@@ -52,12 +52,9 @@ export async function updateSession(request: NextRequest) {
   const isAppRoute = pathname.startsWith("/app")
   const isAuthRoute = pathname === "/login" || pathname === "/signup"
 
-  console.log("[v0] middleware", pathname, "hasAccess:", !!accessToken, "hasRefresh:", !!refreshToken)
-
   // No tokens at all
   if (!accessToken && !refreshToken) {
     if (isAppRoute) {
-      console.log("[v0] no tokens, redirecting to login")
       return NextResponse.redirect(new URL("/login", request.url))
     }
     return response
@@ -105,8 +102,6 @@ export async function updateSession(request: NextRequest) {
       const now = Date.now()
       const bufferMs = 60 * 1000 // refresh 60s before expiry
 
-      console.log("[v0] token exp:", new Date(expiresAt).toISOString(), "now:", new Date(now).toISOString(), "valid:", now < expiresAt - bufferMs)
-
       if (now < expiresAt - bufferMs) {
         // Token still valid — allow through without a network call
         return response
@@ -131,7 +126,6 @@ export async function updateSession(request: NextRequest) {
       }
 
       // Could not refresh — clear and redirect if on protected route
-      console.log("[v0] refresh failed, clearing cookies")
       response.cookies.delete("sb-access-token")
       response.cookies.delete("sb-refresh-token")
       if (isAppRoute) {
