@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <!-- Replaced v0 logo with custom calendar icon for productivity app branding -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <circle cx="256" cy="256" r="240" fill="url(#bgGradient)"/>
+  
+  <!-- Calendar icon -->
+  <rect x="140" y="160" width="232" height="220" rx="24" fill="white" opacity="0.95"/>
+  
+  <!-- Calendar header -->
+  <rect x="140" y="160" width="232" height="60" rx="24" fill="#065f46"/>
+  <rect x="140" y="195" width="232" height="25" fill="#065f46"/>
+  
+  <!-- Calendar rings at top -->
+  <circle cx="190" cy="170" r="8" fill="white"/>
+  <circle cx="256" cy="170" r="8" fill="white"/>
+  <circle cx="322" cy="170" r="8" fill="white"/>
+  
+  <!-- Grid dots representing days -->
+  <circle cx="175" cy="250" r="6" fill="#10b981"/>
+  <circle cx="215" cy="250" r="6" fill="#d1d5db"/>
+  <circle cx="255" cy="250" r="6" fill="#d1d5db"/>
+  <circle cx="295" cy="250" r="6" fill="#d1d5db"/>
+  <circle cx="335" cy="250" r="6" fill="#d1d5db"/>
+  
+  <circle cx="175" cy="290" r="6" fill="#d1d5db"/>
+  <circle cx="215" cy="290" r="6" fill="#10b981"/>
+  <circle cx="255" cy="290" r="6" fill="#d1d5db"/>
+  <circle cx="295" cy="290" r="6" fill="#d1d5db"/>
+  <circle cx="335" cy="290" r="6" fill="#10b981"/>
+  
+  <circle cx="175" cy="330" r="6" fill="#d1d5db"/>
+  <circle cx="215" cy="330" r="6" fill="#d1d5db"/>
+  <circle cx="255" cy="330" r="6" fill="#10b981"/>
+  <circle cx="295" cy="330" r="6" fill="#d1d5db"/>
+  <circle cx="335" cy="330" r="6" fill="#d1d5db"/>
+</svg>

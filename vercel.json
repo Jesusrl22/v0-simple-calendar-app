@@ -1,0 +1,20 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/check-expired-subscriptions",
+      "schedule": "0 0 * * *"
+    },
+    {
+      "path": "/api/cron/check-upcoming-events",
+      "schedule": "*/5 * * * *"
+    },
+    {
+      "path": "/api/cron/reset-daily-tasks-by-timezone",
+      "schedule": "0 * * * *"
+    },
+    {
+      "path": "/api/ai/reset-credits",
+      "schedule": "0 0 1 * *"
+    }
+  ]
+}

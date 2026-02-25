@@ -1,0 +1,747 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Default CSS variables - Neon Green Tech theme with Black background */
+  :root {
+    --color-background: 0 0% 5%;
+    --color-foreground: 0 0% 98%;
+    --color-card: 0 0% 10%;
+    --color-card-foreground: 0 0% 98%;
+    --color-primary: 84 100% 65%; /* Neon green */
+    --color-primary-foreground: 0 0% 5%;
+    --color-secondary: 84 60% 45%;
+    --color-secondary-foreground: 0 0% 5%;
+    --color-muted: 0 0% 20%;
+    --color-muted-foreground: 0 0% 70%;
+    --color-accent: 84 100% 65%; /* Neon green */
+    --color-accent-foreground: 0 0% 5%;
+    --color-border: 0 0% 20%;
+    --color-input: 0 0% 12%;
+    --color-ring: 84 100% 65%; /* Neon green */
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: hsl(var(--color-background));
+    color: hsl(var(--color-foreground));
+    font-feature-settings: "rlig" 1, "calt" 1;
+    /* Support emojis and Unicode */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  }
+}
+
+@layer components {
+  /* Cards - now use dynamic CSS variables */
+  .card {
+    background-color: hsl(var(--color-card));
+    border-color: hsl(var(--color-border));
+    border-width: 1px;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  }
+
+  .neon-glow {
+    border-color: hsl(var(--color-primary) / 0.6);
+    box-shadow: 0 10px 15px -3px hsl(var(--color-primary) / 0.3);
+  }
+
+  .neon-glow-hover {
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+  }
+
+  .neon-glow-hover:hover {
+    border-color: hsl(var(--color-primary));
+    box-shadow: 0 20px 25px -5px hsl(var(--color-primary) / 0.4);
+  }
+
+  .neon-text {
+    color: hsl(var(--color-primary));
+    font-weight: 700;
+  }
+
+  .glass-card {
+    background-color: hsl(var(--color-card) / 0.8);
+    backdrop-filter: blur(12px);
+    border-color: hsl(var(--color-primary) / 0.2);
+    border-width: 1px;
+  }
+
+  .stat-card {
+    background-color: hsl(var(--color-card));
+    border-color: hsl(var(--color-border) / 0.8);
+    border-width: 1px;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+  }
+
+  .stat-card:hover {
+    border-color: hsl(var(--color-primary) / 0.6);
+    box-shadow: 0 10px 15px -3px hsl(var(--color-primary) / 0.2);
+  }
+}
+
+
+
+
+/* Theme Selectors - These override the @theme defaults */
+
+html[data-theme="default"] {
+  color-scheme: dark;
+  --color-background: 0 0% 5%;
+  --color-foreground: 84 100% 85%;
+  --color-card: 0 0% 10%;
+  --color-card-foreground: 84 100% 85%;
+  --color-popover: 0 0% 10%;
+  --color-popover-foreground: 84 100% 85%;
+  --color-primary: 84 100% 65%;
+  --color-primary-foreground: 0 0% 5%;
+  --color-secondary: 84 60% 45%;
+  --color-secondary-foreground: 84 100% 85%;
+  --color-muted: 84 60% 45%;
+  --color-muted-foreground: 0 0% 60%;
+  --color-accent: 84 100% 65%;
+  --color-accent-foreground: 0 0% 5%;
+  --color-border: 0 0% 20%;
+  --color-input: 0 0% 20%;
+  --color-ring: 84 100% 65%;
+  --color-chart-1: 84 100% 65%;
+  --color-chart-2: 160 60% 45%;
+  --color-chart-3: 200 70% 50%;
+  --color-chart-4: 280 65% 60%;
+  --color-chart-5: 340 75% 55%;
+}
+
+html[data-theme="light-mode"] {
+  color-scheme: light;
+  --color-background: 0 0% 100%;
+  --color-foreground: 0 0% 10%;
+  --color-card: 0 0% 95%;
+  --color-card-foreground: 0 0% 10%;
+  --color-popover: 0 0% 95%;
+  --color-popover-foreground: 0 0% 10%;
+  --color-primary: 210 70% 50%;
+  --color-primary-foreground: 0 0% 100%;
+  --color-secondary: 210 50% 70%;
+  --color-secondary-foreground: 0 0% 10%;
+  --color-muted: 210 50% 70%;
+  --color-muted-foreground: 0 0% 40%;
+  --color-accent: 210 70% 50%;
+  --color-accent-foreground: 0 0% 100%;
+  --color-border: 0 0% 90%;
+  --color-input: 0 0% 90%;
+  --color-ring: 210 70% 50%;
+  --color-chart-1: 210 70% 50%;
+  --color-chart-2: 160 60% 45%;
+  --color-chart-3: 30 80% 55%;
+  --color-chart-4: 280 65% 60%;
+  --color-chart-5: 340 75% 55%;
+}
+
+html[data-theme="neon-tech"] {
+  color-scheme: dark;
+  --color-background: 0 0% 3%;
+  --color-foreground: 0 0% 98%;
+  --color-card: 0 0% 8%;
+  --color-card-foreground: 0 0% 98%;
+  --color-popover: 0 0% 8%;
+  --color-popover-foreground: 0 0% 98%;
+  --color-primary: 84 100% 65%;
+  --color-primary-foreground: 0 0% 3%;
+  --color-secondary: 180 100% 50%;
+  --color-secondary-foreground: 0 0% 3%;
+  --color-muted: 0 0% 20%;
+  --color-muted-foreground: 0 0% 70%;
+  --color-accent: 84 100% 65%;
+  --color-accent-foreground: 0 0% 3%;
+  --color-border: 0 0% 20%;
+  --color-input: 0 0% 12%;
+  --color-ring: 84 100% 65%;
+  --color-chart-1: 84 100% 65%;
+  --color-chart-2: 180 100% 50%;
+  --color-chart-3: 280 80% 60%;
+  --color-chart-4: 30 95% 60%;
+  --color-chart-5: 340 75% 55%;
+}
+
+html[data-theme="forest-green"] {
+  color-scheme: dark;
+  --color-background: 140 20% 12%;
+  --color-foreground: 140 30% 95%;
+  --color-card: 140 20% 18%;
+  --color-card-foreground: 140 30% 95%;
+  --color-popover: 140 20% 18%;
+  --color-popover-foreground: 140 30% 95%;
+  --color-primary: 140 60% 50%;
+  --color-primary-foreground: 140 20% 12%;
+  --color-secondary: 130 50% 40%;
+  --color-secondary-foreground: 140 30% 95%;
+  --color-muted: 130 50% 40%;
+  --color-muted-foreground: 140 20% 60%;
+  --color-accent: 140 60% 50%;
+  --color-accent-foreground: 140 20% 12%;
+  --color-border: 140 20% 22%;
+  --color-input: 140 20% 22%;
+  --color-ring: 140 60% 50%;
+  --color-chart-1: 140 60% 50%;
+  --color-chart-2: 160 60% 45%;
+  --color-chart-3: 30 80% 55%;
+  --color-chart-4: 280 65% 60%;
+  --color-chart-5: 340 75% 55%;
+}
+
+html[data-theme="pink-blossom"] {
+  color-scheme: light;
+  --color-background: 330 15% 96%;
+  --color-foreground: 330 30% 15%;
+  --color-card: 330 20% 92%;
+  --color-card-foreground: 330 30% 15%;
+  --color-popover: 330 20% 92%;
+  --color-popover-foreground: 330 30% 15%;
+  --color-primary: 330 75% 65%;
+  --color-primary-foreground: 330 15% 96%;
+  --color-secondary: 340 65% 55%;
+  --color-secondary-foreground: 330 30% 15%;
+  --color-muted: 340 65% 55%;
+  --color-muted-foreground: 330 30% 40%;
+  --color-accent: 330 75% 65%;
+  --color-accent-foreground: 330 15% 96%;
+  --color-border: 330 20% 88%;
+  --color-input: 330 20% 88%;
+  --color-ring: 330 75% 65%;
+  --color-chart-1: 330 75% 65%;
+  --color-chart-2: 160 60% 45%;
+  --color-chart-3: 30 80% 55%;
+  --color-chart-4: 280 65% 60%;
+  --color-chart-5: 200 70% 50%;
+}
+
+html[data-theme="sunset-orange"] {
+  color-scheme: dark;
+  --color-background: 25 30% 12%;
+  --color-foreground: 25 40% 98%;
+  --color-card: 25 25% 18%;
+  --color-card-foreground: 25 40% 98%;
+  --color-popover: 25 25% 18%;
+  --color-popover-foreground: 25 40% 98%;
+  --color-primary: 25 95% 60%;
+  --color-primary-foreground: 25 30% 12%;
+  --color-secondary: 10 90% 55%;
+  --color-secondary-foreground: 25 40% 98%;
+  --color-muted: 10 90% 55%;
+  --color-muted-foreground: 25 30% 60%;
+  --color-accent: 25 95% 60%;
+  --color-accent-foreground: 25 30% 12%;
+  --color-border: 25 25% 25%;
+  --color-input: 25 25% 25%;
+  --color-ring: 25 95% 60%;
+  --color-chart-1: 25 95% 60%;
+  --color-chart-2: 160 60% 45%;
+  --color-chart-3: 200 70% 50%;
+  --color-chart-4: 280 65% 60%;
+  --color-chart-5: 340 75% 55%;
+}
+
+html[data-theme="purple-haze"] {
+  color-scheme: dark;
+  --color-background: 270 30% 12%;
+  --color-foreground: 270 30% 98%;
+  --color-card: 270 25% 18%;
+  --color-card-foreground: 270 30% 98%;
+  --color-popover: 270 25% 18%;
+  --color-popover-foreground: 270 30% 98%;
+  --color-primary: 270 80% 65%;
+  --color-primary-foreground: 270 30% 12%;
+  --color-secondary: 290 70% 55%;
+  --color-secondary-foreground: 270 30% 98%;
+  --color-muted: 290 70% 55%;
+  --color-muted-foreground: 270 20% 60%;
+  --color-accent: 270 80% 65%;
+  --color-accent-foreground: 270 30% 12%;
+  --color-border: 270 25% 25%;
+  --color-input: 270 25% 25%;
+  --color-ring: 270 80% 65%;
+  --color-chart-1: 270 80% 65%;
+  --color-chart-2: 160 60% 45%;
+  --color-chart-3: 30 80% 55%;
+  --color-chart-4: 200 70% 50%;
+  --color-chart-5: 340 75% 55%;
+}
+
+html[data-theme="cyber-pink"] {
+  color-scheme: dark;
+  --color-background: 330 20% 10%;
+  --color-foreground: 330 30% 98%;
+  --color-card: 330 15% 15%;
+  --color-card-foreground: 330 30% 98%;
+  --color-popover: 330 15% 15%;
+  --color-popover-foreground: 330 30% 98%;
+  --color-primary: 330 85% 65%;
+  --color-primary-foreground: 330 20% 10%;
+  --color-secondary: 200 80% 60%;
+  --color-secondary-foreground: 330 30% 98%;
+  --color-muted: 200 80% 60%;
+  --color-muted-foreground: 330 20% 60%;
+  --color-accent: 330 85% 65%;
+  --color-accent-foreground: 330 20% 10%;
+  --color-border: 330 15% 20%;
+  --color-input: 330 15% 20%;
+  --color-ring: 330 85% 65%;
+  --color-chart-1: 330 85% 65%;
+  --color-chart-2: 200 80% 60%;
+  --color-chart-3: 30 80% 55%;
+  --color-chart-4: 280 65% 60%;
+  --color-chart-5: 160 60% 50%;
+}
+
+html[data-theme="mint-fresh"] {
+  color-scheme: dark;
+  --color-background: 160 25% 12%;
+  --color-foreground: 160 30% 98%;
+  --color-card: 160 20% 18%;
+  --color-card-foreground: 160 30% 98%;
+  --color-popover: 160 20% 18%;
+  --color-popover-foreground: 160 30% 98%;
+  --color-primary: 160 70% 55%;
+  --color-primary-foreground: 160 25% 12%;
+  --color-secondary: 180 60% 50%;
+  --color-secondary-foreground: 160 30% 98%;
+  --color-muted: 180 60% 50%;
+  --color-muted-foreground: 160 20% 60%;
+  --color-accent: 160 70% 55%;
+  --color-accent-foreground: 160 25% 12%;
+  --color-border: 160 20% 22%;
+  --color-input: 160 20% 22%;
+  --color-ring: 160 70% 55%;
+  --color-chart-1: 160 70% 55%;
+  --color-chart-2: 180 60% 50%;
+  --color-chart-3: 30 80% 55%;
+  --color-chart-4: 280 65% 60%;
+  --color-chart-5: 340 75% 55%;
+}
+
+html[data-theme="aurora-borealis"] {
+  color-scheme: dark;
+  --color-background: 200 30% 10%;
+  --color-foreground: 180 40% 98%;
+  --color-card: 200 25% 15%;
+  --color-card-foreground: 180 40% 98%;
+  --color-popover: 200 25% 15%;
+  --color-popover-foreground: 180 40% 98%;
+  --color-primary: 180 85% 55%;
+  --color-primary-foreground: 200 30% 10%;
+  --color-secondary: 280 75% 60%;
+  --color-secondary-foreground: 180 40% 98%;
+  --color-muted: 280 75% 60%;
+  --color-muted-foreground: 180 30% 60%;
+  --color-accent: 180 85% 55%;
+  --color-accent-foreground: 200 30% 10%;
+  --color-border: 200 25% 20%;
+  --color-input: 200 25% 20%;
+  --color-ring: 180 85% 55%;
+  --color-chart-1: 180 85% 55%;
+  --color-chart-2: 280 75% 60%;
+  --color-chart-3: 30 80% 55%;
+  --color-chart-4: 200 70% 50%;
+  --color-chart-5: 340 75% 55%;
+}
+
+html[data-theme="golden-hour"] {
+  color-scheme: dark;
+  --color-background: 40 25% 12%;
+  --color-foreground: 45 30% 98%;
+  --color-card: 40 20% 18%;
+  --color-card-foreground: 45 30% 98%;
+  --color-popover: 40 20% 18%;
+  --color-popover-foreground: 45 30% 98%;
+  --color-primary: 45 95% 65%;
+  --color-primary-foreground: 40 25% 12%;
+  --color-secondary: 35 90% 60%;
+  --color-secondary-foreground: 45 30% 98%;
+  --color-muted: 35 90% 60%;
+  --color-muted-foreground: 40 20% 60%;
+  --color-accent: 45 95% 65%;
+  --color-accent-foreground: 40 25% 12%;
+  --color-border: 40 20% 22%;
+  --color-input: 40 20% 22%;
+  --color-ring: 45 95% 65%;
+  --color-chart-1: 45 95% 65%;
+  --color-chart-2: 35 90% 60%;
+  --color-chart-3: 200 70% 50%;
+  --color-chart-4: 280 65% 60%;
+  --color-chart-5: 340 75% 55%;
+}
+
+html[data-theme="deep-ocean"] {
+  color-scheme: dark;
+  --color-background: 210 40% 8%;
+  --color-foreground: 200 30% 98%;
+  --color-card: 210 35% 12%;
+  --color-card-foreground: 200 30% 98%;
+  --color-popover: 210 35% 12%;
+  --color-popover-foreground: 200 30% 98%;
+  --color-primary: 200 85% 50%;
+  --color-primary-foreground: 210 40% 8%;
+  --color-secondary: 220 75% 45%;
+  --color-secondary-foreground: 200 30% 98%;
+  --color-muted: 220 75% 45%;
+  --color-muted-foreground: 200 20% 60%;
+  --color-accent: 200 85% 50%;
+  --color-accent-foreground: 210 40% 8%;
+  --color-border: 210 35% 18%;
+  --color-input: 210 35% 18%;
+  --color-ring: 200 85% 50%;
+  --color-chart-1: 200 85% 50%;
+  --color-chart-2: 220 75% 45%;
+  --color-chart-3: 30 80% 55%;
+  --color-chart-4: 280 65% 60%;
+  --color-chart-5: 340 75% 55%;
+}
+
+html[data-theme="lavender-dreams"] {
+  color-scheme: dark;
+  --color-background: 270 25% 12%;
+  --color-foreground: 280 20% 98%;
+  --color-card: 270 20% 18%;
+  --color-card-foreground: 280 20% 98%;
+  --color-popover: 270 20% 18%;
+  --color-popover-foreground: 280 20% 98%;
+  --color-primary: 280 70% 70%;
+  --color-primary-foreground: 270 25% 12%;
+  --color-secondary: 260 60% 65%;
+  --color-secondary-foreground: 280 20% 98%;
+  --color-muted: 260 60% 65%;
+  --color-muted-foreground: 270 20% 60%;
+  --color-accent: 280 70% 70%;
+  --color-accent-foreground: 270 25% 12%;
+  --color-border: 270 20% 22%;
+  --color-input: 270 20% 22%;
+  --color-ring: 280 70% 70%;
+  --color-chart-1: 280 70% 70%;
+  --color-chart-2: 260 60% 65%;
+  --color-chart-3: 30 80% 55%;
+  --color-chart-4: 200 70% 50%;
+  --color-chart-5: 340 75% 55%;
+}
+
+html[data-theme="fire-ember"] {
+  color-scheme: dark;
+  --color-background: 10 30% 10%;
+  --color-foreground: 15 30% 98%;
+  --color-card: 10 25% 15%;
+  --color-card-foreground: 15 30% 98%;
+  --color-popover: 10 25% 15%;
+  --color-popover-foreground: 15 30% 98%;
+  --color-primary: 15 95% 65%;
+  --color-primary-foreground: 10 30% 10%;
+  --color-secondary: 0 90% 60%;
+  --color-secondary-foreground: 15 30% 98%;
+  --color-muted: 0 90% 60%;
+  --color-muted-foreground: 10 20% 60%;
+  --color-accent: 15 95% 65%;
+  --color-accent-foreground: 10 30% 10%;
+  --color-border: 10 25% 20%;
+  --color-input: 10 25% 20%;
+  --color-ring: 15 95% 65%;
+  --color-chart-1: 15 95% 65%;
+  --color-chart-2: 0 90% 60%;
+  --color-chart-3: 30 80% 55%;
+  --color-chart-4: 280 65% 60%;
+  --color-chart-5: 200 70% 50%;
+}
+
+html.theme-forest-green {
+  color-scheme: dark;
+  --color-background: 140 20% 12%;
+  --color-foreground: 140 30% 95%;
+  --color-card: 140 20% 18%;
+  --color-card-foreground: 140 30% 95%;
+  --color-popover: 140 20% 18%;
+  --color-popover-foreground: 140 30% 95%;
+  --color-primary: 140 60% 50%;
+  --color-primary-foreground: 140 20% 12%;
+  --color-secondary: 130 50% 40%;
+  --color-secondary-foreground: 140 30% 95%;
+  --color-muted: 130 50% 40%;
+  --color-muted-foreground: 140 20% 60%;
+  --color-accent: 140 60% 50%;
+  --color-accent-foreground: 140 20% 12%;
+  --color-border: 140 20% 22%;
+  --color-input: 140 20% 22%;
+  --color-ring: 140 60% 50%;
+  --color-chart-1: 140 60% 50%;
+  --color-chart-2: 160 60% 45%;
+  --color-chart-3: 30 80% 55%;
+  --color-chart-4: 280 65% 60%;
+  --color-chart-5: 340 75% 55%;
+}
+
+html.theme-pink-blossom {
+  color-scheme: light;
+  --color-background: 330 15% 96%;
+  --color-foreground: 330 30% 15%;
+  --color-card: 330 20% 92%;
+  --color-card-foreground: 330 30% 15%;
+  --color-popover: 330 20% 92%;
+  --color-popover-foreground: 330 30% 15%;
+  --color-primary: 330 75% 65%;
+  --color-primary-foreground: 330 15% 96%;
+  --color-secondary: 340 65% 55%;
+  --color-secondary-foreground: 330 30% 15%;
+  --color-muted: 340 65% 55%;
+  --color-muted-foreground: 330 30% 40%;
+  --color-accent: 330 75% 65%;
+  --color-accent-foreground: 330 15% 96%;
+  --color-border: 330 20% 88%;
+  --color-input: 330 20% 88%;
+  --color-ring: 330 75% 65%;
+  --color-chart-1: 330 75% 65%;
+  --color-chart-2: 160 60% 45%;
+  --color-chart-3: 30 80% 55%;
+  --color-chart-4: 280 65% 60%;
+  --color-chart-5: 200 70% 50%;
+}
+
+html.theme-sunset-orange {
+  color-scheme: dark;
+  --color-background: 25 30% 12%;
+  --color-foreground: 25 40% 98%;
+  --color-card: 25 25% 18%;
+  --color-card-foreground: 25 40% 98%;
+  --color-popover: 25 25% 18%;
+  --color-popover-foreground: 25 40% 98%;
+  --color-primary: 25 95% 60%;
+  --color-primary-foreground: 25 30% 12%;
+  --color-secondary: 10 90% 55%;
+  --color-secondary-foreground: 25 40% 98%;
+  --color-muted: 10 90% 55%;
+  --color-muted-foreground: 25 30% 60%;
+  --color-accent: 25 95% 60%;
+  --color-accent-foreground: 25 30% 12%;
+  --color-border: 25 25% 25%;
+  --color-input: 25 25% 25%;
+  --color-ring: 25 95% 60%;
+  --color-chart-1: 25 95% 60%;
+  --color-chart-2: 160 60% 45%;
+  --color-chart-3: 200 70% 50%;
+  --color-chart-4: 280 65% 60%;
+  --color-chart-5: 340 75% 55%;
+}
+
+html.theme-purple-haze {
+  color-scheme: dark;
+  --color-background: 270 30% 12%;
+  --color-foreground: 270 30% 98%;
+  --color-card: 270 25% 18%;
+  --color-card-foreground: 270 30% 98%;
+  --color-popover: 270 25% 18%;
+  --color-popover-foreground: 270 30% 98%;
+  --color-primary: 270 80% 65%;
+  --color-primary-foreground: 270 30% 12%;
+  --color-secondary: 290 70% 55%;
+  --color-secondary-foreground: 270 30% 98%;
+  --color-muted: 290 70% 55%;
+  --color-muted-foreground: 270 20% 60%;
+  --color-accent: 270 80% 65%;
+  --color-accent-foreground: 270 30% 12%;
+  --color-border: 270 25% 25%;
+  --color-input: 270 25% 25%;
+  --color-ring: 270 80% 65%;
+  --color-chart-1: 270 80% 65%;
+  --color-chart-2: 160 60% 45%;
+  --color-chart-3: 30 80% 55%;
+  --color-chart-4: 200 70% 50%;
+  --color-chart-5: 340 75% 55%;
+}
+
+html.theme-cyber-pink {
+  color-scheme: dark;
+  --color-background: 330 20% 10%;
+  --color-foreground: 330 30% 98%;
+  --color-card: 330 15% 15%;
+  --color-card-foreground: 330 30% 98%;
+  --color-popover: 330 15% 15%;
+  --color-popover-foreground: 330 30% 98%;
+  --color-primary: 330 85% 65%;
+  --color-primary-foreground: 330 20% 10%;
+  --color-secondary: 200 80% 60%;
+  --color-secondary-foreground: 330 30% 98%;
+  --color-muted: 200 80% 60%;
+  --color-muted-foreground: 330 20% 60%;
+  --color-accent: 330 85% 65%;
+  --color-accent-foreground: 330 20% 10%;
+  --color-border: 330 15% 20%;
+  --color-input: 330 15% 20%;
+  --color-ring: 330 85% 65%;
+  --color-chart-1: 330 85% 65%;
+  --color-chart-2: 200 80% 60%;
+  --color-chart-3: 30 80% 55%;
+  --color-chart-4: 280 65% 60%;
+  --color-chart-5: 160 60% 50%;
+}
+
+html.theme-mint-fresh {
+  color-scheme: dark;
+  --color-background: 160 25% 12%;
+  --color-foreground: 160 30% 98%;
+  --color-card: 160 20% 18%;
+  --color-card-foreground: 160 30% 98%;
+  --color-popover: 160 20% 18%;
+  --color-popover-foreground: 160 30% 98%;
+  --color-primary: 160 70% 55%;
+  --color-primary-foreground: 160 25% 12%;
+  --color-secondary: 180 60% 50%;
+  --color-secondary-foreground: 160 30% 98%;
+  --color-muted: 180 60% 50%;
+  --color-muted-foreground: 160 20% 60%;
+  --color-accent: 160 70% 55%;
+  --color-accent-foreground: 160 25% 12%;
+  --color-border: 160 20% 22%;
+  --color-input: 160 20% 22%;
+  --color-ring: 160 70% 55%;
+  --color-chart-1: 160 70% 55%;
+  --color-chart-2: 180 60% 50%;
+  --color-chart-3: 30 80% 55%;
+  --color-chart-4: 280 65% 60%;
+  --color-chart-5: 340 75% 55%;
+}
+
+html.theme-aurora-borealis {
+  color-scheme: dark;
+  --color-background: 200 30% 10%;
+  --color-foreground: 180 40% 98%;
+  --color-card: 200 25% 15%;
+  --color-card-foreground: 180 40% 98%;
+  --color-popover: 200 25% 15%;
+  --color-popover-foreground: 180 40% 98%;
+  --color-primary: 180 85% 55%;
+  --color-primary-foreground: 200 30% 10%;
+  --color-secondary: 280 75% 60%;
+  --color-secondary-foreground: 180 40% 98%;
+  --color-muted: 280 75% 60%;
+  --color-muted-foreground: 180 30% 60%;
+  --color-accent: 180 85% 55%;
+  --color-accent-foreground: 200 30% 10%;
+  --color-border: 200 25% 20%;
+  --color-input: 200 25% 20%;
+  --color-ring: 180 85% 55%;
+  --color-chart-1: 180 85% 55%;
+  --color-chart-2: 280 75% 60%;
+  --color-chart-3: 30 80% 55%;
+  --color-chart-4: 200 70% 50%;
+  --color-chart-5: 340 75% 55%;
+}
+
+html.theme-golden-hour {
+  color-scheme: dark;
+  --color-background: 40 25% 12%;
+  --color-foreground: 45 30% 98%;
+  --color-card: 40 20% 18%;
+  --color-card-foreground: 45 30% 98%;
+  --color-popover: 40 20% 18%;
+  --color-popover-foreground: 45 30% 98%;
+  --color-primary: 45 95% 65%;
+  --color-primary-foreground: 40 25% 12%;
+  --color-secondary: 35 90% 60%;
+  --color-secondary-foreground: 45 30% 98%;
+  --color-muted: 35 90% 60%;
+  --color-muted-foreground: 40 20% 60%;
+  --color-accent: 45 95% 65%;
+  --color-accent-foreground: 40 25% 12%;
+  --color-border: 40 20% 22%;
+  --color-input: 40 20% 22%;
+  --color-ring: 45 95% 65%;
+  --color-chart-1: 45 95% 65%;
+  --color-chart-2: 35 90% 60%;
+  --color-chart-3: 200 70% 50%;
+  --color-chart-4: 280 65% 60%;
+  --color-chart-5: 340 75% 55%;
+}
+
+html.theme-deep-ocean {
+  color-scheme: dark;
+  --color-background: 210 40% 8%;
+  --color-foreground: 200 30% 98%;
+  --color-card: 210 35% 12%;
+  --color-card-foreground: 200 30% 98%;
+  --color-popover: 210 35% 12%;
+  --color-popover-foreground: 200 30% 98%;
+  --color-primary: 200 85% 50%;
+  --color-primary-foreground: 210 40% 8%;
+  --color-secondary: 220 75% 45%;
+  --color-secondary-foreground: 200 30% 98%;
+  --color-muted: 220 75% 45%;
+  --color-muted-foreground: 200 20% 60%;
+  --color-accent: 200 85% 50%;
+  --color-accent-foreground: 210 40% 8%;
+  --color-border: 210 35% 18%;
+  --color-input: 210 35% 18%;
+  --color-ring: 200 85% 50%;
+  --color-chart-1: 200 85% 50%;
+  --color-chart-2: 220 75% 45%;
+  --color-chart-3: 30 80% 55%;
+  --color-chart-4: 280 65% 60%;
+  --color-chart-5: 340 75% 55%;
+}
+
+html.theme-lavender-dreams {
+  color-scheme: dark;
+  --color-background: 270 25% 12%;
+  --color-foreground: 280 20% 98%;
+  --color-card: 270 20% 18%;
+  --color-card-foreground: 280 20% 98%;
+  --color-popover: 270 20% 18%;
+  --color-popover-foreground: 280 20% 98%;
+  --color-primary: 280 70% 70%;
+  --color-primary-foreground: 270 25% 12%;
+  --color-secondary: 260 60% 65%;
+  --color-secondary-foreground: 280 20% 98%;
+  --color-muted: 260 60% 65%;
+  --color-muted-foreground: 270 20% 60%;
+  --color-accent: 280 70% 70%;
+  --color-accent-foreground: 270 25% 12%;
+  --color-border: 270 20% 22%;
+  --color-input: 270 20% 22%;
+  --color-ring: 280 70% 70%;
+  --color-chart-1: 280 70% 70%;
+  --color-chart-2: 260 60% 65%;
+  --color-chart-3: 30 80% 55%;
+  --color-chart-4: 200 70% 50%;
+  --color-chart-5: 340 75% 55%;
+}
+
+html.theme-fire-ember {
+  color-scheme: dark;
+  --color-background: 10 30% 10%;
+  --color-foreground: 15 30% 98%;
+  --color-card: 10 25% 15%;
+  --color-card-foreground: 15 30% 98%;
+  --color-popover: 10 25% 15%;
+  --color-popover-foreground: 15 30% 98%;
+  --color-primary: 15 95% 65%;
+  --color-primary-foreground: 10 30% 10%;
+  --color-secondary: 0 90% 60%;
+  --color-secondary-foreground: 15 30% 98%;
+  --color-muted: 0 90% 60%;
+  --color-muted-foreground: 10 20% 60%;
+  --color-accent: 15 95% 65%;
+  --color-accent-foreground: 10 30% 10%;
+  --color-border: 10 25% 20%;
+  --color-input: 10 25% 20%;
+  --color-ring: 15 95% 65%;
+  --color-chart-1: 15 95% 65%;
+  --color-chart-2: 0 90% 60%;
+  --color-chart-3: 30 80% 55%;
+  --color-chart-4: 280 65% 60%;
+  --color-chart-5: 200 70% 50%;
+}

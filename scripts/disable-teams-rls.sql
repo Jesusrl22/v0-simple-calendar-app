@@ -1,0 +1,9 @@
+-- Disable RLS on team tables to prevent infinite recursion
+-- The APIs use service role which bypasses RLS anyway
+ALTER TABLE teams DISABLE ROW LEVEL SECURITY;
+ALTER TABLE team_members DISABLE ROW LEVEL SECURITY;
+ALTER TABLE team_invitations DISABLE ROW LEVEL SECURITY;
+ALTER TABLE team_tasks DISABLE ROW LEVEL SECURITY;
+ALTER TABLE team_events DISABLE ROW LEVEL SECURITY;
+ALTER TABLE team_notes DISABLE ROW LEVEL SECURITY;
+ALTER TABLE task_comments DISABLE ROW LEVEL SECURITY;

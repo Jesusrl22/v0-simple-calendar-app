@@ -1,0 +1,14 @@
+---
+[CLIENT]
+---
+[compiler error] Syntax error in app/app/tasks/page.tsx:
+Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+>         )}
+>          ^
+---
+[CLIENT]
+---
+[compiler error] Syntax error in app/app/tasks/page.tsx:
+Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+>         )}
+>          ^
