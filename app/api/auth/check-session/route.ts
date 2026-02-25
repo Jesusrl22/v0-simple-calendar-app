@@ -69,14 +69,14 @@ export async function GET() {
       }
     }
 
+    // Refresh token also failed — clear cookies only if both are invalid
     const noSessionResponse = NextResponse.json({ hasSession: false, user: null })
     noSessionResponse.cookies.delete("sb-access-token")
     noSessionResponse.cookies.delete("sb-refresh-token")
     return noSessionResponse
   } catch (error) {
-    const errorResponse = NextResponse.json({ hasSession: false, user: null })
-    errorResponse.cookies.delete("sb-access-token")
-    errorResponse.cookies.delete("sb-refresh-token")
-    return errorResponse
+    // Network error — do NOT delete cookies, just return no session
+    // The cookies may still be valid; we don't want to log the user out on a transient failure
+    return NextResponse.json({ hasSession: false, user: null })
   }
 }
