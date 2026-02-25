@@ -108,7 +108,7 @@ export async function POST(request: Request) {
 
     // Check if this is a new device by comparing IP addresses
     // Get last login info from database
-    const { data: userData } = await fetch(
+    const userData = await fetch(
       `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/users?id=eq.${loginData.user.id}&select=last_login_ip,last_login_at`,
       {
         headers: {
@@ -116,9 +116,9 @@ export async function POST(request: Request) {
           Authorization: `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY!}`,
         },
       },
-    ).then((res) => res.json())
+    ).then((res) => res.json()).catch(() => null)
 
-    const isNewDevice = userData && userData[0]?.last_login_ip !== lastLoginIp
+    const isNewDevice = Array.isArray(userData) && userData[0]?.last_login_ip !== lastLoginIp
     
     // Log new device login for security monitoring
     if (isNewDevice) {
