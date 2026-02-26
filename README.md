@@ -31,6 +31,7 @@ Accede a: `/admin/test-system`
 curl https://tu-app.vercel.app/api/test-system
 \`\`\`
 
+
 El test verificará automáticamente:
 - ✅ Variables de entorno configuradas
 - ✅ Conexión a Supabase
