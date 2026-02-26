@@ -234,15 +234,3 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ error: "Failed to delete conversation" }, { status: 500 })
   }
 }
-      .eq("id", id)
-      .eq("user_id", user.id)
-
-    if (error) throw error
-
-    console.log("[v0] Conversation deleted successfully")
-    return NextResponse.json({ success: true })
-  } catch (error: any) {
-    console.error("[v0] Error deleting conversation:", error)
-    return NextResponse.json({ error: error.message }, { status: 500 })
-  }
-}
