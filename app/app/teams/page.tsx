@@ -21,9 +21,6 @@ interface Team {
   created_at: string
 }
 
-// Force revalidation on every request
-export const revalidate = 0
-
 export default function TeamsPage() {
   const { t } = useTranslation()
   const router = useRouter()
