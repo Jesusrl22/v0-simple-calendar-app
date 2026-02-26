@@ -155,6 +155,18 @@ const translations = {
     blogPost3Desc:
       "Explore how AI tools can help you automate tasks, generate ideas, and streamline your workflow to achieve more in less time.",
     blogPost3ReadTime: "6 min read",
+    blogPost4Title: "Master Task Prioritization",
+    blogPost4Desc:
+      "Learn the Eisenhower Matrix, ABCD method, and other prioritization frameworks to focus on what truly matters and maximize your impact.",
+    blogPost4ReadTime: "8 min read",
+    blogPost5Title: "Effective Team Collaboration",
+    blogPost5Desc:
+      "Discover best practices for remote work, communication strategies, and tools to keep your team aligned and productive across time zones.",
+    blogPost5ReadTime: "7 min read",
+    blogPost6Title: "Prevent Burnout and Stay Healthy",
+    blogPost6Desc:
+      "Understand the signs of burnout, implement work-life balance strategies, and use productivity tools to sustain long-term success without compromising well-being.",
+    blogPost6ReadTime: "9 min read",
     howItWorksTitle: "How It Works",
     howItWorksDesc: "Get started in minutes with our simple and intuitive platform.",
     step1Title: "Sign Up",
@@ -323,6 +335,18 @@ const translations = {
     blogPost3Desc:
       "Explora cómo las herramientas de IA pueden ayudarte a automatizar tareas, generar ideas y optimizar tu flujo de trabajo para lograr más en menos tiempo.",
     blogPost3ReadTime: "6 min read",
+    blogPost4Title: "Domina la Priorización de Tareas",
+    blogPost4Desc:
+      "Aprende la Matriz de Eisenhower, método ABCD y otros marcos de priorización para enfocarte en lo que realmente importa y maximizar tu impacto.",
+    blogPost4ReadTime: "8 min read",
+    blogPost5Title: "Colaboración Efectiva en Equipo",
+    blogPost5Desc:
+      "Descubre mejores prácticas para trabajo remoto, estrategias de comunicación y herramientas para mantener tu equipo alineado y productivo.",
+    blogPost5ReadTime: "7 min read",
+    blogPost6Title: "Prevén Burnout y Mantente Saludable",
+    blogPost6Desc:
+      "Entiende los signos del agotamiento, implementa estrategias de balance trabajo-vida y usa herramientas de productividad para el éxito sostenible.",
+    blogPost6ReadTime: "9 min read",
     howItWorksTitle: "Cómo Funciona",
     howItWorksDesc: "Empieza en minutos con nuestra plataforma sencilla e intuitiva.",
     step1Title: "Regístrate",

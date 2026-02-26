@@ -8,10 +8,12 @@ import { HelpChatbot } from "@/components/help-chatbot"
 import { ScrollToTop } from "@/components/scroll-to-top"
 
 export const metadata: Metadata = {
-  title: "Future Task - Smart Task Management",
-  description: "Organize your tasks, notes, and projects with AI-powered assistance",
+  title: "Future Task - Smart Task Management & Productivity App",
+  description: "Organize your tasks, notes, and projects with AI-powered assistance. Master task management with our intelligent platform.",
   generator: "v0.app",
   manifest: "/manifest.json",
+  keywords: ["task management", "productivity app", "AI assistant", "todo list", "team collaboration", "task tracking", "productivity tools"],
+  authors: [{ name: "Future Task" }],
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "48x48" },
@@ -34,9 +36,14 @@ export const metadata: Metadata = {
     userScalable: true,
     viewportFit: "cover",
   },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    title: "Future Task - Smart Task Management",
+    description: "Organize your tasks with AI-powered assistance and seamless collaboration",
+    siteName: "Future Task",
+  },
 }
-
-
 
 export default function RootLayout({
   children,
@@ -52,6 +59,8 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="Future Task" />
         <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="color-scheme" content="light dark" />
+        <link rel="canonical" href="https://future-task.com" />
         <script
           type="text/javascript"
           src="//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js"
@@ -64,7 +73,7 @@ export default function RootLayout({
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3746054566396266"
           crossOrigin="anonymous"
-          strategy="beforeInteractive"
+          strategy="lazyOnload"
         />
         <LanguageProvider>
           {children}
@@ -75,3 +84,4 @@ export default function RootLayout({
     </html>
   )
 }
+
