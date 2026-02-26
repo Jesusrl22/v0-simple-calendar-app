@@ -6,7 +6,7 @@
     },
     {
       "path": "/api/cron/check-upcoming-events",
-      "schedule": "*/5 * * * *"
+      "schedule": "0 9 * * *"
     },
     {
       "path": "/api/cron/reset-daily-tasks-by-timezone",
