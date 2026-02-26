@@ -1,7 +1,12 @@
 "use client"
 
 import { Suspense } from "react"
-import AuthCallbackContent from "./auth-callback-content"
+import dynamic from "next/dynamic"
+
+const AuthCallbackContent = dynamic(() => import("./auth-callback-content"), {
+  loading: () => <AuthCallbackLoading />,
+  ssr: false,
+})
 
 export default function AuthCallbackPage() {
   return (
