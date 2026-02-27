@@ -181,21 +181,20 @@ export async function POST(req: NextRequest) {
     </div>
 
     <script>
-        const data = ${JSON.stringify(presentationData)};
+        const data = ${JSON.stringify(JSON.stringify(presentationData))};
+        const parsedData = JSON.parse(data);
         let currentSlide = 0;
 
         function init() {
             const slidesContainer = document.getElementById('slides');
-            document.getElementById('totalSlides').textContent = data.slides.length;
+            document.getElementById('totalSlides').textContent = parsedData.slides.length;
             
-            data.slides.forEach((slide, idx) => {
+            parsedData.slides.forEach((slide, idx) => {
                 const slideEl = document.createElement('div');
                 slideEl.className = 'slide' + (idx === 0 ? ' active' : '');
-                slideEl.innerHTML = \`
-                    <h1>\${slide.title || 'Slide ' + (idx + 1)}</h1>
-                    \${slide.imageUrl ? '<img src="' + slide.imageUrl + '" alt="Slide image">' : ''}
-                    <p>\${(slide.content || '').replace(/\\n/g, '<br>')}</p>
-                \`;
+                const imageHtml = slide.imageUrl ? '<img src="' + slide.imageUrl + '" alt="Slide image">' : '';
+                const contentText = (slide.content || '').replace(/\n/g, '<br>');
+                slideEl.innerHTML = '<h1>' + (slide.title || 'Slide ' + (idx + 1)) + '</h1>' + imageHtml + '<p>' + contentText + '</p>';
                 slidesContainer.appendChild(slideEl);
             });
             
