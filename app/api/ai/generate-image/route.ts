@@ -1,13 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
-import * as fal from "@fal-ai/serverless-client"
 import { cookies } from "next/headers"
 import { rateLimit } from "@/lib/redis"
 import { createServiceRoleClient } from "@/lib/supabase/server"
-
-// Configure fal client
-fal.config({
-  credentials: process.env.FAL_KEY,
-})
 
 function getUserIdFromToken(token: string): string | null {
   try {
@@ -88,16 +82,30 @@ export async function POST(req: NextRequest) {
 
     console.log("[v0] Generating image with Fal:", { prompt, imageType, creditCost })
 
-    // Generate image using Fal flux schnell model
-    const result = await fal.subscribe("fal-ai/flux/schnell", {
-      input: {
-        prompt,
-        image_size: "square_hd",
-        num_inference_steps: 4,
-        num_images: 1,
+    // Generate image using Fal flux schnell model via REST API
+    const falResponse = await fetch("https://api.falai.com/v1/fal-ai/flux/schnell", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Key ${process.env.FAL_KEY || ""}`,
       },
+      body: JSON.stringify({
+        input: {
+          prompt,
+          image_size: "square_hd",
+          num_inference_steps: 4,
+          num_images: 1,
+        },
+      }),
     })
 
+    if (!falResponse.ok) {
+      const error = await falResponse.text()
+      console.error("[v0] Fal API error:", error)
+      throw new Error(`Fal API error: ${falResponse.status}`)
+    }
+
+    const result = await falResponse.json()
     const imageUrl = result.images?.[0]?.url
 
     if (!imageUrl) {
