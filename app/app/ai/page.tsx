@@ -464,6 +464,148 @@ const AIPage = () => {
     }
   }
 
+  const handleGenerateImage = async (prompt: string, type: "image" | "schema") => {
+    try {
+      setLoading(true)
+      const creditCost = type === "image" ? 3 : 3
+
+      if ((monthlyCredits + purchasedCredits) < creditCost) {
+        toast.error(`You need ${creditCost} credits to generate a ${type}`)
+        setLoading(false)
+        return
+      }
+
+      console.log("[v0] Generating", type, "with prompt:", prompt.substring(0, 50) + "...")
+
+      const response = await fetch("/api/ai/generate-image", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          prompt: type === "schema" ? `Create a visual diagram/schema for: ${prompt}` : prompt,
+          imageType: type,
+        }),
+      })
+
+      if (response.status === 402) {
+        const error = await response.json()
+        toast.error(error.message || "Insufficient credits")
+        setLoading(false)
+        return
+      }
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.message || "Failed to generate image")
+      }
+
+      const data = await response.json()
+      
+      // Add image message to chat
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content: `[Image generated - ${type}]\n\n${data.imageUrl}`,
+        },
+      ])
+
+      // Update credits display
+      if (data.creditsRemaining !== undefined) {
+        setProfileData((prev) => ({
+          ...prev,
+          purchasedCredits: Math.max(0, data.creditsRemaining - (monthlyCredits)),
+        }))
+      }
+
+      toast.success(`${type === "image" ? "Image" : "Diagram"} generated! (${creditCost} credits used)`)
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+    } catch (error: any) {
+      console.error("[v0] Error generating image:", error)
+      toast.error(error.message || "Failed to generate image")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleExportPresentation = async (slideCount: 5 | 10 = 5) => {
+    try {
+      setLoading(true)
+      const creditCost = slideCount === 5 ? 7 : 12
+
+      if ((monthlyCredits + purchasedCredits) < creditCost) {
+        toast.error(`You need ${creditCost} credits to export a ${slideCount}-slide presentation`)
+        setLoading(false)
+        return
+      }
+
+      // Extract text and images from messages
+      const content = messages
+        .filter((msg) => msg.role === "assistant")
+        .map((msg, idx) => {
+          const isImage = msg.content.includes("https://")
+          if (isImage) {
+            const imageUrl = msg.content.split("\n").find((line) => line.includes("https://")) || ""
+            return {
+              title: `Content ${idx}`,
+              imageUrl,
+              text: msg.content.split("\n")[0],
+            }
+          }
+          return {
+            title: `Slide ${idx}`,
+            text: msg.content.substring(0, 500),
+          }
+        })
+        .slice(0, slideCount)
+
+      if (content.length === 0) {
+        toast.error("No content to export. Generate some AI responses first.")
+        setLoading(false)
+        return
+      }
+
+      console.log("[v0] Exporting presentation with", slideCount, "slides")
+
+      const response = await fetch("/api/ai/export-presentation", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          content,
+          title: `AI Generated Presentation`,
+          slideCount,
+        }),
+      })
+
+      if (response.status === 402) {
+        const error = await response.json()
+        toast.error(error.message || "Insufficient credits")
+        setLoading(false)
+        return
+      }
+
+      if (!response.ok) {
+        throw new Error("Failed to export presentation")
+      }
+
+      // Download the file
+      const blob = await response.blob()
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement("a")
+      a.href = url
+      a.download = `presentation_${slideCount}slides.pptx`
+      a.click()
+      URL.revokeObjectURL(url)
+
+      toast.success(`Presentation exported! (${creditCost} credits used)`)
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+    } catch (error: any) {
+      console.error("[v0] Error exporting presentation:", error)
+      toast.error(error.message || "Failed to export presentation")
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (!file) return
@@ -891,10 +1033,31 @@ const AIPage = () => {
                         message.role === "user" ? "bg-primary text-primary-foreground" : "bg-secondary/50"
                       }`}
                     >
-                      <p className="whitespace-pre-wrap break-words">{message.content}</p>
+                      {/* Check if message contains an image URL */}
+                      {message.content.includes("https://") && message.role === "assistant" ? (
+                        <div className="space-y-2">
+                          <p className="text-xs text-muted-foreground">{message.content.split("\n")[0]}</p>
+                          <img 
+                            src={message.content.split("\n").find(line => line.includes("https://")) || ""} 
+                            alt="Generated content" 
+                            className="w-full rounded-lg max-w-xs"
+                          />
+                          <a
+                            href={message.content.split("\n").find(line => line.includes("https://")) || ""}
+                            download
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-block text-xs px-2 py-1 rounded bg-primary/20 hover:bg-primary/30 transition"
+                          >
+                            ⬇️ Download
+                          </a>
+                        </div>
+                      ) : (
+                        <p className="whitespace-pre-wrap break-words">{message.content}</p>
+                      )}
 
                       {message.role === "assistant" && (
-                        <div className="hidden group-hover:flex gap-2 mt-2 pt-2 border-t border-border/50">
+                        <div className="hidden group-hover:flex gap-2 mt-2 pt-2 border-t border-border/50 flex-wrap">
                           <button
                             onClick={() => {
                               setSelectedMessageToSave(message.content)
@@ -916,6 +1079,22 @@ const AIPage = () => {
                             title={t("save_to_calendar")}
                           >
                             📅 Calendar
+                          </button>
+                          <button
+                            onClick={() => handleGenerateImage(message.content, "image")}
+                            disabled={loading || (monthlyCredits + purchasedCredits) < 3}
+                            className="text-xs px-2 py-1 rounded bg-primary/20 hover:bg-primary/30 transition disabled:opacity-50"
+                            title={`Generate image (3 credits)`}
+                          >
+                            🎨 Image
+                          </button>
+                          <button
+                            onClick={() => handleGenerateImage(message.content, "schema")}
+                            disabled={loading || (monthlyCredits + purchasedCredits) < 3}
+                            className="text-xs px-2 py-1 rounded bg-primary/20 hover:bg-primary/30 transition disabled:opacity-50"
+                            title={`Generate diagram (3 credits)`}
+                          >
+                            📊 Schema
                           </button>
                         </div>
                       )}
@@ -954,6 +1133,28 @@ const AIPage = () => {
                 >
                   <Send className="w-3 h-3 md:w-4 md:h-4" />
                 </Button>
+                {messages.length > 0 && (
+                  <>
+                    <Button
+                      onClick={() => handleExportPresentation(5)}
+                      disabled={loading || messages.filter((m) => m.role === "assistant").length === 0 || (monthlyCredits + purchasedCredits) < 7}
+                      variant="outline"
+                      className="shrink-0 text-xs"
+                      title="Export 5-slide presentation (7 credits)"
+                    >
+                      📊 5 slides
+                    </Button>
+                    <Button
+                      onClick={() => handleExportPresentation(10)}
+                      disabled={loading || messages.filter((m) => m.role === "assistant").length === 0 || (monthlyCredits + purchasedCredits) < 12}
+                      variant="outline"
+                      className="shrink-0 text-xs"
+                      title="Export 10-slide presentation (12 credits)"
+                    >
+                      📊 10 slides
+                    </Button>
+                  </>
+                )}
                 {aiMode === "analyze" && (
                   <>
                     <Button
