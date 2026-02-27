@@ -1136,23 +1136,52 @@ const AIPage = () => {
                 {messages.length > 0 && (
                   <>
                     <Button
-                      onClick={() => handleExportPresentation(5)}
-                      disabled={loading || messages.filter((m) => m.role === "assistant").length === 0 || (monthlyCredits + purchasedCredits) < 7}
+                      onClick={() => handleGenerateImage(messages[messages.length - 1]?.content || "", "image")}
+                      disabled={loading || (monthlyCredits + purchasedCredits) < 3}
                       variant="outline"
                       className="shrink-0 text-xs"
-                      title="Export 5-slide presentation (7 credits)"
+                      title="Generate image (3 credits)"
                     >
-                      📊 5 slides
+                      🎨 Image
                     </Button>
                     <Button
-                      onClick={() => handleExportPresentation(10)}
-                      disabled={loading || messages.filter((m) => m.role === "assistant").length === 0 || (monthlyCredits + purchasedCredits) < 12}
+                      onClick={() => handleGenerateImage(messages[messages.length - 1]?.content || "", "schema")}
+                      disabled={loading || (monthlyCredits + purchasedCredits) < 3}
                       variant="outline"
                       className="shrink-0 text-xs"
-                      title="Export 10-slide presentation (12 credits)"
+                      title="Generate diagram (3 credits)"
                     >
-                      📊 10 slides
+                      📊 Schema
                     </Button>
+                    {/* PowerPoint Export Dropdown */}
+                    <div className="relative group">
+                      <Button
+                        variant="outline"
+                        className="shrink-0 text-xs"
+                        title="Export presentation"
+                      >
+                        📑 Export
+                        <svg className="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                        </svg>
+                      </Button>
+                      <div className="absolute right-0 mt-0 w-48 bg-secondary border border-border rounded-lg shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-all z-10">
+                        <button
+                          onClick={() => handleExportPresentation(5)}
+                          disabled={loading || (monthlyCredits + purchasedCredits) < 7}
+                          className="w-full text-left px-4 py-2 hover:bg-primary/20 rounded-t-lg text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          5 slides (7 credits)
+                        </button>
+                        <button
+                          onClick={() => handleExportPresentation(10)}
+                          disabled={loading || (monthlyCredits + purchasedCredits) < 12}
+                          className="w-full text-left px-4 py-2 hover:bg-primary/20 rounded-b-lg text-sm border-t border-border/50 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          10 slides (12 credits)
+                        </button>
+                      </div>
+                    </div>
                   </>
                 )}
                 {aiMode === "analyze" && (
