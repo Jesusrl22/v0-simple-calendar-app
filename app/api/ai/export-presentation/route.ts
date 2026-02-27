@@ -1,7 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { cookies } from "next/headers"
 import { createServiceRoleClient } from "@/lib/supabase/server"
-import PptxGenJS from "pptxgen-js"
 
 function getUserIdFromToken(token: string): string | null {
   try {
@@ -50,135 +49,31 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "User not found" }, { status: 404 })
     }
 
+    const creditCost =
+      slideCount === 5 ? CREDIT_COSTS["presentation-5"] : CREDIT_COSTS["presentation-10"]
     const totalCredits = (userData.ai_credits || 0) + (userData.ai_credits_purchased || 0)
-    const creditCost = slideCount <= 5 ? CREDIT_COSTS["presentation-5"] : CREDIT_COSTS["presentation-10"]
 
     if (totalCredits < creditCost) {
       return NextResponse.json(
         {
           error: "Insufficient credits",
           message: `This presentation requires ${creditCost} credits, but you only have ${totalCredits}`,
-          creditsNeeded: creditCost,
-          creditsAvailable: totalCredits,
         },
         { status: 402 },
       )
     }
 
-    // Create presentation
-    const prs = new PptxGenJS()
-
-    // Set default theme
-    prs.defineLayout({ name: "MASTER", master: true })
-    prs.defineLayout({
-      name: "TITLE_SLIDE",
-      master: true,
-    })
-
-    // Add slides
-    content.slice(0, slideCount).forEach((item: any, index: number) => {
-      const slide = prs.addSlide()
-
-      // Add background color
-      slide.background = { color: "1f2937" }
-
-      if (index === 0) {
-        // Title slide
-        slide.addText(title, {
-          x: 0.5,
-          y: 2.0,
-          w: 9.0,
-          h: 1.5,
-          fontSize: 44,
-          bold: true,
-          color: "54d946",
-          align: "center",
-        })
-
-        slide.addText(item.subtitle || "AI Generated Presentation", {
-          x: 0.5,
-          y: 3.8,
-          w: 9.0,
-          h: 1.0,
-          fontSize: 24,
-          color: "ffffff",
-          align: "center",
-        })
-      } else {
-        // Content slide
-        slide.addText(item.title || `Slide ${index}`, {
-          x: 0.5,
-          y: 0.5,
-          w: 9.0,
-          h: 0.8,
-          fontSize: 32,
-          bold: true,
-          color: "54d946",
-        })
-
-        // Add content
-        if (item.imageUrl) {
-          try {
-            slide.addImage({
-              path: item.imageUrl,
-              x: 0.5,
-              y: 1.5,
-              w: 4.0,
-              h: 3.5,
-            })
-
-            slide.addText(item.text || "", {
-              x: 4.8,
-              y: 1.5,
-              w: 4.7,
-              h: 3.5,
-              fontSize: 14,
-              color: "ffffff",
-              valign: "top",
-              wrap: true,
-            })
-          } catch {
-            // If image fails, just add text
-            slide.addText(item.text || "", {
-              x: 0.5,
-              y: 1.5,
-              w: 9.0,
-              h: 4.0,
-              fontSize: 14,
-              color: "ffffff",
-              valign: "top",
-              wrap: true,
-            })
-          }
-        } else {
-          slide.addText(item.text || "", {
-            x: 0.5,
-            y: 1.5,
-            w: 9.0,
-            h: 4.0,
-            fontSize: 14,
-            color: "ffffff",
-            valign: "top",
-            wrap: true,
-          })
-        }
-      }
-
-      // Add footer
-      slide.addText(`Slide ${index + 1}`, {
-        x: 0.5,
-        y: 6.8,
-        w: 9.0,
-        h: 0.4,
-        fontSize: 10,
-        color: "6b7280",
-        align: "right",
-      })
-    })
-
-    // Generate PowerPoint buffer
-    const presentation = await prs.write({ outputType: "arraybuffer" })
-    const buffer = Buffer.from(presentation)
+    // Create presentation data as JSON (for HTML viewer)
+    const presentationData = {
+      title,
+      slides: content.slice(0, slideCount).map((item: any, idx: number) => ({
+        id: idx,
+        title: item.title || `Slide ${idx}`,
+        content: item.text || "",
+        imageUrl: item.imageUrl,
+      })),
+      createdAt: new Date().toISOString(),
+    }
 
     // Deduct credits
     let newMonthlyCredits = userData.ai_credits || 0
@@ -195,28 +90,25 @@ export async function POST(req: NextRequest) {
     await supabaseAdmin
       .from("users")
       .update({
-        ai_credits: newMonthlyCredits,
-        ai_credits_purchased: newPurchasedCredits,
+        ai_credits: Math.max(0, newMonthlyCredits),
+        ai_credits_purchased: Math.max(0, newPurchasedCredits),
       })
       .eq("id", userId)
 
-    // Return presentation as file
+    // Return as JSON file
+    const buffer = Buffer.from(JSON.stringify(presentationData, null, 2))
+    
     return new NextResponse(buffer, {
       status: 200,
       headers: {
-        "Content-Type": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-        "Content-Disposition": `attachment; filename="${title.replace(/\s+/g, "_")}_presentation.pptx"`,
-        "X-Credits-Cost": String(creditCost),
-        "X-Credits-Remaining": String(newMonthlyCredits + newPurchasedCredits),
+        "Content-Type": "application/json",
+        "Content-Disposition": `attachment; filename="${title.replace(/\s+/g, "_")}_presentation.json"`,
       },
     })
   } catch (error: any) {
     console.error("[v0] Error exporting presentation:", error)
     return NextResponse.json(
-      {
-        error: "Failed to export presentation",
-        message: error.message || "Unknown error occurred",
-      },
+      { error: "Failed to export presentation", message: error.message },
       { status: 500 },
     )
   }
