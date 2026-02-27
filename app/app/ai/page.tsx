@@ -1136,8 +1136,11 @@ const AIPage = () => {
                 {messages.length > 0 && (
                   <>
                     <Button
-                      onClick={() => handleGenerateImage(messages[messages.length - 1]?.content || "", "image")}
-                      disabled={loading || (monthlyCredits + purchasedCredits) < 3}
+                      onClick={() => {
+                        const lastAssistantMsg = [...messages].reverse().find(m => m.role === "assistant")
+                        if (lastAssistantMsg) handleGenerateImage(lastAssistantMsg.content, "image")
+                      }}
+                      disabled={loading || !messages.some(m => m.role === "assistant") || (monthlyCredits + purchasedCredits) < 3}
                       variant="outline"
                       className="shrink-0 text-xs"
                       title="Generate image (3 credits)"
@@ -1145,8 +1148,11 @@ const AIPage = () => {
                       🎨 Image
                     </Button>
                     <Button
-                      onClick={() => handleGenerateImage(messages[messages.length - 1]?.content || "", "schema")}
-                      disabled={loading || (monthlyCredits + purchasedCredits) < 3}
+                      onClick={() => {
+                        const lastAssistantMsg = [...messages].reverse().find(m => m.role === "assistant")
+                        if (lastAssistantMsg) handleGenerateImage(lastAssistantMsg.content, "schema")
+                      }}
+                      disabled={loading || !messages.some(m => m.role === "assistant") || (monthlyCredits + purchasedCredits) < 3}
                       variant="outline"
                       className="shrink-0 text-xs"
                       title="Generate diagram (3 credits)"
