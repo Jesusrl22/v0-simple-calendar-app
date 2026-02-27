@@ -82,6 +82,12 @@ export async function POST(req: NextRequest) {
 
     console.log("[v0] Generating image with Fal:", { prompt, imageType, creditCost })
 
+    // Enhance prompt for schema generation
+    let enhancedPrompt = prompt
+    if (imageType === "schema") {
+      enhancedPrompt = `Create a professional diagram/flowchart/schema showing: ${prompt}. Use clear boxes, arrows, connections, and labels. Style: modern, clean, organized. Use colors to distinguish different elements.`
+    }
+
     // Generate image using Fal flux schnell model via REST API
     const falResponse = await fetch("https://api.falai.com/v1/fal-ai/flux/schnell", {
       method: "POST",
@@ -91,7 +97,7 @@ export async function POST(req: NextRequest) {
       },
       body: JSON.stringify({
         input: {
-          prompt,
+          prompt: enhancedPrompt,
           image_size: "square_hd",
           num_inference_steps: 4,
           num_images: 1,

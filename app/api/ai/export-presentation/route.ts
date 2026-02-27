@@ -63,17 +63,182 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    // Create presentation data as JSON (for HTML viewer)
-    const presentationData = {
-      title,
-      slides: content.slice(0, slideCount).map((item: any, idx: number) => ({
-        id: idx,
-        title: item.title || `Slide ${idx}`,
-        content: item.text || "",
-        imageUrl: item.imageUrl,
-      })),
-      createdAt: new Date().toISOString(),
-    }
+    // Create presentation as HTML (interactive, downloadable as .html)
+    const htmlContent = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${title}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0f172a;
+            color: #fff;
+            overflow: hidden;
+        }
+        .presentation { 
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            background: #0f172a;
+        }
+        .slide-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        }
+        .slide {
+            display: none;
+            width: 95%;
+            height: 95%;
+            max-width: 1200px;
+            max-height: 800px;
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 60px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            border: 1px solid #334155;
+            animation: fadeIn 0.3s ease-in;
+        }
+        .slide.active { display: flex; flex-direction: column; }
+        .slide h1 { 
+            color: #54d946;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            word-wrap: break-word;
+        }
+        .slide p { 
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #e2e8f0;
+            margin-bottom: 20px;
+            flex: 1;
+            overflow-y: auto;
+        }
+        .slide img {
+            max-width: 100%;
+            max-height: 400px;
+            border-radius: 8px;
+            margin: 20px 0;
+            object-fit: contain;
+        }
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 60px;
+            background: #1e293b;
+            border-top: 1px solid #334155;
+        }
+        button {
+            background: #54d946;
+            color: #0f172a;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        button:hover { 
+            background: #4ade80;
+            transform: scale(1.05);
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .slide-counter {
+            font-size: 1rem;
+            color: #94a3b8;
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .title-slide { justify-content: center; text-align: center; }
+        .title-slide h1 { font-size: 3rem; }
+        .title-slide p { 
+            font-size: 1.3rem;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation">
+        <div class="slide-container">
+            <div id="slides"></div>
+        </div>
+        <div class="controls">
+            <button id="prevBtn" onclick="previousSlide()">← Previous</button>
+            <span class="slide-counter"><span id="currentSlide">1</span> / <span id="totalSlides">0</span></span>
+            <button id="nextBtn" onclick="nextSlide()">Next →</button>
+        </div>
+    </div>
+
+    <script>
+        const data = ${JSON.stringify(presentationData)};
+        let currentSlide = 0;
+
+        function init() {
+            const slidesContainer = document.getElementById('slides');
+            document.getElementById('totalSlides').textContent = data.slides.length;
+            
+            data.slides.forEach((slide, idx) => {
+                const slideEl = document.createElement('div');
+                slideEl.className = 'slide' + (idx === 0 ? ' active' : '');
+                slideEl.innerHTML = \`
+                    <h1>\${slide.title || 'Slide ' + (idx + 1)}</h1>
+                    \${slide.imageUrl ? '<img src="' + slide.imageUrl + '" alt="Slide image">' : ''}
+                    <p>\${(slide.content || '').replace(/\\n/g, '<br>')}</p>
+                \`;
+                slidesContainer.appendChild(slideEl);
+            });
+            
+            updateControls();
+        }
+
+        function showSlide(n) {
+            const slides = document.querySelectorAll('.slide');
+            if (n >= slides.length) currentSlide = slides.length - 1;
+            if (n < 0) currentSlide = 0;
+            
+            slides.forEach(s => s.classList.remove('active'));
+            slides[currentSlide].classList.add('active');
+            document.getElementById('currentSlide').textContent = currentSlide + 1;
+            updateControls();
+        }
+
+        function nextSlide() {
+            currentSlide++;
+            showSlide(currentSlide);
+        }
+
+        function previousSlide() {
+            currentSlide--;
+            showSlide(currentSlide);
+        }
+
+        function updateControls() {
+            const slides = document.querySelectorAll('.slide');
+            document.getElementById('prevBtn').disabled = currentSlide === 0;
+            document.getElementById('nextBtn').disabled = currentSlide === slides.length - 1;
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') previousSlide();
+        });
+
+        init();
+    </script>
+</body>
+</html>`
 
     // Deduct credits
     let newMonthlyCredits = userData.ai_credits || 0
@@ -95,14 +260,14 @@ export async function POST(req: NextRequest) {
       })
       .eq("id", userId)
 
-    // Return as JSON file
-    const buffer = Buffer.from(JSON.stringify(presentationData, null, 2))
+    // Return as HTML file
+    const buffer = Buffer.from(htmlContent)
     
     return new NextResponse(buffer, {
       status: 200,
       headers: {
-        "Content-Type": "application/json",
-        "Content-Disposition": `attachment; filename="${title.replace(/\s+/g, "_")}_presentation.json"`,
+        "Content-Type": "text/html; charset=utf-8",
+        "Content-Disposition": `attachment; filename="${title.replace(/\s+/g, "_")}_presentation_${slideCount}slides.html"`,
       },
     })
   } catch (error: any) {
