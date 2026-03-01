@@ -103,15 +103,7 @@ const AIPage = () => {
           const data = await response.json()
           console.log("[v0] Loaded", data.length, "conversations from database")
           setConversations(data)
-          
-          // If there are conversations, load the most recent one
-          if (data.length > 0) {
-            const mostRecent = data[0]
-            setCurrentConversationId(mostRecent.id)
-            setMessages(mostRecent.messages || [])
-            setAiMode(mostRecent.mode || "chat")
-            console.log("[v0] Loaded most recent conversation:", mostRecent.id)
-          }
+          // Don't auto-load conversation - let user choose which one to open
         } else {
           console.warn("[v0] Failed to load conversations:", response.status)
         }
