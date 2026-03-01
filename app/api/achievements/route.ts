@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { cookies } from "next/headers"
 import { achievementsList } from "@/lib/achievements"
+import { notifyAchievementUnlocked } from "@/lib/notification-triggers"
 
 function getUserIdFromToken(token: string): string | null {
   try {
@@ -117,6 +118,14 @@ export async function GET() {
           if (insertResponse.ok) {
             const inserted = await insertResponse.json()
             newAchievements.push(inserted[0])
+            
+            // Send notification for achievement unlock
+            try {
+              console.log("[v0] Achievement unlocked, sending notification for:", achievement.title)
+              await notifyAchievementUnlocked(userId, achievement.title)
+            } catch (notifError) {
+              console.warn("[v0] Failed to send achievement notification:", notifError)
+            }
           }
         }
       }

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { cookies } from "next/headers"
+import { notifyPomodoroCompleted } from "@/lib/notification-triggers"
 
 function getUserIdFromToken(token: string): string | null {
   try {
@@ -63,6 +64,15 @@ export async function POST(request: Request) {
 
     const session = await response.json()
     console.log("[v0] Pomodoro API: Session saved successfully:", session)
+
+    // Send notification for pomodoro completion
+    try {
+      const sessionType = body.sessionType || "work"
+      console.log("[v0] Pomodoro completed, sending notification for:", sessionType)
+      await notifyPomodoroCompleted(userId, sessionType)
+    } catch (notifError) {
+      console.warn("[v0] Failed to send pomodoro notification:", notifError)
+    }
 
     return NextResponse.json({ success: true, session })
   } catch (error) {
