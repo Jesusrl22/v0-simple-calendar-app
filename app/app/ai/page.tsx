@@ -1004,24 +1004,50 @@ const AIPage = () => {
                   )}
                 </div>
 
-                {input.trim() === "" && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-1 md:gap-2">
-                    {(SUGGESTED_PROMPTS[aiMode] || []).map((prompt, index) => (
-                      <button
-                        key={index}
-                        onClick={() => handleSend(prompt)}
-                        className="p-2 md:p-3 rounded-lg border border-border/50 hover:border-primary bg-secondary/20 hover:bg-secondary/40 transition-all text-xs text-left hover:shadow-lg"
-                      >
-                        {prompt}
-                      </button>
-                    ))}
+                {/* Suggested Prompts */}
+                {SUGGESTED_PROMPTS[aiMode] && (
+                  <div className="space-y-2">
+                    <p className="text-xs md:text-sm text-muted-foreground text-center">{t("suggestions") || "Try asking:"}</p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                      {SUGGESTED_PROMPTS[aiMode].map((prompt, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => {
+                            setInput(prompt)
+                            setTimeout(() => handleSend(), 100)
+                          }}
+                          className="p-2 md:p-3 text-left rounded-lg bg-secondary/30 hover:bg-primary/20 border border-border/50 hover:border-primary/50 transition text-xs md:text-sm text-muted-foreground hover:text-foreground"
+                        >
+                          {prompt}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 )}
 
-                <p className="text-xs text-muted-foreground text-center">
-                  {t("total_available")}: {monthlyCredits + purchasedCredits} {t("credits")}
-                </p>
+                {/* Recent Conversations */}
+                {conversations.length > 0 && (
+                  <div className="space-y-2 pt-4 border-t border-border/50">
+                    <p className="text-xs md:text-sm text-muted-foreground text-center">{t("recent_conversations") || "Recent conversations:"}</p>
+                    <div className="grid grid-cols-1 gap-2">
+                      {conversations.slice(0, 3).map((conv) => (
+                        <button
+                          key={conv.id}
+                          onClick={() => loadConversation(conv.id)}
+                          className="p-2 md:p-3 text-left rounded-lg bg-secondary/30 hover:bg-secondary/50 border border-border/50 hover:border-primary/50 transition text-xs md:text-sm"
+                        >
+                          <p className="truncate font-medium text-foreground">{conv.title}</p>
+                          <p className="text-xs text-muted-foreground truncate">{conv.messages?.length || 0} messages</p>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
+
+              <p className="text-xs text-muted-foreground text-center">
+                {t("total_available")}: {monthlyCredits + purchasedCredits} {t("credits")}
+              </p>
             </div>
           ) : (
             <>
