@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { cookies } from "next/headers"
+import { notifyTaskCompleted } from "@/lib/notification-triggers"
 
 function getUserIdFromToken(token: string): string | null {
   try {
@@ -213,6 +214,11 @@ export async function PATCH(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
+    const userId = getUserIdFromToken(accessToken)
+    if (!userId) {
+      return NextResponse.json({ error: "Invalid token" }, { status: 401 })
+    }
+
     const { id, ...updates } = await request.json()
 
     // If marking task as completed, set completed_at timestamp
@@ -238,6 +244,18 @@ export async function PATCH(request: Request) {
     })
 
     const task = await response.json()
+    
+    // Send notification if task was completed
+    if (updatedData.completed === true && Array.isArray(task) && task[0]) {
+      const completedTask = task[0]
+      try {
+        console.log("[v0] Task completed, sending notification for:", completedTask.title)
+        await notifyTaskCompleted(userId, completedTask.title || "Task")
+      } catch (notifError) {
+        console.warn("[v0] Failed to send task completion notification:", notifError)
+      }
+    }
+    
     return NextResponse.json({ task })
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 })
