@@ -1045,10 +1045,9 @@ const AIPage = () => {
                 )}
               </div>
 
-                <p className="text-xs text-muted-foreground text-center">
-                  {t("total_available")}: {monthlyCredits + purchasedCredits} {t("credits")}
-                </p>
-              </div>
+              <p className="text-xs text-muted-foreground text-center">
+                {t("total_available")}: {monthlyCredits + purchasedCredits} {t("credits")}
+              </p>
             </div>
           ) : (
             <>
