@@ -24,7 +24,6 @@ import { useToast } from "@/hooks/use-toast"
 import { TaskDayView } from "@/components/TaskDayView"
 import { TaskWeekView } from "@/components/TaskWeekView"
 import { TaskMonthView } from "@/components/TaskMonthView"
-import { TaskTrackerView } from "@/components/TaskTrackerView"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export default function TasksPage() {
@@ -295,22 +294,18 @@ export default function TasksPage() {
 
       {/* View Mode Tabs */}
       <Tabs value={viewMode} onValueChange={setViewMode} className="w-full">
-        <TabsList className="grid w-full grid-cols-4 bg-background border border-border rounded-lg">
+        <TabsList className="grid w-full grid-cols-3 bg-background border border-border rounded-lg">
           <TabsTrigger value="today" className="gap-2">
             <Calendar className="h-4 w-4" />
-            <span className="hidden sm:inline">Hoy</span>
+            Hoy
           </TabsTrigger>
           <TabsTrigger value="week" className="gap-2">
             <Calendar className="h-4 w-4" />
-            <span className="hidden sm:inline">Semana</span>
+            Semana
           </TabsTrigger>
           <TabsTrigger value="month" className="gap-2">
             <Calendar className="h-4 w-4" />
-            <span className="hidden sm:inline">Mes</span>
-          </TabsTrigger>
-          <TabsTrigger value="tracker" className="gap-2">
-            <CheckSquare className="h-4 w-4" />
-            <span className="hidden sm:inline">Tracker</span>
+            Mes
           </TabsTrigger>
         </TabsList>
 
@@ -368,18 +363,6 @@ export default function TasksPage() {
               // Abrir diálogo para crear tarea para ese día específico
               setIsDialogOpen(true)
             }}
-          />
-        </TabsContent>
-
-        {/* Tracker View */}
-        <TabsContent value="tracker" className="space-y-4 mt-6">
-          <div className="bg-primary/10 border border-primary/30 rounded-lg p-4">
-            <h2 className="text-xl font-bold text-foreground">Rastreador de Tareas</h2>
-            <p className="text-sm text-muted-foreground">Visualiza el progreso de tus tareas con un tracker interactivo</p>
-          </div>
-          <TaskTrackerView
-            tasks={tasks}
-            onTaskToggle={toggleTask}
           />
         </TabsContent>
       </Tabs>
