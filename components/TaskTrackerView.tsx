@@ -6,7 +6,6 @@ import { format, startOfWeek, addDays, startOfMonth, eachDayOfInterval, endOfMon
 import { es, fr, de } from "date-fns/locale"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Card } from "@/components/ui/card"
-import { useTheme } from "@/contexts/theme-context"
 import { useLanguage } from "@/contexts/language-context"
 import { useTranslation } from "@/hooks/useTranslation"
 
@@ -26,7 +25,6 @@ interface TaskTrackerViewProps {
 }
 
 export function TaskTrackerView({ tasks, onTaskToggle, viewMode = "week" }: TaskTrackerViewProps) {
-  const { theme } = useTheme()
   const { language } = useLanguage()
   const { t } = useTranslation(language)
   const today = new Date()
