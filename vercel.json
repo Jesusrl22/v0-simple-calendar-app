@@ -1,4 +1,9 @@
 {
+  "buildCommand": "pnpm run build",
+  "outputDirectory": ".next",
+  "env": {
+    "VERCEL_URL": "@vercel_url"
+  },
   "crons": [
     {
       "path": "/api/cron/check-expired-subscriptions",
