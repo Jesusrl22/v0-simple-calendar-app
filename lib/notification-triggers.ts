@@ -98,15 +98,3 @@ export async function notifyTeamTaskAssigned(userId: string, taskTitle: string, 
     url: "/app/teams",
   })
 }
-
-export async function notifyUpcomingEvent(userId: string, eventTitle: string, timeUntil: string) {
-  const subscriptions = await getPushSubscriptions(userId)
-  if (subscriptions.length === 0) return
-
-  await sendPushNotificationToUser(subscriptions, {
-    title: "Upcoming Event",
-    body: `${eventTitle} starts in ${timeUntil}`,
-    type: "event",
-    url: "/app/calendar",
-  })
-}
