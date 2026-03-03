@@ -372,174 +372,157 @@ export default function TasksPage() {
           />
         </TabsContent>
 
-        {/* Tracker View - inline, no external component */}
+        {/* Tracker View */}
         <TabsContent value="tracker" className="mt-6">
           {(() => {
             const dateLocale = language === "es" ? es : language === "fr" ? fr : language === "de" ? de : enUS
             const today = new Date()
             const weekStart = startOfWeek(today, { weekStartsOn: 1 })
-            const days = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i))
-            const totalTasks = filteredTasks.length
+            const weekDays = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i))
             const completedTotal = filteredTasks.filter((t) => t.completed).length
-            const progressPct = totalTasks === 0 ? 0 : Math.round((completedTotal / totalTasks) * 100)
+            const progressPct = filteredTasks.length === 0 ? 0 : Math.round((completedTotal / filteredTasks.length) * 100)
 
             return (
-              <div className="space-y-4">
-                {/* Header stats */}
-                <div className="grid grid-cols-3 gap-3">
-                  <div className="bg-primary/10 border border-primary/30 rounded-lg p-3 text-center">
-                    <p className="text-2xl font-bold text-primary">{totalTasks}</p>
-                    <p className="text-xs text-muted-foreground">{t("total_tasks") || "Total"}</p>
+              <div className="space-y-6">
+                {/* Month Header */}
+                <div className="bg-gradient-to-r from-primary/20 to-primary/10 border-2 border-primary/50 rounded-lg p-6 text-center">
+                  <h2 className="text-3xl font-bold text-foreground">{format(today, "MMMM yyyy", { locale: dateLocale })}</h2>
+                </div>
+
+                {/* Progress Summary */}
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="bg-primary/5 border border-primary/30 rounded-lg p-4 text-center">
+                    <p className="text-3xl font-bold text-primary">{filteredTasks.length}</p>
+                    <p className="text-xs text-muted-foreground mt-1">{t("total_tasks") || "Total Tareas"}</p>
                   </div>
-                  <div className="bg-primary/10 border border-primary/30 rounded-lg p-3 text-center">
-                    <p className="text-2xl font-bold text-primary">{completedTotal}</p>
-                    <p className="text-xs text-muted-foreground">{t("completed") || "Completadas"}</p>
+                  <div className="bg-primary/5 border border-primary/30 rounded-lg p-4 text-center">
+                    <p className="text-3xl font-bold text-primary">{completedTotal}</p>
+                    <p className="text-xs text-muted-foreground mt-1">{t("completed") || "Completadas"}</p>
                   </div>
-                  <div className="bg-primary/10 border border-primary/30 rounded-lg p-3 text-center">
-                    <p className="text-2xl font-bold text-primary">{progressPct}%</p>
-                    <p className="text-xs text-muted-foreground">{t("progress") || "Progreso"}</p>
+                  <div className="bg-primary/5 border border-primary/30 rounded-lg p-4 text-center">
+                    <p className="text-3xl font-bold text-primary">{progressPct}%</p>
+                    <p className="text-xs text-muted-foreground mt-1">{t("progress") || "Progreso"}</p>
                   </div>
                 </div>
 
-                {/* Progress bar */}
-                <div className="bg-secondary/30 border border-border rounded-lg p-4 space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">{t("monthly_progress") || "Progreso mensual"}</span>
-                    <span className="text-primary font-bold">{progressPct}%</span>
+                {/* Main Progress Bar */}
+                <div className="bg-secondary/30 border-2 border-primary/40 rounded-lg p-6 space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="font-bold text-foreground">{t("progress") || "Progreso"}</span>
+                    <span className="text-primary font-bold text-lg">{progressPct}%</span>
                   </div>
-                  <div className="w-full h-3 bg-secondary rounded-full overflow-hidden">
+                  <div className="w-full h-6 bg-secondary rounded-full overflow-hidden border border-border/50">
                     <div
-                      className="h-full bg-primary rounded-full transition-all duration-500"
+                      className="h-full bg-gradient-to-r from-primary to-primary/80 rounded-full transition-all duration-500"
                       style={{ width: `${progressPct}%` }}
                     />
                   </div>
                 </div>
 
-                {/* Tracker table */}
-                <div className="overflow-x-auto rounded-lg border border-border">
-                  <table className="w-full min-w-[600px]">
+                {/* Tracker Grid */}
+                <div className="overflow-x-auto border-2 border-primary/40 rounded-lg bg-secondary/10">
+                  <table className="w-full">
                     <thead>
-                      <tr className="bg-primary/20 border-b border-border">
-                        <th className="text-left px-4 py-3 text-sm font-bold text-foreground min-w-[180px]">
-                          {t("tasks") || "Tareas"}
-                        </th>
-                        {days.map((day, i) => (
-                          <th key={i} className={`px-3 py-3 text-center text-xs font-bold min-w-[70px] ${isSameDay(day, today) ? "text-primary" : "text-muted-foreground"}`}>
-                            <div>{format(day, "EEE", { locale: dateLocale }).toUpperCase()}</div>
-                            <div className={`text-lg font-bold mt-0.5 ${isSameDay(day, today) ? "text-primary" : "text-foreground"}`}>
-                              {format(day, "d")}
-                            </div>
-                          </th>
-                        ))}
-                        <th className="px-3 py-3 text-center text-xs font-bold text-muted-foreground min-w-[80px]">
-                          {t("progress") || "Progreso"}
-                        </th>
+                      <tr className="bg-primary/20 border-b-2 border-primary/40">
+                        <th className="text-left px-4 py-4 font-bold text-foreground text-sm border-r border-border/50 min-w-[160px]">{t("tasks") || "Hábitos"}</th>
+                        {weekDays.map((day, i) => {
+                          const isToday = isSameDay(day, today)
+                          return (
+                            <th
+                              key={i}
+                              className={`px-3 py-4 text-center font-bold text-xs border-r border-border/50 min-w-[50px] ${isToday ? "bg-primary/30 text-primary" : "text-muted-foreground"}`}
+                            >
+                              <div>{format(day, "EEE", { locale: dateLocale })}</div>
+                              <div className={`text-xl font-bold mt-1 ${isToday ? "text-primary" : "text-foreground"}`}>{format(day, "d")}</div>
+                            </th>
+                          )
+                        })}
                       </tr>
                     </thead>
                     <tbody>
                       {filteredTasks.length === 0 ? (
                         <tr>
-                          <td colSpan={9} className="px-4 py-8 text-center text-muted-foreground text-sm">
-                            {t("no_tasks") || "No hay tareas. Crea una tarea para empezar."}
+                          <td colSpan={8} className="px-4 py-12 text-center text-muted-foreground">
+                            {t("no_tasks") || "Sin tareas aún"}
                           </td>
                         </tr>
                       ) : (
-                        filteredTasks.map((task, idx) => {
-                          const taskProgress = task.completed ? 100 : 0
-                          return (
-                            <tr key={task.id} className={`border-b border-border/50 hover:bg-secondary/20 transition-colors ${idx % 2 === 0 ? "bg-secondary/5" : "bg-background"}`}>
-                              <td className="px-4 py-3">
-                                <div className="flex items-center gap-2">
-                                  <div className={`w-2 h-2 rounded-full shrink-0 ${task.priority === "high" ? "bg-red-500" : task.priority === "medium" ? "bg-yellow-500" : "bg-green-500"}`} />
-                                  <span className={`text-sm font-medium truncate max-w-[140px] ${task.completed ? "line-through text-muted-foreground" : "text-foreground"}`}>
-                                    {task.title}
-                                  </span>
-                                </div>
-                              </td>
-                              {days.map((day, i) => {
-                                const isToday = isSameDay(day, today)
-                                const isChecked = task.completed && isToday
-                                return (
-                                  <td key={i} className="px-3 py-3 text-center">
-                                    <div className="flex items-center justify-center">
-                                      <button
-                                        onClick={() => isToday && toggleTask(task.id, task.completed)}
-                                        disabled={!isToday}
-                                        className={`w-7 h-7 rounded border-2 flex items-center justify-center transition-all ${
-                                          isChecked
-                                            ? "bg-primary border-primary"
-                                            : isToday
-                                            ? "border-primary/60 hover:border-primary hover:bg-primary/20 cursor-pointer"
-                                            : "border-border/30 cursor-default opacity-50"
-                                        }`}
-                                      >
-                                        {isChecked && (
-                                          <svg className="w-4 h-4 text-primary-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                                          </svg>
-                                        )}
-                                      </button>
-                                    </div>
-                                  </td>
-                                )
-                              })}
-                              <td className="px-3 py-3">
-                                <div className="flex flex-col items-center gap-1">
-                                  <span className="text-xs font-bold text-primary">{taskProgress}%</span>
-                                  <div className="w-full h-2 bg-secondary rounded-full overflow-hidden">
-                                    <div
-                                      className="h-full bg-primary rounded-full transition-all"
-                                      style={{ width: `${taskProgress}%` }}
-                                    />
-                                  </div>
-                                </div>
-                              </td>
-                            </tr>
-                          )
-                        })
+                        filteredTasks.map((task, idx) => (
+                          <tr key={task.id} className={`border-b border-border/50 ${idx % 2 === 0 ? "bg-secondary/5" : ""}`}>
+                            <td className="px-4 py-3 text-sm font-medium text-foreground border-r border-border/50 truncate">
+                              <div className="flex items-center gap-2">
+                                <span
+                                  className={`w-2 h-2 rounded-full flex-shrink-0 ${
+                                    task.priority === "high" ? "bg-red-500" : task.priority === "medium" ? "bg-yellow-500" : "bg-primary"
+                                  }`}
+                                />
+                                {task.title}
+                              </div>
+                            </td>
+                            {weekDays.map((day, i) => {
+                              const isToday = isSameDay(day, today)
+                              const canCheck = isToday
+                              return (
+                                <td key={i} className={`px-3 py-3 text-center border-r border-border/50 ${isToday ? "bg-primary/5" : ""}`}>
+                                  {canCheck ? (
+                                    <button
+                                      onClick={() => toggleTask(task.id, task.completed)}
+                                      className={`w-6 h-6 rounded border-2 flex items-center justify-center transition-all ${
+                                        task.completed
+                                          ? "bg-primary border-primary"
+                                          : "border-primary/60 hover:border-primary hover:bg-primary/10"
+                                      }`}
+                                    >
+                                      {task.completed && (
+                                        <svg className="w-4 h-4 text-primary-foreground" fill="currentColor" viewBox="0 0 20 20">
+                                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                        </svg>
+                                      )}
+                                    </button>
+                                  ) : (
+                                    <div className="w-6 h-6 rounded border-2 border-border/30 opacity-40" />
+                                  )}
+                                </td>
+                              )
+                            })}
+                          </tr>
+                        ))
                       )}
                     </tbody>
                     <tfoot>
-                      <tr className="bg-primary/10 border-t-2 border-primary/30">
-                        <td className="px-4 py-3 text-sm font-bold text-foreground">
-                          {t("daily_count") || "Completadas"}
-                        </td>
-                        {days.map((day, i) => {
+                      <tr className="bg-primary/15 border-t-2 border-primary/40 font-bold">
+                        <td className="px-4 py-3 text-sm text-foreground border-r border-border/50">{t("completed_today") || "Completadas hoy"}</td>
+                        {weekDays.map((day, i) => {
                           const isToday = isSameDay(day, today)
                           const count = isToday ? completedTotal : 0
                           return (
-                            <td key={i} className="px-3 py-3 text-center">
-                              <span className={`text-sm font-bold ${count > 0 ? "text-primary" : "text-muted-foreground"}`}>
-                                {count}
-                              </span>
+                            <td key={i} className={`px-3 py-3 text-center text-sm font-bold border-r border-border/50 ${isToday ? "text-primary bg-primary/10" : "text-muted-foreground"}`}>
+                              {count}
                             </td>
                           )
                         })}
-                        <td className="px-3 py-3 text-center">
-                          <span className="text-sm font-bold text-primary">{progressPct}%</span>
-                        </td>
                       </tr>
                     </tfoot>
                   </table>
                 </div>
 
-                {/* Per-task progress cards */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                  {filteredTasks.map((task) => (
-                    <div key={task.id} className="bg-secondary/20 border border-border rounded-lg p-3 space-y-2">
-                      <p className="text-xs font-medium text-foreground truncate">{task.title}</p>
-                      <div className="flex justify-between text-xs text-muted-foreground">
-                        <span>{t("count") || "Count"}</span>
-                        <span className="font-bold text-primary">{task.completed ? 1 : 0}</span>
+                {/* Daily Progress Cards */}
+                <div>
+                  <h3 className="text-sm font-bold text-foreground mb-3">{t("each_habit") || "Cada tarea"}</h3>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                    {filteredTasks.map((task) => (
+                      <div key={task.id} className="bg-secondary/20 border border-border/50 rounded-lg p-3 space-y-2">
+                        <p className="text-xs font-medium text-foreground truncate">{task.title}</p>
+                        <div className="w-full h-5 bg-secondary rounded-full overflow-hidden border border-border/50">
+                          <div
+                            className="h-full bg-primary transition-all"
+                            style={{ width: task.completed ? "100%" : "0%" }}
+                          />
+                        </div>
+                        <p className="text-xs text-center text-primary font-bold">{task.completed ? "100%" : "0%"}</p>
                       </div>
-                      <div className="w-full h-4 bg-secondary rounded overflow-hidden">
-                        <div
-                          className="h-full bg-primary transition-all"
-                          style={{ width: task.completed ? "100%" : "0%" }}
-                        />
-                      </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
               </div>
             )
