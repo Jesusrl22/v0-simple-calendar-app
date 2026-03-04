@@ -15,6 +15,23 @@ export const translations = {
     teams: "Teams",
     achievements: "Achievements",
     subscription: "Subscription",
+    habit_tracker: "Habits",
+
+    // Habit Tracker
+    track_daily_habits: "Track your daily habits",
+    add_habit: "Add Habit",
+    add_first_habit: "Add your first habit to start tracking",
+    no_habits: "No habits yet",
+    habit_name: "Habit name",
+    habit_placeholder: "e.g. Exercise, Read, Meditate...",
+    habit_added: "Habit added!",
+    habit_count: "Habit Count",
+    habits: "Habits",
+    completed_habits: "Completed",
+    monthly_progress: "Progress",
+    each_habit: "Each Habit",
+    count: "Count",
+    week: "Week",
 
     // Subscription plan names and billing labels
     plan_free: "Free",
@@ -255,6 +272,23 @@ export const translations = {
     teams: "Equipos",
     achievements: "Logros",
     subscription: "Suscripción",
+    habit_tracker: "Hábitos",
+
+    // Habit Tracker
+    track_daily_habits: "Sigue tus hábitos diarios",
+    add_habit: "Añadir Hábito",
+    add_first_habit: "Añade tu primer hábito para empezar",
+    no_habits: "Sin hábitos aún",
+    habit_name: "Nombre del hábito",
+    habit_placeholder: "ej. Ejercicio, Leer, Meditar...",
+    habit_added: "Hábito añadido!",
+    habit_count: "Conteo",
+    habits: "Hábitos",
+    completed_habits: "Completados",
+    monthly_progress: "Progreso",
+    each_habit: "Cada Hábito",
+    count: "Conteo",
+    week: "Semana",
 
     // Subscription plan names and billing labels
     plan_free: "Gratuito",
@@ -760,6 +794,23 @@ export const translations = {
     teams: "Équipes",
     achievements: "Réalisations",
     subscription: "Abonnement",
+    habit_tracker: "Habitudes",
+
+    // Habit Tracker
+    track_daily_habits: "Suivez vos habitudes quotidiennes",
+    add_habit: "Ajouter une habitude",
+    add_first_habit: "Ajoutez votre première habitude pour commencer",
+    no_habits: "Pas encore d'habitudes",
+    habit_name: "Nom de l'habitude",
+    habit_placeholder: "ex. Sport, Lecture, Méditation...",
+    habit_added: "Habitude ajoutée!",
+    habit_count: "Compteur",
+    habits: "Habitudes",
+    completed_habits: "Complétées",
+    monthly_progress: "Progrès",
+    each_habit: "Chaque habitude",
+    count: "Compteur",
+    week: "Semaine",
 
     // Subscription plan names and billing labels
     plan_free: "Gratuit",
@@ -1145,6 +1196,23 @@ export const translations = {
     teams: "Teams",
     achievements: "Erfolge",
     subscription: "Abonnement",
+    habit_tracker: "Gewohnheiten",
+
+    // Habit Tracker
+    track_daily_habits: "Verfolge deine täglichen Gewohnheiten",
+    add_habit: "Gewohnheit hinzufügen",
+    add_first_habit: "Füge deine erste Gewohnheit hinzu",
+    no_habits: "Noch keine Gewohnheiten",
+    habit_name: "Name der Gewohnheit",
+    habit_placeholder: "z.B. Sport, Lesen, Meditieren...",
+    habit_added: "Gewohnheit hinzugefügt!",
+    habit_count: "Anzahl",
+    habits: "Gewohnheiten",
+    completed_habits: "Abgeschlossen",
+    monthly_progress: "Fortschritt",
+    each_habit: "Jede Gewohnheit",
+    count: "Anzahl",
+    week: "Woche",
 
     // Subscription plan names and billing labels
     plan_free: "Kostenlos",
