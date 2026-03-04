@@ -13,7 +13,8 @@ import {
   CreditCard,
   Settings,
   LogOut,
-  Users, // Added Users icon for Teams
+  Users,
+  Activity,
 } from "@/components/icons"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
@@ -68,6 +69,7 @@ export function AppSidebar({ onNavigate }: { onNavigate?: () => void }) {
     { icon: Home, label: t("dashboard"), href: "/app" },
     { icon: Calendar, label: t("calendar"), href: "/app/calendar" },
     { icon: CheckSquare, label: t("tasks"), href: "/app/tasks" },
+    { icon: Activity, label: t("habit_tracker") || "Habits", href: "/app/habits" },
     { icon: FileText, label: t("notes"), href: "/app/notes" },
     { icon: Heart, label: t("wishlist"), href: "/app/wishlist" },
     { icon: Timer, label: t("pomodoro"), href: "/app/pomodoro" },
