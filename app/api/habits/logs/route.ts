@@ -10,6 +10,9 @@ function getUserIdFromToken(token: string): string | null {
   }
 }
 
+const getServiceKey = () => process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!
+
 // GET logs for a given month: ?year=2026&month=3
 export async function GET(request: Request) {
   try {
@@ -27,17 +30,18 @@ export async function GET(request: Request) {
     const lastDay = new Date(Number(year), Number(month), 0).getDate()
     const end = `${year}-${monthStr}-${lastDay}`
 
+    const serviceKey = getServiceKey()
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/habit_logs?user_id=eq.${userId}&completed_date=gte.${start}&completed_date=lte.${end}`,
+      `${SUPABASE_URL}/rest/v1/habit_logs?user_id=eq.${userId}&completed_date=gte.${start}&completed_date=lte.${end}`,
       {
         headers: {
-          apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-          Authorization: `Bearer ${accessToken}`,
+          apikey: serviceKey,
+          Authorization: `Bearer ${serviceKey}`,
         },
       }
     )
     const logs = await response.json()
-    return NextResponse.json({ logs })
+    return NextResponse.json({ logs: Array.isArray(logs) ? logs : [] })
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
@@ -55,39 +59,41 @@ export async function POST(request: Request) {
     const { habit_id, date } = await request.json()
     if (!habit_id || !date) return NextResponse.json({ error: "habit_id and date required" }, { status: 400 })
 
+    const serviceKey = getServiceKey()
+
     // Check if log already exists
     const checkRes = await fetch(
-      `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/habit_logs?user_id=eq.${userId}&habit_id=eq.${habit_id}&completed_date=eq.${date}`,
+      `${SUPABASE_URL}/rest/v1/habit_logs?user_id=eq.${userId}&habit_id=eq.${habit_id}&completed_date=eq.${date}`,
       {
         headers: {
-          apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-          Authorization: `Bearer ${accessToken}`,
+          apikey: serviceKey,
+          Authorization: `Bearer ${serviceKey}`,
         },
       }
     )
     const existing = await checkRes.json()
 
-    if (existing.length > 0) {
+    if (Array.isArray(existing) && existing.length > 0) {
       // Delete (toggle off)
       await fetch(
-        `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/habit_logs?user_id=eq.${userId}&habit_id=eq.${habit_id}&completed_date=eq.${date}`,
+        `${SUPABASE_URL}/rest/v1/habit_logs?user_id=eq.${userId}&habit_id=eq.${habit_id}&completed_date=eq.${date}`,
         {
           method: "DELETE",
           headers: {
-            apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-            Authorization: `Bearer ${accessToken}`,
+            apikey: serviceKey,
+            Authorization: `Bearer ${serviceKey}`,
           },
         }
       )
       return NextResponse.json({ completed: false })
     } else {
       // Insert (toggle on)
-      await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/habit_logs`, {
+      await fetch(`${SUPABASE_URL}/rest/v1/habit_logs`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-          Authorization: `Bearer ${accessToken}`,
+          apikey: serviceKey,
+          Authorization: `Bearer ${serviceKey}`,
           Prefer: "return=minimal",
         },
         body: JSON.stringify({ user_id: userId, habit_id, completed_date: date }),

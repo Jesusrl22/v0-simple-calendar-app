@@ -136,30 +136,17 @@ export default function HabitsPage() {
   }
 
   const addHabit = async () => {
-    if (!newHabitName.trim()) {
-      console.log("[v0] Habit name is empty")
-      return
-    }
-    console.log("[v0] Adding habit with name:", newHabitName, "color:", newHabitColor)
+    if (!newHabitName.trim()) return
     setSaving(true)
     try {
-      const payload = { name: newHabitName.trim(), color: newHabitColor }
-      console.log("[v0] Sending payload:", payload)
-      
       const res = await fetch("/api/habits", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({ name: newHabitName.trim(), color: newHabitColor }),
       })
-      
-      console.log("[v0] Response status:", res.status)
       const responseText = await res.text()
-      console.log("[v0] Response text:", responseText)
-      
       if (res.ok && responseText) {
         const data = JSON.parse(responseText)
-        console.log("[v0] Parsed data:", data)
-        
         if (data.habit) {
           const newHabit = {
             id: data.habit.id,
@@ -167,25 +154,16 @@ export default function HabitsPage() {
             color: data.habit.color || newHabitColor || "#54d946",
             icon: data.habit.icon || "",
           }
-          console.log("[v0] Adding new habit to state:", newHabit)
-          setHabits((prev) => {
-            const updated = [...prev, newHabit]
-            console.log("[v0] Updated habits state:", updated)
-            return updated
-          })
+          setHabits((prev) => [...prev, newHabit])
           setNewHabitName("")
           setNewHabitColor("#54d946")
           setIsAddOpen(false)
-          toast({ title: t("habit_added") || "Habit added successfully!" })
-        } else {
-          console.warn("[v0] No habit in response:", data)
+          toast({ title: t("habit_added") || "Habit added!" })
         }
       } else {
-        console.error("[v0] Request failed with status:", res.status, "and body:", responseText)
-        toast({ title: "Error", description: "Failed to add habit", variant: "destructive" })
+        toast({ title: "Error", description: responseText || "Failed to add habit", variant: "destructive" })
       }
     } catch (error) {
-      console.error("[v0] Exception in addHabit:", error)
       toast({ title: "Error", description: String(error), variant: "destructive" })
     } finally {
       setSaving(false)
@@ -450,16 +428,8 @@ export default function HabitsPage() {
                 id="habit-input"
                 placeholder={t("habit_placeholder") || "e.g. Exercise, Read, Meditate..."}
                 value={newHabitName}
-                onChange={(e) => {
-                  console.log("[v0] Input changed to:", e.target.value)
-                  setNewHabitName(e.target.value)
-                }}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    console.log("[v0] Enter pressed")
-                    addHabit()
-                  }
-                }}
+                onChange={(e) => setNewHabitName(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && addHabit()}
               />
             </div>
             <div className="space-y-2">
@@ -469,10 +439,7 @@ export default function HabitsPage() {
                   <button
                     key={color}
                     type="button"
-                    onClick={() => {
-                      console.log("[v0] Color clicked:", color)
-                      setNewHabitColor(color)
-                    }}
+                    onClick={() => setNewHabitColor(color)}
                     className={`w-8 h-8 rounded-full border-2 transition-all ${newHabitColor === color ? "border-foreground scale-110" : "border-transparent"}`}
                     style={{ backgroundColor: color }}
                   />
@@ -481,23 +448,13 @@ export default function HabitsPage() {
             </div>
           </div>
           <DialogFooter>
-            <Button 
-              type="button"
-              variant="outline" 
-              onClick={() => {
-                console.log("[v0] Cancel clicked")
-                setIsAddOpen(false)
-              }}
-            >
+            <Button type="button" variant="outline" onClick={() => setIsAddOpen(false)}>
               {t("cancel") || "Cancel"}
             </Button>
-            <Button 
+            <Button
               type="button"
-              onClick={() => {
-                console.log("[v0] Add button clicked. newHabitName:", newHabitName, "trim:", newHabitName.trim(), "saving:", saving)
-                addHabit()
-              }} 
-              disabled={saving || !newHabitName.trim()} 
+              onClick={addHabit}
+              disabled={saving || !newHabitName.trim()}
               className="bg-primary text-primary-foreground"
             >
               {saving ? (t("saving") || "Saving...") : (t("add") || "Add")}
