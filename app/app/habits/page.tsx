@@ -60,20 +60,34 @@ export default function HabitsPage() {
   const headers = language === "en" ? dayHeadersEn : language === "fr" ? dayHeadersFr : language === "de" ? dayHeadersDe : dayHeaders
 
   const fetchHabits = useCallback(async () => {
-    const res = await fetch("/api/habits")
-    if (res.ok) {
-      const data = await res.json()
-      setHabits(data.habits || [])
+    try {
+      const res = await fetch("/api/habits")
+      if (res.ok) {
+        const data = await res.json()
+        setHabits(Array.isArray(data.habits) ? data.habits : [])
+      } else {
+        setHabits([])
+      }
+    } catch (error) {
+      console.error("[v0] Failed to fetch habits:", error)
+      setHabits([])
     }
   }, [])
 
   const fetchLogs = useCallback(async () => {
-    const year = currentDate.getFullYear()
-    const month = currentDate.getMonth() + 1
-    const res = await fetch(`/api/habits/logs?year=${year}&month=${month}`)
-    if (res.ok) {
-      const data = await res.json()
-      setLogs(data.logs || [])
+    try {
+      const year = currentDate.getFullYear()
+      const month = currentDate.getMonth() + 1
+      const res = await fetch(`/api/habits/logs?year=${year}&month=${month}`)
+      if (res.ok) {
+        const data = await res.json()
+        setLogs(Array.isArray(data.logs) ? data.logs : [])
+      } else {
+        setLogs([])
+      }
+    } catch (error) {
+      console.error("[v0] Failed to fetch logs:", error)
+      setLogs([])
     }
   }, [currentDate])
 
@@ -124,20 +138,29 @@ export default function HabitsPage() {
   const addHabit = async () => {
     if (!newHabitName.trim()) return
     setSaving(true)
-    const res = await fetch("/api/habits", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: newHabitName.trim(), color: newHabitColor }),
-    })
-    if (res.ok) {
-      const data = await res.json()
-      setHabits((prev) => [...prev, data.habit])
-      setNewHabitName("")
-      setNewHabitColor("#54d946")
-      setIsAddOpen(false)
-      toast({ title: t("habit_added") || "Habit added!" })
+    try {
+      const res = await fetch("/api/habits", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: newHabitName.trim(), color: newHabitColor }),
+      })
+      if (res.ok) {
+        const data = await res.json()
+        if (data.habit) {
+          const habitWithColor = { ...data.habit, color: data.habit.color || newHabitColor }
+          setHabits((prev) => [...prev, habitWithColor])
+          setNewHabitName("")
+          setNewHabitColor("#54d946")
+          setIsAddOpen(false)
+          toast({ title: t("habit_added") || "Habit added!" })
+        }
+      }
+    } catch (error) {
+      console.error("[v0] Failed to add habit:", error)
+      toast({ title: t("habit_added") || "Error adding habit", variant: "destructive" })
+    } finally {
+      setSaving(false)
     }
-    setSaving(false)
   }
 
   const deleteHabit = async (id: string) => {
