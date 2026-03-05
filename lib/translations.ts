@@ -32,6 +32,13 @@ export const translations = {
     each_habit: "Each Habit",
     count: "Count",
     week: "Week",
+    daily: "Daily",
+    your_habits: "Your Habits",
+    of: "of",
+    days: "days",
+    saving: "Saving...",
+    add: "Add",
+    color: "Color",
 
     // Subscription plan names and billing labels
     plan_free: "Free",
@@ -289,6 +296,13 @@ export const translations = {
     each_habit: "Cada Hábito",
     count: "Conteo",
     week: "Semana",
+    daily: "Diariamente",
+    your_habits: "Tus Hábitos",
+    of: "de",
+    days: "días",
+    saving: "Guardando...",
+    add: "Añadir",
+    color: "Color",
 
     // Subscription plan names and billing labels
     plan_free: "Gratuito",
@@ -811,6 +825,13 @@ export const translations = {
     each_habit: "Chaque habitude",
     count: "Compteur",
     week: "Semaine",
+    daily: "Quotidiennement",
+    your_habits: "Vos habitudes",
+    of: "sur",
+    days: "jours",
+    saving: "Enregistrement...",
+    add: "Ajouter",
+    color: "Couleur",
 
     // Subscription plan names and billing labels
     plan_free: "Gratuit",
@@ -1213,6 +1234,13 @@ export const translations = {
     each_habit: "Jede Gewohnheit",
     count: "Anzahl",
     week: "Woche",
+    daily: "Täglich",
+    your_habits: "Ihre Gewohnheiten",
+    of: "von",
+    days: "Tage",
+    saving: "Wird gespeichert...",
+    add: "Hinzufügen",
+    color: "Farbe",
 
     // Subscription plan names and billing labels
     plan_free: "Kostenlos",
