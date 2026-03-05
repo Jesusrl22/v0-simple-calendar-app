@@ -200,54 +200,58 @@ export default function HabitsPage() {
   const weeks = Array.from({ length: numWeeks }, (_, i) => i + 1)
 
   return (
-    <div className="p-4 md:p-6 space-y-6 max-w-full">
+    <div className="p-3 sm:p-4 md:p-6 space-y-4 md:space-y-6 max-w-full">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">{t("habit_tracker") || "Habit Tracker"}</h1>
-          <p className="text-sm text-muted-foreground">{t("track_daily_habits") || "Track your daily habits"}</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-foreground">{t("habit_tracker") || "Habit Tracker"}</h1>
+          <p className="text-xs sm:text-sm text-muted-foreground mt-1">{t("track_daily_habits") || "Track your daily habits"}</p>
         </div>
-        <Button onClick={() => setIsAddOpen(true)} className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90">
+        <Button onClick={() => setIsAddOpen(true)} size="sm" className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90 w-full sm:w-auto">
           <Plus className="h-4 w-4" />
-          <span className="hidden sm:inline">{t("add_habit") || "Add Habit"}</span>
+          <span className="text-sm">{t("add_habit") || "Add Habit"}</span>
         </Button>
       </div>
 
-      {/* Month nav + progress */}
-      <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center">
+      {/* Month nav + progress - stacked on mobile */}
+      <div className="flex flex-col gap-3">
         {/* Month navigator */}
-        <div className="flex items-center gap-3 bg-secondary/20 border border-border rounded-lg px-4 py-2">
-          <button onClick={() => setCurrentDate(subMonths(currentDate, 1))} className="text-muted-foreground hover:text-foreground transition-colors">
-            <ChevronLeft className="h-5 w-5" />
+        <div className="flex items-center gap-2 bg-secondary/20 border border-border rounded-lg px-3 py-2 justify-center sm:justify-start">
+          <button onClick={() => setCurrentDate(subMonths(currentDate, 1))} className="text-muted-foreground hover:text-foreground transition-colors p-1">
+            <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" />
           </button>
-          <span className="text-lg font-bold text-foreground min-w-[140px] text-center">
-            {format(currentDate, "MMMM yyyy", { locale: dateLocale })}
+          <span className="text-sm sm:text-lg font-bold text-foreground min-w-[120px] sm:min-w-[140px] text-center">
+            {format(currentDate, "MMM yyyy", { locale: dateLocale })}
           </span>
-          <button onClick={() => setCurrentDate(addMonths(currentDate, 1))} className="text-muted-foreground hover:text-foreground transition-colors">
-            <ChevronRight className="h-5 w-5" />
+          <button onClick={() => setCurrentDate(addMonths(currentDate, 1))} className="text-muted-foreground hover:text-foreground transition-colors p-1">
+            <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
           </button>
         </div>
 
         {/* Stats */}
-        <div className="flex gap-3 flex-1">
-          <div className="flex-1 bg-primary/10 border border-primary/30 rounded-lg p-3 text-center">
-            <p className="text-xl font-bold text-primary">{totalCompleted}</p>
-            <p className="text-xs text-muted-foreground">{t("completed_habits") || "Completadas"}</p>
+        <div className="grid grid-cols-2 gap-2 md:grid-cols-3 md:gap-3">
+          <div className="bg-primary/10 border border-primary/30 rounded-lg p-2 md:p-3 text-center">
+            <p className="text-lg md:text-xl font-bold text-primary">{totalCompleted}</p>
+            <p className="text-xs text-muted-foreground mt-0.5">{t("completed_habits") || "Completed"}</p>
           </div>
-          <div className="flex-1 bg-primary/10 border border-primary/30 rounded-lg p-3 text-center">
-            <p className="text-xl font-bold text-primary">{progressPct}%</p>
-            <p className="text-xs text-muted-foreground">{t("monthly_progress") || "Progreso"}</p>
+          <div className="bg-primary/10 border border-primary/30 rounded-lg p-2 md:p-3 text-center">
+            <p className="text-lg md:text-xl font-bold text-primary">{progressPct}%</p>
+            <p className="text-xs text-muted-foreground mt-0.5">{t("monthly_progress") || "Progress"}</p>
+          </div>
+          <div className="bg-primary/10 border border-primary/30 rounded-lg p-2 md:p-3 text-center col-span-2 md:col-span-1">
+            <p className="text-lg md:text-xl font-bold text-primary">{habits.length}</p>
+            <p className="text-xs text-muted-foreground mt-0.5">{t("habits") || "Habits"}</p>
           </div>
         </div>
       </div>
 
       {/* Progress bar */}
-      <div className="bg-secondary/20 border border-border rounded-lg p-4 space-y-2">
-        <div className="flex justify-between text-sm font-medium">
+      <div className="bg-secondary/20 border border-border rounded-lg p-3 md:p-4 space-y-2">
+        <div className="flex justify-between text-xs md:text-sm font-medium">
           <span className="text-foreground">{t("progress") || "Progress"}</span>
           <span className="text-primary font-bold">{progressPct}%</span>
         </div>
-        <div className="w-full h-5 bg-secondary rounded-full overflow-hidden border border-border/30">
+        <div className="w-full h-4 md:h-5 bg-secondary rounded-full overflow-hidden border border-border/30">
           <div
             className="h-full bg-primary rounded-full transition-all duration-500"
             style={{ width: `${progressPct}%` }}
@@ -256,51 +260,48 @@ export default function HabitsPage() {
       </div>
 
       {loading ? (
-        <div className="flex items-center justify-center py-20 text-muted-foreground">
+        <div className="flex items-center justify-center py-12 md:py-20 text-muted-foreground">
           <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin mr-3" />
-          {t("loading") || "Loading..."}
+          <span className="text-sm md:text-base">{t("loading") || "Loading..."}</span>
         </div>
       ) : habits.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-20 space-y-3 border-2 border-dashed border-border rounded-lg">
-          <p className="text-muted-foreground font-medium">{t("no_habits") || "No habits yet"}</p>
-          <p className="text-xs text-muted-foreground">{t("add_first_habit") || "Add your first habit to start tracking"}</p>
+        <div className="flex flex-col items-center justify-center py-12 md:py-20 space-y-3 border-2 border-dashed border-border rounded-lg">
+          <p className="text-muted-foreground font-medium text-sm md:text-base">{t("no_habits") || "No habits yet"}</p>
+          <p className="text-xs text-muted-foreground text-center px-2">{t("add_first_habit") || "Add your first habit to start tracking"}</p>
           <Button onClick={() => setIsAddOpen(true)} size="sm" className="gap-2">
             <Plus className="h-4 w-4" />
             {t("add_habit") || "Add Habit"}
           </Button>
         </div>
       ) : (
-        /* Main Tracker Table */
-        <div className="overflow-x-auto rounded-lg border-2 border-border">
-          <table className="w-full text-sm">
+        /* Main Tracker Table - Hidden on mobile, shown on sm+ */
+        <div className="hidden sm:block overflow-x-auto rounded-lg border-2 border-border">
+          <table className="w-full text-xs md:text-sm">
             <thead>
               {/* Week headers */}
               <tr className="bg-primary/20 border-b border-border">
-                <th className="sticky left-0 bg-primary/20 text-left px-4 py-3 font-bold text-foreground border-r border-border min-w-[150px]">
+                <th className="sticky left-0 bg-primary/20 text-left px-2 md:px-4 py-2 md:py-3 font-bold text-foreground border-r border-border min-w-[100px] md:min-w-[150px] text-xs md:text-sm">
                   {t("habits") || "Habits"}
                 </th>
-                {weeks.map((week) => {
-                  const daysInWeek = Math.min(7, daysInMonth.length - (week - 1) * 7 + (week === 1 ? firstDayOfWeek : 0))
-                  return (
-                    <th key={week} colSpan={7} className="text-center px-2 py-3 font-bold text-foreground border-r border-border/50 text-xs">
-                      {t("week") || "Week"} {week}
-                    </th>
-                  )
-                })}
+                {weeks.map((week) => (
+                  <th key={week} colSpan={7} className="text-center px-1 md:px-2 py-2 md:py-3 font-bold text-foreground border-r border-border/50 text-xs">
+                    {t("week") || "Week"} {week}
+                  </th>
+                ))}
               </tr>
               {/* Day of week headers */}
               <tr className="bg-secondary/30 border-b border-border">
-                <th className="sticky left-0 bg-secondary/30 border-r border-border px-4 py-2" />
+                <th className="sticky left-0 bg-secondary/30 border-r border-border px-2 md:px-4 py-1 md:py-2" />
                 {Array.from({ length: numWeeks * 7 }, (_, i) => {
                   const dayIndex = i - firstDayOfWeek
                   const date = dayIndex >= 0 && dayIndex < daysInMonth.length ? daysInMonth[dayIndex] : null
                   const isToday = date ? format(date, "yyyy-MM-dd") === format(new Date(), "yyyy-MM-dd") : false
                   return (
-                    <th key={i} className={`px-1 py-2 text-center border-r border-border/30 min-w-[32px] ${isToday ? "bg-primary/20" : ""}`}>
+                    <th key={i} className={`px-0.5 md:px-1 py-1 md:py-2 text-center border-r border-border/30 min-w-[28px] md:min-w-[32px] ${isToday ? "bg-primary/20" : ""}`}>
                       {date ? (
-                        <div>
-                          <div className="text-xs text-muted-foreground">{headers[(i) % 7]}</div>
-                          <div className={`text-sm font-bold ${isToday ? "text-primary" : "text-foreground"}`}>
+                        <div className="text-xs">
+                          <div className="text-muted-foreground text-[10px] md:text-xs">{headers[(i) % 7]}</div>
+                          <div className={`font-bold text-xs md:text-sm ${isToday ? "text-primary" : "text-foreground"}`}>
                             {format(date, "d")}
                           </div>
                         </div>
@@ -313,14 +314,14 @@ export default function HabitsPage() {
             <tbody>
               {habits.map((habit, idx) => (
                 <tr key={habit.id} className={`border-b border-border/50 ${idx % 2 === 0 ? "bg-secondary/5" : "bg-background"} hover:bg-secondary/10 transition-colors`}>
-                  <td className="sticky left-0 bg-inherit border-r border-border px-4 py-2">
-                    <div className="flex items-center justify-between gap-2">
-                      <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: habit.color || "#54d946" }} />
-                        <span className="font-medium text-foreground text-xs truncate max-w-[110px]">{habit.name}</span>
+                  <td className="sticky left-0 bg-inherit border-r border-border px-2 md:px-4 py-1 md:py-2">
+                    <div className="flex items-center justify-between gap-1 md:gap-2 group">
+                      <div className="flex items-center gap-1 md:gap-2 min-w-0">
+                        <div className="w-2 md:w-3 h-2 md:h-3 rounded-full flex-shrink-0" style={{ backgroundColor: habit.color || "#54d946" }} />
+                        <span className="font-medium text-foreground text-xs md:text-sm truncate">{habit.name}</span>
                       </div>
                       <button onClick={() => deleteHabit(habit.id)} className="text-muted-foreground hover:text-destructive transition-colors flex-shrink-0 opacity-0 group-hover:opacity-100">
-                        <Trash2 className="h-3 w-3" />
+                        <Trash2 className="h-3 w-3 md:h-4 md:w-4" />
                       </button>
                     </div>
                   </td>
@@ -333,12 +334,12 @@ export default function HabitsPage() {
                     const isToggling = key !== null && toggling === key
 
                     return (
-                      <td key={i} className={`px-1 py-2 text-center border-r border-border/30 ${isToday ? "bg-primary/5" : ""}`}>
+                      <td key={i} className={`px-0.5 md:px-1 py-1 md:py-2 text-center border-r border-border/30 ${isToday ? "bg-primary/5" : ""}`}>
                         {date ? (
                           <button
                             onClick={() => toggleLog(habit.id, date)}
                             disabled={isToggling}
-                            className={`w-6 h-6 rounded border-2 flex items-center justify-center transition-all ${
+                            className={`w-5 md:w-6 h-5 md:h-6 rounded border-2 flex items-center justify-center transition-all mx-auto ${
                               done
                                 ? "border-transparent"
                                 : "border-border hover:border-primary/60"
@@ -346,7 +347,7 @@ export default function HabitsPage() {
                             style={done ? { backgroundColor: habit.color || "#54d946", borderColor: habit.color || "#54d946" } : {}}
                           >
                             {done && (
-                              <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                              <svg className="w-2.5 md:w-3 h-2.5 md:h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
                                 <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                               </svg>
                             )}
@@ -361,8 +362,8 @@ export default function HabitsPage() {
             {/* Footer: daily counts */}
             <tfoot>
               <tr className="bg-primary/10 border-t-2 border-primary/40 font-bold">
-                <td className="sticky left-0 bg-primary/10 border-r border-border px-4 py-2 text-xs font-bold text-foreground">
-                  {t("habit_count") || "Habit Count"}
+                <td className="sticky left-0 bg-primary/10 border-r border-border px-2 md:px-4 py-1 md:py-2 text-xs font-bold text-foreground">
+                  {t("daily") || "Daily"}
                 </td>
                 {Array.from({ length: numWeeks * 7 }, (_, i) => {
                   const dayIndex = i - firstDayOfWeek
@@ -370,9 +371,9 @@ export default function HabitsPage() {
                   const count = date ? dayCount(date) : null
                   const isToday = date ? format(date, "yyyy-MM-dd") === format(new Date(), "yyyy-MM-dd") : false
                   return (
-                    <td key={i} className={`px-1 py-2 text-center border-r border-border/30 text-xs ${isToday ? "bg-primary/10 text-primary" : "text-muted-foreground"}`}>
+                    <td key={i} className={`px-0.5 md:px-1 py-1 md:py-2 text-center border-r border-border/30 text-xs font-bold ${isToday ? "bg-primary/10 text-primary" : "text-muted-foreground"}`}>
                       {count !== null ? (
-                        <span className={count > 0 ? "text-primary font-bold" : ""}>{count}</span>
+                        <span className={count > 0 ? "text-primary" : ""}>{count}</span>
                       ) : null}
                     </td>
                   )
@@ -383,17 +384,51 @@ export default function HabitsPage() {
         </div>
       )}
 
-      {/* Per-habit progress cards */}
+      {/* Mobile card view - shown only on small screens */}
+      {!loading && habits.length > 0 && (
+        <div className="sm:hidden space-y-3">
+          <h3 className="text-sm font-bold text-foreground">{t("your_habits") || "Your Habits"}</h3>
+          {habits.map((habit) => {
+            const count = habitCount(habit.id)
+            const pct = daysInMonth.length === 0 ? 0 : Math.round((count / daysInMonth.length) * 100)
+            return (
+              <div key={habit.id} className="bg-secondary/20 border border-border rounded-lg p-3 space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: habit.color || "#54d946" }} />
+                    <span className="font-medium text-foreground text-sm truncate">{habit.name}</span>
+                  </div>
+                  <button onClick={() => deleteHabit(habit.id)} className="text-muted-foreground hover:text-destructive transition-colors flex-shrink-0 ml-2">
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                </div>
+                <div className="w-full h-3 bg-secondary rounded-full overflow-hidden border border-border/30">
+                  <div
+                    className="h-full rounded transition-all duration-300"
+                    style={{ width: `${pct}%`, backgroundColor: habit.color || "#54d946" }}
+                  />
+                </div>
+                <div className="flex justify-between text-xs">
+                  <span className="text-muted-foreground">{count} {t("of") || "of"} {daysInMonth.length} {t("days") || "days"}</span>
+                  <span className="font-bold" style={{ color: habit.color || "#54d946" }}>{pct}%</span>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      )}
+
+      {/* Per-habit progress cards - desktop view */}
       {habits.length > 0 && (
-        <div>
+        <div className="hidden sm:block">
           <h3 className="text-sm font-bold text-foreground mb-3">{t("each_habit") || "Each Habit"}</h3>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
             {habits.map((habit) => {
               const count = habitCount(habit.id)
               const pct = daysInMonth.length === 0 ? 0 : Math.round((count / daysInMonth.length) * 100)
               return (
                 <div key={habit.id} className="bg-secondary/20 border border-border rounded-lg p-3 space-y-2">
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 min-w-0">
                     <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: habit.color || "#54d946" }} />
                     <p className="text-xs font-medium text-foreground truncate">{habit.name}</p>
                   </div>
