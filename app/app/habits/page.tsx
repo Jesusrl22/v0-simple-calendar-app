@@ -140,34 +140,52 @@ export default function HabitsPage() {
       console.log("[v0] Habit name is empty")
       return
     }
-    console.log("[v0] Adding habit:", newHabitName)
+    console.log("[v0] Adding habit with name:", newHabitName, "color:", newHabitColor)
     setSaving(true)
     try {
+      const payload = { name: newHabitName.trim(), color: newHabitColor }
+      console.log("[v0] Sending payload:", payload)
+      
       const res = await fetch("/api/habits", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: newHabitName.trim(), color: newHabitColor }),
+        body: JSON.stringify(payload),
       })
-      console.log("[v0] API Response status:", res.status)
-      if (res.ok) {
-        const data = await res.json()
-        console.log("[v0] API Response data:", data)
+      
+      console.log("[v0] Response status:", res.status)
+      const responseText = await res.text()
+      console.log("[v0] Response text:", responseText)
+      
+      if (res.ok && responseText) {
+        const data = JSON.parse(responseText)
+        console.log("[v0] Parsed data:", data)
+        
         if (data.habit) {
-          const habitWithColor = { ...data.habit, color: data.habit.color || newHabitColor }
-          setHabits((prev) => [...prev, habitWithColor])
+          const newHabit = {
+            id: data.habit.id,
+            name: data.habit.name,
+            color: data.habit.color || newHabitColor || "#54d946",
+            icon: data.habit.icon || "",
+          }
+          console.log("[v0] Adding new habit to state:", newHabit)
+          setHabits((prev) => {
+            const updated = [...prev, newHabit]
+            console.log("[v0] Updated habits state:", updated)
+            return updated
+          })
           setNewHabitName("")
           setNewHabitColor("#54d946")
           setIsAddOpen(false)
-          toast({ title: t("habit_added") || "Habit added!" })
+          toast({ title: t("habit_added") || "Habit added successfully!" })
         } else {
-          console.warn("[v0] No habit in response")
+          console.warn("[v0] No habit in response:", data)
         }
       } else {
-        console.error("[v0] API error:", res.status)
+        console.error("[v0] Request failed with status:", res.status, "and body:", responseText)
         toast({ title: "Error", description: "Failed to add habit", variant: "destructive" })
       }
     } catch (error) {
-      console.error("[v0] Failed to add habit:", error)
+      console.error("[v0] Exception in addHabit:", error)
       toast({ title: "Error", description: String(error), variant: "destructive" })
     } finally {
       setSaving(false)
