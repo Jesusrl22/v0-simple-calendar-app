@@ -18,22 +18,23 @@ export async function GET() {
     const userId = getUserIdFromToken(accessToken)
     if (!userId) return NextResponse.json({ error: "Invalid token" }, { status: 401 })
 
+    const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/habits?user_id=eq.${userId}&order=created_at.asc`,
       {
         headers: {
-          apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-          Authorization: `Bearer ${accessToken}`,
+          apikey: serviceKey,
+          Authorization: `Bearer ${serviceKey}`,
         },
       }
     )
     const habits = await response.json()
-    // Ensure all habits have a color field
-    const habitsWithColor = habits.map((h: any) => ({
+    const habitsWithColor = Array.isArray(habits) ? habits.map((h: any) => ({
       ...h,
       color: h.color || "#54d946",
       icon: h.icon || "",
-    }))
+    })) : []
     return NextResponse.json({ habits: habitsWithColor })
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 })
@@ -51,17 +52,24 @@ export async function POST(request: Request) {
     const { name, color, icon } = await request.json()
     if (!name?.trim()) return NextResponse.json({ error: "Name is required" }, { status: 400 })
 
+    const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+
     const response = await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/habits`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-        Authorization: `Bearer ${accessToken}`,
+        apikey: serviceKey,
+        Authorization: `Bearer ${serviceKey}`,
         Prefer: "return=representation",
       },
       body: JSON.stringify({ user_id: userId, name: name.trim(), color: color || "#54d946", icon: icon || "" }),
     })
-    const habit = await response.json()
+
+    const text = await response.text()
+    if (!response.ok) {
+      return NextResponse.json({ error: `Supabase error: ${text}` }, { status: 500 })
+    }
+    const habit = JSON.parse(text)
     return NextResponse.json({ habit: habit[0] })
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 })
@@ -75,11 +83,12 @@ export async function DELETE(request: Request) {
     if (!accessToken) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
     const { id } = await request.json()
+    const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
     await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/habits?id=eq.${id}`, {
       method: "DELETE",
       headers: {
-        apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-        Authorization: `Bearer ${accessToken}`,
+        apikey: serviceKey,
+        Authorization: `Bearer ${serviceKey}`,
       },
     })
     return NextResponse.json({ success: true })

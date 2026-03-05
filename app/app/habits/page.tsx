@@ -136,11 +136,7 @@ export default function HabitsPage() {
   }
 
   const addHabit = async () => {
-    if (!newHabitName.trim()) {
-      console.log("[v0] Habit name is empty")
-      return
-    }
-    console.log("[v0] Adding habit:", newHabitName)
+    if (!newHabitName.trim()) return
     setSaving(true)
     try {
       const res = await fetch("/api/habits", {
@@ -148,26 +144,26 @@ export default function HabitsPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: newHabitName.trim(), color: newHabitColor }),
       })
-      console.log("[v0] API Response status:", res.status)
-      if (res.ok) {
-        const data = await res.json()
-        console.log("[v0] API Response data:", data)
+      const responseText = await res.text()
+      if (res.ok && responseText) {
+        const data = JSON.parse(responseText)
         if (data.habit) {
-          const habitWithColor = { ...data.habit, color: data.habit.color || newHabitColor }
-          setHabits((prev) => [...prev, habitWithColor])
+          const newHabit = {
+            id: data.habit.id,
+            name: data.habit.name,
+            color: data.habit.color || newHabitColor || "#54d946",
+            icon: data.habit.icon || "",
+          }
+          setHabits((prev) => [...prev, newHabit])
           setNewHabitName("")
           setNewHabitColor("#54d946")
           setIsAddOpen(false)
           toast({ title: t("habit_added") || "Habit added!" })
-        } else {
-          console.warn("[v0] No habit in response")
         }
       } else {
-        console.error("[v0] API error:", res.status)
-        toast({ title: "Error", description: "Failed to add habit", variant: "destructive" })
+        toast({ title: "Error", description: responseText || "Failed to add habit", variant: "destructive" })
       }
     } catch (error) {
-      console.error("[v0] Failed to add habit:", error)
       toast({ title: "Error", description: String(error), variant: "destructive" })
     } finally {
       setSaving(false)
@@ -427,8 +423,9 @@ export default function HabitsPage() {
           </DialogHeader>
           <div className="space-y-4 py-2">
             <div className="space-y-2">
-              <Label>{t("habit_name") || "Habit name"}</Label>
+              <Label htmlFor="habit-input">{t("habit_name") || "Habit name"}</Label>
               <Input
+                id="habit-input"
                 placeholder={t("habit_placeholder") || "e.g. Exercise, Read, Meditate..."}
                 value={newHabitName}
                 onChange={(e) => setNewHabitName(e.target.value)}
@@ -441,6 +438,7 @@ export default function HabitsPage() {
                 {PRESET_COLORS.map((color) => (
                   <button
                     key={color}
+                    type="button"
                     onClick={() => setNewHabitColor(color)}
                     className={`w-8 h-8 rounded-full border-2 transition-all ${newHabitColor === color ? "border-foreground scale-110" : "border-transparent"}`}
                     style={{ backgroundColor: color }}
@@ -450,8 +448,15 @@ export default function HabitsPage() {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsAddOpen(false)}>{t("cancel") || "Cancel"}</Button>
-            <Button onClick={addHabit} disabled={saving || !newHabitName.trim()} className="bg-primary text-primary-foreground">
+            <Button type="button" variant="outline" onClick={() => setIsAddOpen(false)}>
+              {t("cancel") || "Cancel"}
+            </Button>
+            <Button
+              type="button"
+              onClick={addHabit}
+              disabled={saving || !newHabitName.trim()}
+              className="bg-primary text-primary-foreground"
+            >
               {saving ? (t("saving") || "Saving...") : (t("add") || "Add")}
             </Button>
           </DialogFooter>
