@@ -286,7 +286,7 @@ export default function HabitsPage() {
                   <td className="sticky left-0 bg-inherit border-r border-border px-4 py-2">
                     <div className="flex items-center justify-between gap-2">
                       <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: habit.color }} />
+                        <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: habit.color || "#54d946" }} />
                         <span className="font-medium text-foreground text-xs truncate max-w-[110px]">{habit.name}</span>
                       </div>
                       <button onClick={() => deleteHabit(habit.id)} className="text-muted-foreground hover:text-destructive transition-colors flex-shrink-0 opacity-0 group-hover:opacity-100">
@@ -313,7 +313,7 @@ export default function HabitsPage() {
                                 ? "border-transparent"
                                 : "border-border hover:border-primary/60"
                             }`}
-                            style={done ? { backgroundColor: habit.color, borderColor: habit.color } : {}}
+                            style={done ? { backgroundColor: habit.color || "#54d946", borderColor: habit.color || "#54d946" } : {}}
                           >
                             {done && (
                               <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -364,20 +364,20 @@ export default function HabitsPage() {
               return (
                 <div key={habit.id} className="bg-secondary/20 border border-border rounded-lg p-3 space-y-2">
                   <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: habit.color }} />
+                    <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: habit.color || "#54d946" }} />
                     <p className="text-xs font-medium text-foreground truncate">{habit.name}</p>
                   </div>
                   <div className="flex justify-between text-xs text-muted-foreground">
                     <span>{t("count") || "Count"}</span>
-                    <span className="font-bold" style={{ color: habit.color }}>{count}</span>
+                    <span className="font-bold" style={{ color: habit.color || "#54d946" }}>{count}</span>
                   </div>
                   <div className="w-full h-4 bg-secondary rounded overflow-hidden border border-border/30">
                     <div
                       className="h-full rounded transition-all duration-300"
-                      style={{ width: `${pct}%`, backgroundColor: habit.color }}
+                      style={{ width: `${pct}%`, backgroundColor: habit.color || "#54d946" }}
                     />
                   </div>
-                  <p className="text-xs text-center font-bold" style={{ color: habit.color }}>{pct}%</p>
+                  <p className="text-xs text-center font-bold" style={{ color: habit.color || "#54d946" }}>{pct}%</p>
                 </div>
               )
             })}

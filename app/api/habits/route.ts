@@ -28,7 +28,13 @@ export async function GET() {
       }
     )
     const habits = await response.json()
-    return NextResponse.json({ habits })
+    // Ensure all habits have a color field
+    const habitsWithColor = habits.map((h: any) => ({
+      ...h,
+      color: h.color || "#54d946",
+      icon: h.icon || "",
+    }))
+    return NextResponse.json({ habits: habitsWithColor })
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
