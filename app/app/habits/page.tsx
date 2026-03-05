@@ -136,7 +136,11 @@ export default function HabitsPage() {
   }
 
   const addHabit = async () => {
-    if (!newHabitName.trim()) return
+    if (!newHabitName.trim()) {
+      console.log("[v0] Habit name is empty")
+      return
+    }
+    console.log("[v0] Adding habit:", newHabitName)
     setSaving(true)
     try {
       const res = await fetch("/api/habits", {
@@ -144,8 +148,10 @@ export default function HabitsPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: newHabitName.trim(), color: newHabitColor }),
       })
+      console.log("[v0] API Response status:", res.status)
       if (res.ok) {
         const data = await res.json()
+        console.log("[v0] API Response data:", data)
         if (data.habit) {
           const habitWithColor = { ...data.habit, color: data.habit.color || newHabitColor }
           setHabits((prev) => [...prev, habitWithColor])
@@ -153,11 +159,16 @@ export default function HabitsPage() {
           setNewHabitColor("#54d946")
           setIsAddOpen(false)
           toast({ title: t("habit_added") || "Habit added!" })
+        } else {
+          console.warn("[v0] No habit in response")
         }
+      } else {
+        console.error("[v0] API error:", res.status)
+        toast({ title: "Error", description: "Failed to add habit", variant: "destructive" })
       }
     } catch (error) {
       console.error("[v0] Failed to add habit:", error)
-      toast({ title: t("habit_added") || "Error adding habit", variant: "destructive" })
+      toast({ title: "Error", description: String(error), variant: "destructive" })
     } finally {
       setSaving(false)
     }
