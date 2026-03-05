@@ -445,12 +445,21 @@ export default function HabitsPage() {
           </DialogHeader>
           <div className="space-y-4 py-2">
             <div className="space-y-2">
-              <Label>{t("habit_name") || "Habit name"}</Label>
+              <Label htmlFor="habit-input">{t("habit_name") || "Habit name"}</Label>
               <Input
+                id="habit-input"
                 placeholder={t("habit_placeholder") || "e.g. Exercise, Read, Meditate..."}
                 value={newHabitName}
-                onChange={(e) => setNewHabitName(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && addHabit()}
+                onChange={(e) => {
+                  console.log("[v0] Input changed to:", e.target.value)
+                  setNewHabitName(e.target.value)
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    console.log("[v0] Enter pressed")
+                    addHabit()
+                  }
+                }}
               />
             </div>
             <div className="space-y-2">
@@ -459,7 +468,11 @@ export default function HabitsPage() {
                 {PRESET_COLORS.map((color) => (
                   <button
                     key={color}
-                    onClick={() => setNewHabitColor(color)}
+                    type="button"
+                    onClick={() => {
+                      console.log("[v0] Color clicked:", color)
+                      setNewHabitColor(color)
+                    }}
                     className={`w-8 h-8 rounded-full border-2 transition-all ${newHabitColor === color ? "border-foreground scale-110" : "border-transparent"}`}
                     style={{ backgroundColor: color }}
                   />
@@ -468,8 +481,25 @@ export default function HabitsPage() {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsAddOpen(false)}>{t("cancel") || "Cancel"}</Button>
-            <Button onClick={addHabit} disabled={saving || !newHabitName.trim()} className="bg-primary text-primary-foreground">
+            <Button 
+              type="button"
+              variant="outline" 
+              onClick={() => {
+                console.log("[v0] Cancel clicked")
+                setIsAddOpen(false)
+              }}
+            >
+              {t("cancel") || "Cancel"}
+            </Button>
+            <Button 
+              type="button"
+              onClick={() => {
+                console.log("[v0] Add button clicked. newHabitName:", newHabitName, "trim:", newHabitName.trim(), "saving:", saving)
+                addHabit()
+              }} 
+              disabled={saving || !newHabitName.trim()} 
+              className="bg-primary text-primary-foreground"
+            >
               {saving ? (t("saving") || "Saving...") : (t("add") || "Add")}
             </Button>
           </DialogFooter>
