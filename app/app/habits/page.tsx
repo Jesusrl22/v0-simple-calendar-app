@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label"
 import { useTranslation } from "@/hooks/useTranslation"
 import { useLanguage } from "@/contexts/language-context"
 import { useToast } from "@/hooks/use-toast"
-import { format, startOfMonth, endOfMonth, eachDayOfInterval, addMonths, subMonths, getDay } from "date-fns"
+import { format, startOfMonth, endOfMonth, eachDayOfInterval, addMonths, subMonths, getDay, addDays } from "date-fns"
 import { es, fr, de, enUS } from "date-fns/locale"
 
 type Habit = {
@@ -51,6 +51,13 @@ export default function HabitsPage() {
   const monthStart = startOfMonth(currentDate)
   const monthEnd = endOfMonth(currentDate)
   const daysInMonth = eachDayOfInterval({ start: monthStart, end: monthEnd })
+
+  // Current week (Monday to Sunday)
+  const today = new Date()
+  const dayOfWeek = getDay(today) // 0 = Sunday, 1 = Monday...
+  const weekStart = new Date(today)
+  weekStart.setDate(today.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1))
+  const currentWeekDays = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i))
 
   // Day headers - start Monday
   const dayHeaders = ["L", "M", "X", "J", "V", "S", "D"]
@@ -384,7 +391,7 @@ export default function HabitsPage() {
         </div>
       )}
 
-      {/* Mobile table view - last 7 days only */}
+      {/* Mobile table view - current week only */}
       {!loading && habits.length > 0 && (
         <div className="sm:hidden overflow-x-auto rounded-lg border border-border">
           <table className="w-full text-xs">
@@ -393,16 +400,15 @@ export default function HabitsPage() {
                 <th className="sticky left-0 bg-primary/20 text-left px-2 py-2 font-bold text-foreground border-r border-border min-w-[80px]">
                   {t("habits") || "Habits"}
                 </th>
-                {/* Last 7 days */}
-                {Array.from({ length: Math.min(7, daysInMonth.length) }, (_, i) => {
-                  const date = daysInMonth[Math.max(0, daysInMonth.length - 7 + i)]
+                {/* Current week (Monday to Sunday) */}
+                {currentWeekDays.map((date, i) => {
                   const isToday = format(date, "yyyy-MM-dd") === format(new Date(), "yyyy-MM-dd")
                   return (
                     <th
                       key={i}
                       className={`px-1.5 py-2 text-center border-r border-border/30 min-w-[36px] text-[10px] font-bold ${isToday ? "bg-primary/30 text-primary" : ""}`}
                     >
-                      <div className="text-muted-foreground">{format(date, "EEE").substring(0, 1)}</div>
+                      <div className="text-muted-foreground">{format(date, "EEE", { locale: dateLocale }).substring(0, 1)}</div>
                       <div className={isToday ? "text-primary font-bold" : "text-foreground"}>{format(date, "d")}</div>
                     </th>
                   )
@@ -418,8 +424,7 @@ export default function HabitsPage() {
                       <span className="font-medium text-foreground text-xs truncate">{habit.name}</span>
                     </div>
                   </td>
-                  {Array.from({ length: Math.min(7, daysInMonth.length) }, (_, i) => {
-                    const date = daysInMonth[Math.max(0, daysInMonth.length - 7 + i)]
+                  {currentWeekDays.map((date, i) => {
                     const done = isCompleted(habit.id, date)
                     const isToday = format(date, "yyyy-MM-dd") === format(new Date(), "yyyy-MM-dd")
                     const key = `${habit.id}-${format(date, "yyyy-MM-dd")}`
