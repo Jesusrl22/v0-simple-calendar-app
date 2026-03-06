@@ -125,21 +125,38 @@ export default function HabitsPage() {
       setLogs((prev) => [...prev, { habit_id: habitId, completed_date: dateStr }])
     }
 
-    const res = await fetch("/api/habits/logs", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ habit_id: habitId, date: dateStr }),
-    })
+    try {
+      const res = await fetch("/api/habits/logs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ habit_id: habitId, date: dateStr }),
+      })
 
-    if (!res.ok) {
-      // Revert
+      if (!res.ok) {
+        console.error("[v0] Toggle log failed:", res.status, res.statusText)
+        // Revert on error
+        if (wasCompleted) {
+          setLogs((prev) => [...prev, { habit_id: habitId, completed_date: dateStr }])
+        } else {
+          setLogs((prev) => prev.filter((l) => !(l.habit_id === habitId && l.completed_date === dateStr)))
+        }
+        toast({ title: "Error", description: "Failed to save habit log", variant: "destructive" })
+      } else {
+        const data = await res.json()
+        console.log("[v0] Toggle log success:", data)
+      }
+    } catch (error) {
+      console.error("[v0] Toggle log exception:", error)
+      // Revert on error
       if (wasCompleted) {
         setLogs((prev) => [...prev, { habit_id: habitId, completed_date: dateStr }])
       } else {
         setLogs((prev) => prev.filter((l) => !(l.habit_id === habitId && l.completed_date === dateStr)))
       }
+      toast({ title: "Error", description: String(error), variant: "destructive" })
+    } finally {
+      setToggling(null)
     }
-    setToggling(null)
   }
 
   const addHabit = async () => {
