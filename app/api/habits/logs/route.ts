@@ -32,7 +32,7 @@ export async function GET(request: Request) {
 
     const serviceKey = getServiceKey()
     const response = await fetch(
-      `${SUPABASE_URL}/rest/v1/habit_logs?user_id=eq.${userId}&completed_date=gte.${start}&completed_date=lte.${end}`,
+      `${SUPABASE_URL}/rest/v1/habit_logs?user_id=eq.${userId}&date=gte.${start}&date=lte.${end}`,
       {
         headers: {
           apikey: serviceKey,
@@ -41,7 +41,9 @@ export async function GET(request: Request) {
       }
     )
     const logs = await response.json()
-    return NextResponse.json({ logs: Array.isArray(logs) ? logs : [] })
+    // Map 'date' column to 'completed_date' for frontend compatibility
+    const mapped = Array.isArray(logs) ? logs.map(l => ({ ...l, completed_date: l.date })) : []
+    return NextResponse.json({ logs: mapped })
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
@@ -63,7 +65,7 @@ export async function POST(request: Request) {
 
     // Check if log already exists
     const checkRes = await fetch(
-      `${SUPABASE_URL}/rest/v1/habit_logs?user_id=eq.${userId}&habit_id=eq.${habit_id}&completed_date=eq.${date}`,
+      `${SUPABASE_URL}/rest/v1/habit_logs?user_id=eq.${userId}&habit_id=eq.${habit_id}&date=eq.${date}`,
       {
         headers: {
           apikey: serviceKey,
@@ -82,7 +84,7 @@ export async function POST(request: Request) {
     if (Array.isArray(existing) && existing.length > 0) {
       // Delete (toggle off)
       const deleteRes = await fetch(
-        `${SUPABASE_URL}/rest/v1/habit_logs?user_id=eq.${userId}&habit_id=eq.${habit_id}&completed_date=eq.${date}`,
+        `${SUPABASE_URL}/rest/v1/habit_logs?user_id=eq.${userId}&habit_id=eq.${habit_id}&date=eq.${date}`,
         {
           method: "DELETE",
           headers: {
@@ -107,7 +109,7 @@ export async function POST(request: Request) {
           Authorization: `Bearer ${serviceKey}`,
           Prefer: "return=minimal",
         },
-        body: JSON.stringify({ user_id: userId, habit_id, completed_date: date }),
+        body: JSON.stringify({ user_id: userId, habit_id, date }),
       })
       if (!insertRes.ok) {
         const errorText = await insertRes.text()
