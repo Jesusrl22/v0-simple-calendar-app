@@ -39,6 +39,9 @@ export const translations = {
     saving: "Saving...",
     add: "Add",
     color: "Color",
+    frequency: "Frequency",
+    custom_days: "Custom",
+    select_days: "Select days",
 
     // Subscription plan names and billing labels
     plan_free: "Free",
@@ -303,6 +306,9 @@ export const translations = {
     saving: "Guardando...",
     add: "Añadir",
     color: "Color",
+    frequency: "Frecuencia",
+    custom_days: "Personalizado",
+    select_days: "Seleccionar días",
 
     // Subscription plan names and billing labels
     plan_free: "Gratuito",
@@ -832,6 +838,9 @@ export const translations = {
     saving: "Enregistrement...",
     add: "Ajouter",
     color: "Couleur",
+    frequency: "Fréquence",
+    custom_days: "Personnalisé",
+    select_days: "Sélectionner les jours",
 
     // Subscription plan names and billing labels
     plan_free: "Gratuit",
@@ -1241,6 +1250,9 @@ export const translations = {
     saving: "Wird gespeichert...",
     add: "Hinzufügen",
     color: "Farbe",
+    frequency: "Häufigkeit",
+    custom_days: "Benutzerdefiniert",
+    select_days: "Tage auswählen",
 
     // Subscription plan names and billing labels
     plan_free: "Kostenlos",

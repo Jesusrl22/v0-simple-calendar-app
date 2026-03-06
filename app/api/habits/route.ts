@@ -49,7 +49,7 @@ export async function POST(request: Request) {
     const userId = getUserIdFromToken(accessToken)
     if (!userId) return NextResponse.json({ error: "Invalid token" }, { status: 401 })
 
-    const { name, color, icon } = await request.json()
+    const { name, color, icon, recurrence_type, recurrence_days } = await request.json()
     if (!name?.trim()) return NextResponse.json({ error: "Name is required" }, { status: 400 })
 
     const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
@@ -62,7 +62,14 @@ export async function POST(request: Request) {
         Authorization: `Bearer ${serviceKey}`,
         Prefer: "return=representation",
       },
-      body: JSON.stringify({ user_id: userId, name: name.trim(), color: color || "#54d946", icon: icon || "" }),
+      body: JSON.stringify({
+        user_id: userId,
+        name: name.trim(),
+        color: color || "#54d946",
+        icon: icon || "",
+        recurrence_type: recurrence_type || "daily",
+        recurrence_days: recurrence_days || [0, 1, 2, 3, 4, 5, 6],
+      }),
     })
 
     const text = await response.text()
