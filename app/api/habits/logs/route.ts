@@ -32,7 +32,7 @@ export async function GET(request: Request) {
 
     const serviceKey = getServiceKey()
     const response = await fetch(
-      `${SUPABASE_URL}/rest/v1/habit_logs?user_id=eq.${userId}&completed_date=gte.${start}&completed_date=lte.${end}`,
+      `${SUPABASE_URL}/rest/v1/habit_logs?user_id=eq.${userId}&date=gte.${start}&date=lte.${end}`,
       {
         headers: {
           apikey: serviceKey,
@@ -41,7 +41,9 @@ export async function GET(request: Request) {
       }
     )
     const logs = await response.json()
-    return NextResponse.json({ logs: Array.isArray(logs) ? logs : [] })
+    // Map 'date' column to 'completed_date' for frontend compatibility
+    const mapped = Array.isArray(logs) ? logs.map(l => ({ ...l, completed_date: l.date })) : []
+    return NextResponse.json({ logs: mapped })
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
@@ -63,7 +65,7 @@ export async function POST(request: Request) {
 
     // Check if log already exists
     const checkRes = await fetch(
-      `${SUPABASE_URL}/rest/v1/habit_logs?user_id=eq.${userId}&habit_id=eq.${habit_id}&completed_date=eq.${date}`,
+      `${SUPABASE_URL}/rest/v1/habit_logs?user_id=eq.${userId}&habit_id=eq.${habit_id}&date=eq.${date}`,
       {
         headers: {
           apikey: serviceKey,
@@ -71,12 +73,18 @@ export async function POST(request: Request) {
         },
       }
     )
-    const existing = await checkRes.json()
+    const checkText = await checkRes.text()
+    let existing = []
+    try {
+      existing = JSON.parse(checkText)
+    } catch (e) {
+      console.error("[v0] Failed to parse check response:", checkText)
+    }
 
     if (Array.isArray(existing) && existing.length > 0) {
       // Delete (toggle off)
-      await fetch(
-        `${SUPABASE_URL}/rest/v1/habit_logs?user_id=eq.${userId}&habit_id=eq.${habit_id}&completed_date=eq.${date}`,
+      const deleteRes = await fetch(
+        `${SUPABASE_URL}/rest/v1/habit_logs?user_id=eq.${userId}&habit_id=eq.${habit_id}&date=eq.${date}`,
         {
           method: "DELETE",
           headers: {
@@ -85,10 +93,15 @@ export async function POST(request: Request) {
           },
         }
       )
-      return NextResponse.json({ completed: false })
+      if (!deleteRes.ok) {
+        const errorText = await deleteRes.text()
+        console.error("[v0] Delete failed:", deleteRes.status, errorText)
+        return NextResponse.json({ error: "Failed to delete log" }, { status: 500 })
+      }
+      return NextResponse.json({ completed: false, success: true })
     } else {
       // Insert (toggle on)
-      await fetch(`${SUPABASE_URL}/rest/v1/habit_logs`, {
+      const insertRes = await fetch(`${SUPABASE_URL}/rest/v1/habit_logs`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -96,11 +109,17 @@ export async function POST(request: Request) {
           Authorization: `Bearer ${serviceKey}`,
           Prefer: "return=minimal",
         },
-        body: JSON.stringify({ user_id: userId, habit_id, completed_date: date }),
+        body: JSON.stringify({ user_id: userId, habit_id, date }),
       })
-      return NextResponse.json({ completed: true })
+      if (!insertRes.ok) {
+        const errorText = await insertRes.text()
+        console.error("[v0] Insert failed:", insertRes.status, errorText)
+        return NextResponse.json({ error: "Failed to insert log" }, { status: 500 })
+      }
+      return NextResponse.json({ completed: true, success: true })
     }
   } catch (error: any) {
+    console.error("[v0] POST logs error:", error.message)
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
 }
