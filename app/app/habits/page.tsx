@@ -384,7 +384,74 @@ export default function HabitsPage() {
         </div>
       )}
 
-      {/* Mobile card view - shown only on small screens */}
+      {/* Mobile table view - last 7 days only */}
+      {!loading && habits.length > 0 && (
+        <div className="sm:hidden overflow-x-auto rounded-lg border border-border">
+          <table className="w-full text-xs">
+            <thead>
+              <tr className="bg-primary/20 border-b border-border">
+                <th className="sticky left-0 bg-primary/20 text-left px-2 py-2 font-bold text-foreground border-r border-border min-w-[80px]">
+                  {t("habits") || "Habits"}
+                </th>
+                {/* Last 7 days */}
+                {Array.from({ length: Math.min(7, daysInMonth.length) }, (_, i) => {
+                  const date = daysInMonth[Math.max(0, daysInMonth.length - 7 + i)]
+                  const isToday = format(date, "yyyy-MM-dd") === format(new Date(), "yyyy-MM-dd")
+                  return (
+                    <th
+                      key={i}
+                      className={`px-1.5 py-2 text-center border-r border-border/30 min-w-[36px] text-[10px] font-bold ${isToday ? "bg-primary/30 text-primary" : ""}`}
+                    >
+                      <div className="text-muted-foreground">{format(date, "EEE").substring(0, 1)}</div>
+                      <div className={isToday ? "text-primary font-bold" : "text-foreground"}>{format(date, "d")}</div>
+                    </th>
+                  )
+                })}
+              </tr>
+            </thead>
+            <tbody>
+              {habits.map((habit, idx) => (
+                <tr key={habit.id} className={`border-b border-border/50 ${idx % 2 === 0 ? "bg-secondary/5" : ""}`}>
+                  <td className="sticky left-0 bg-inherit border-r border-border px-2 py-2">
+                    <div className="flex items-center gap-1 min-w-0">
+                      <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: habit.color || "#54d946" }} />
+                      <span className="font-medium text-foreground text-xs truncate">{habit.name}</span>
+                    </div>
+                  </td>
+                  {Array.from({ length: Math.min(7, daysInMonth.length) }, (_, i) => {
+                    const date = daysInMonth[Math.max(0, daysInMonth.length - 7 + i)]
+                    const done = isCompleted(habit.id, date)
+                    const isToday = format(date, "yyyy-MM-dd") === format(new Date(), "yyyy-MM-dd")
+                    const key = `${habit.id}-${format(date, "yyyy-MM-dd")}`
+                    const isToggling = toggling === key
+
+                    return (
+                      <td key={i} className={`px-1.5 py-2 text-center border-r border-border/30 ${isToday ? "bg-primary/10" : ""}`}>
+                        <button
+                          onClick={() => toggleLog(habit.id, date)}
+                          disabled={isToggling}
+                          className={`w-5 h-5 rounded border-1.5 flex items-center justify-center transition-all mx-auto text-white text-[10px] ${
+                            done
+                              ? "border-transparent"
+                              : "border-border/50 hover:border-primary/60"
+                          }`}
+                          style={done ? { backgroundColor: habit.color || "#54d946", borderColor: habit.color || "#54d946" } : {}}
+                        >
+                          {done && <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>}
+                        </button>
+                      </td>
+                    )
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {/* Mobile progress cards view */}
       {!loading && habits.length > 0 && (
         <div className="sm:hidden space-y-3">
           <h3 className="text-sm font-bold text-foreground">{t("your_habits") || "Your Habits"}</h3>
