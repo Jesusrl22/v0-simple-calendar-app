@@ -44,6 +44,8 @@ export default function HabitsPage() {
   const [newHabitName, setNewHabitName] = useState("")
   const [newHabitColor, setNewHabitColor] = useState("#54d946")
   const [saving, setSaving] = useState(false)
+  const [recurrenceType, setRecurrenceType] = useState<"daily" | "custom">("daily")
+  const [selectedDays, setSelectedDays] = useState<number[]>([0, 1, 2, 3, 4, 5, 6]) // 0=Sunday...6=Saturday
 
   const dateLocale = language === "es" ? es : language === "fr" ? fr : language === "de" ? de : enUS
 
@@ -166,7 +168,12 @@ export default function HabitsPage() {
       const res = await fetch("/api/habits", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: newHabitName.trim(), color: newHabitColor }),
+        body: JSON.stringify({
+          name: newHabitName.trim(),
+          color: newHabitColor,
+          recurrence_type: recurrenceType,
+          recurrence_days: recurrenceType === "daily" ? [0, 1, 2, 3, 4, 5, 6] : selectedDays,
+        }),
       })
       const responseText = await res.text()
       if (res.ok && responseText) {
@@ -177,10 +184,14 @@ export default function HabitsPage() {
             name: data.habit.name,
             color: data.habit.color || newHabitColor || "#54d946",
             icon: data.habit.icon || "",
+            recurrence_type: data.habit.recurrence_type || "daily",
+            recurrence_days: data.habit.recurrence_days || [0, 1, 2, 3, 4, 5, 6],
           }
           setHabits((prev) => [...prev, newHabit])
           setNewHabitName("")
           setNewHabitColor("#54d946")
+          setRecurrenceType("daily")
+          setSelectedDays([0, 1, 2, 3, 4, 5, 6])
           setIsAddOpen(false)
           toast({ title: t("habit_added") || "Habit added!" })
         }
@@ -570,6 +581,65 @@ export default function HabitsPage() {
                 ))}
               </div>
             </div>
+            <div className="space-y-2">
+              <Label>{t("frequency") || "Frequency"}</Label>
+              <div className="flex gap-2">
+                <Button
+                  type="button"
+                  size="sm"
+                  variant={recurrenceType === "daily" ? "default" : "outline"}
+                  onClick={() => setRecurrenceType("daily")}
+                  className="flex-1"
+                >
+                  {t("daily") || "Daily"}
+                </Button>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant={recurrenceType === "custom" ? "default" : "outline"}
+                  onClick={() => setRecurrenceType("custom")}
+                  className="flex-1"
+                >
+                  {t("custom_days") || "Custom"}
+                </Button>
+              </div>
+            </div>
+            {recurrenceType === "custom" && (
+              <div className="space-y-2">
+                <Label>{t("select_days") || "Select days"}</Label>
+                <div className="grid grid-cols-7 gap-1.5">
+                  {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day, index) => {
+                    const dayNum = index === 0 ? 0 : index // Convert to 0=Sunday format
+                    const isSelected = selectedDays.includes(dayNum)
+                    const dayLabels = {
+                      en: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+                      es: ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sab"],
+                      fr: ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"],
+                      de: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
+                    }
+                    const labels = dayLabels[language as keyof typeof dayLabels] || dayLabels.en
+                    return (
+                      <button
+                        key={dayNum}
+                        type="button"
+                        onClick={() =>
+                          setSelectedDays((prev) =>
+                            isSelected ? prev.filter((d) => d !== dayNum) : [...prev, dayNum].sort()
+                          )
+                        }
+                        className={`p-2 text-xs font-bold rounded transition-all ${
+                          isSelected
+                            ? "bg-primary text-primary-foreground border-2 border-primary"
+                            : "bg-secondary text-secondary-foreground border-2 border-border hover:border-primary/50"
+                        }`}
+                      >
+                        {labels[index]}
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
           </div>
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => setIsAddOpen(false)}>
