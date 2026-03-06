@@ -236,6 +236,7 @@ export default function HabitsPage() {
 
   return (
     <div className="p-3 sm:p-4 md:p-6 space-y-4 md:space-y-6 max-w-full">
+      {console.log("[v0] Rendering habits page, recurrenceType:", recurrenceType, "selectedDays:", selectedDays)}
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div>
@@ -552,7 +553,7 @@ export default function HabitsPage() {
 
       {/* Add Habit Dialog */}
       <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
-        <DialogContent className="max-w-sm">
+        <DialogContent className="max-w-sm max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>{t("add_habit") || "Add Habit"}</DialogTitle>
           </DialogHeader>
