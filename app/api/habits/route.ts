@@ -34,6 +34,8 @@ export async function GET() {
       ...h,
       color: h.color || "#54d946",
       icon: h.icon || "",
+      recurrence_type: h.recurrence_type || "daily",
+      recurrence_days: h.recurrence_days || [0, 1, 2, 3, 4, 5, 6],
     })) : []
     return NextResponse.json({ habits: habitsWithColor })
   } catch (error: any) {
