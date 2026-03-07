@@ -214,18 +214,33 @@ export default function HabitsPage() {
     })
   }
 
-  // Stats
-  const totalPossible = habits.length * daysInMonth.length
+  // Stats - Calculate total possible days considering habit recurrences
+  const totalPossible = habits.reduce((sum, habit) => {
+    const recurrenceDays = habit.recurrence_days || [0, 1, 2, 3, 4, 5, 6]
+    const daysApplicable = daysInMonth.filter((date) => recurrenceDays.includes(getDay(date))).length
+    return sum + daysApplicable
+  }, 0)
   const totalCompleted = logs.length
   const progressPct = totalPossible === 0 ? 0 : Math.round((totalCompleted / totalPossible) * 100)
 
-  // Per habit count
-  const habitCount = (habitId: string) => logs.filter((l) => l.habit_id === habitId).length
+  // Per habit count - only count applicable days
+  const habitCount = (habitId: string) => {
+    const habit = habits.find((h) => h.id === habitId)
+    const recurrenceDays = habit?.recurrence_days || [0, 1, 2, 3, 4, 5, 6]
+    return logs.filter(
+      (l) => l.habit_id === habitId && recurrenceDays.includes(getDay(new Date(l.completed_date)))
+    ).length
+  }
 
-  // Daily count
+  // Daily count - only count for habits that should be done that day
   const dayCount = (date: Date) => {
     const dateStr = format(date, "yyyy-MM-dd")
-    return logs.filter((l) => l.completed_date === dateStr).length
+    const dayOfWeek = getDay(date)
+    return logs.filter((l) => {
+      const habit = habits.find((h) => h.id === l.habit_id)
+      const recurrenceDays = habit?.recurrence_days || [0, 1, 2, 3, 4, 5, 6]
+      return l.completed_date === dateStr && recurrenceDays.includes(dayOfWeek)
+    }).length
   }
 
   // Week numbers for header grouping (weeks 1-5)
@@ -365,6 +380,9 @@ export default function HabitsPage() {
                     const dayIndex = i - firstDayOfWeek
                     const date = dayIndex >= 0 && dayIndex < daysInMonth.length ? daysInMonth[dayIndex] : null
                     const isToday = date ? format(date, "yyyy-MM-dd") === format(new Date(), "yyyy-MM-dd") : false
+                    const dayOfWeek = date ? getDay(date) : null
+                    const recurrenceDays = habit.recurrence_days || [0, 1, 2, 3, 4, 5, 6]
+                    const shouldShow = dayOfWeek !== null ? recurrenceDays.includes(dayOfWeek) : false
                     const done = date ? isCompleted(habit.id, date) : false
                     const key = date ? `${habit.id}-${format(date, "yyyy-MM-dd")}` : null
                     const isToggling = key !== null && toggling === key
@@ -372,22 +390,26 @@ export default function HabitsPage() {
                     return (
                       <td key={i} className={`px-0.5 md:px-1 py-1 md:py-2 text-center border-r border-border/30 ${isToday ? "bg-primary/5" : ""}`}>
                         {date ? (
-                          <button
-                            onClick={() => toggleLog(habit.id, date)}
-                            disabled={isToggling}
-                            className={`w-5 md:w-6 h-5 md:h-6 rounded border-2 flex items-center justify-center transition-all mx-auto ${
-                              done
-                                ? "border-transparent"
-                                : "border-border hover:border-primary/60"
-                            }`}
-                            style={done ? { backgroundColor: habit.color || "#54d946", borderColor: habit.color || "#54d946" } : {}}
-                          >
-                            {done && (
-                              <svg className="w-2.5 md:w-3 h-2.5 md:h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                              </svg>
-                            )}
-                          </button>
+                          shouldShow ? (
+                            <button
+                              onClick={() => toggleLog(habit.id, date)}
+                              disabled={isToggling}
+                              className={`w-5 md:w-6 h-5 md:h-6 rounded border-2 flex items-center justify-center transition-all mx-auto ${
+                                done
+                                  ? "border-transparent"
+                                  : "border-border hover:border-primary/60"
+                              }`}
+                              style={done ? { backgroundColor: habit.color || "#54d946", borderColor: habit.color || "#54d946" } : {}}
+                            >
+                              {done && (
+                                <svg className="w-2.5 md:w-3 h-2.5 md:h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                </svg>
+                              )}
+                            </button>
+                          ) : (
+                            <div className="w-5 md:w-6 h-5 md:h-6 mx-auto bg-secondary/30 rounded" />
+                          )
                         ) : null}
                       </td>
                     )
@@ -454,6 +476,9 @@ export default function HabitsPage() {
                     </div>
                   </td>
                   {currentWeekDays.map((date, i) => {
+                    const dayOfWeek = getDay(date) // 0=Sunday, 1=Monday...
+                    const recurrenceDays = habit.recurrence_days || [0, 1, 2, 3, 4, 5, 6]
+                    const shouldShow = recurrenceDays.includes(dayOfWeek)
                     const done = isCompleted(habit.id, date)
                     const isToday = format(date, "yyyy-MM-dd") === format(new Date(), "yyyy-MM-dd")
                     const key = `${habit.id}-${format(date, "yyyy-MM-dd")}`
@@ -461,20 +486,24 @@ export default function HabitsPage() {
 
                     return (
                       <td key={i} className={`px-1.5 py-2 text-center border-r border-border/30 ${isToday ? "bg-primary/10" : ""}`}>
-                        <button
-                          onClick={() => toggleLog(habit.id, date)}
-                          disabled={isToggling}
-                          className={`w-5 h-5 rounded border-1.5 flex items-center justify-center transition-all mx-auto text-white text-[10px] ${
-                            done
-                              ? "border-transparent"
-                              : "border-border/50 hover:border-primary/60"
-                          }`}
-                          style={done ? { backgroundColor: habit.color || "#54d946", borderColor: habit.color || "#54d946" } : {}}
-                        >
-                          {done && <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                          </svg>}
-                        </button>
+                        {shouldShow ? (
+                          <button
+                            onClick={() => toggleLog(habit.id, date)}
+                            disabled={isToggling}
+                            className={`w-5 h-5 rounded border-1.5 flex items-center justify-center transition-all mx-auto text-white text-[10px] ${
+                              done
+                                ? "border-transparent"
+                                : "border-border/50 hover:border-primary/60"
+                            }`}
+                            style={done ? { backgroundColor: habit.color || "#54d946", borderColor: habit.color || "#54d946" } : {}}
+                          >
+                            {done && <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                            </svg>}
+                          </button>
+                        ) : (
+                          <div className="w-5 h-5 mx-auto bg-secondary/30 rounded" />
+                        )}
                       </td>
                     )
                   })}
@@ -491,7 +520,9 @@ export default function HabitsPage() {
           <h3 className="text-sm font-bold text-foreground">{t("your_habits") || "Your Habits"}</h3>
           {habits.map((habit) => {
             const count = habitCount(habit.id)
-            const pct = daysInMonth.length === 0 ? 0 : Math.round((count / daysInMonth.length) * 100)
+            const recurrenceDays = habit.recurrence_days || [0, 1, 2, 3, 4, 5, 6]
+            const daysApplicable = daysInMonth.filter((date) => recurrenceDays.includes(getDay(date))).length
+            const pct = daysApplicable === 0 ? 0 : Math.round((count / daysApplicable) * 100)
             return (
               <div key={habit.id} className="bg-secondary/20 border border-border rounded-lg p-3 space-y-2">
                 <div className="flex items-center justify-between">
@@ -510,7 +541,7 @@ export default function HabitsPage() {
                   />
                 </div>
                 <div className="flex justify-between text-xs">
-                  <span className="text-muted-foreground">{count} {t("of") || "of"} {daysInMonth.length} {t("days") || "days"}</span>
+                  <span className="text-muted-foreground">{count} {t("of") || "of"} {daysApplicable} {t("days") || "days"}</span>
                   <span className="font-bold" style={{ color: habit.color || "#54d946" }}>{pct}%</span>
                 </div>
               </div>
@@ -526,7 +557,9 @@ export default function HabitsPage() {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
             {habits.map((habit) => {
               const count = habitCount(habit.id)
-              const pct = daysInMonth.length === 0 ? 0 : Math.round((count / daysInMonth.length) * 100)
+              const recurrenceDays = habit.recurrence_days || [0, 1, 2, 3, 4, 5, 6]
+              const daysApplicable = daysInMonth.filter((date) => recurrenceDays.includes(getDay(date))).length
+              const pct = daysApplicable === 0 ? 0 : Math.round((count / daysApplicable) * 100)
               return (
                 <div key={habit.id} className="bg-secondary/20 border border-border rounded-lg p-3 space-y-2">
                   <div className="flex items-center gap-2 min-w-0">
