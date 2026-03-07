@@ -73,7 +73,14 @@ export default function HabitsPage() {
       const res = await fetch("/api/habits")
       if (res.ok) {
         const data = await res.json()
-        setHabits(Array.isArray(data.habits) ? data.habits : [])
+        const habitsData = Array.isArray(data.habits) ? data.habits : []
+        console.log("[v0] Loaded habits:", habitsData.map((h: any) => ({
+          id: h.id,
+          name: h.name,
+          recurrence_type: h.recurrence_type,
+          recurrence_days: h.recurrence_days,
+        })))
+        setHabits(habitsData)
       } else {
         setHabits([])
       }
