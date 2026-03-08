@@ -42,6 +42,9 @@ export const translations = {
     frequency: "Frequency",
     custom_days: "Custom",
     select_days: "Select days",
+    edit_habit: "Edit Habit",
+    habit_updated: "Habit updated!",
+    save: "Save",
 
     // Subscription plan names and billing labels
     plan_free: "Free",
@@ -309,6 +312,9 @@ export const translations = {
     frequency: "Frecuencia",
     custom_days: "Personalizado",
     select_days: "Seleccionar días",
+    edit_habit: "Editar Hábito",
+    habit_updated: "Hábito actualizado!",
+    save: "Guardar",
 
     // Subscription plan names and billing labels
     plan_free: "Gratuito",
@@ -841,6 +847,9 @@ export const translations = {
     frequency: "Fréquence",
     custom_days: "Personnalisé",
     select_days: "Sélectionner les jours",
+    edit_habit: "Modifier l'habitude",
+    habit_updated: "Habitude mise à jour!",
+    save: "Enregistrer",
 
     // Subscription plan names and billing labels
     plan_free: "Gratuit",
@@ -1253,6 +1262,9 @@ export const translations = {
     frequency: "Häufigkeit",
     custom_days: "Benutzerdefiniert",
     select_days: "Tage auswählen",
+    edit_habit: "Gewohnheit bearbeiten",
+    habit_updated: "Gewohnheit aktualisiert!",
+    save: "Speichern",
 
     // Subscription plan names and billing labels
     plan_free: "Kostenlos",
