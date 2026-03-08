@@ -74,12 +74,9 @@ export default function HabitsPage() {
       if (res.ok) {
         const data = await res.json()
         const habitsData = Array.isArray(data.habits) ? data.habits : []
-        console.log("[v0] Loaded habits:", habitsData.map((h: any) => ({
-          id: h.id,
-          name: h.name,
-          recurrence_type: h.recurrence_type,
-          recurrence_days: h.recurrence_days,
-        })))
+        habitsData.forEach((h: any) => {
+          console.log(`[v0] Habit "${h.name}": recurrence_type=${h.recurrence_type}, recurrence_days=${JSON.stringify(h.recurrence_days)}`)
+        })
         setHabits(habitsData)
       } else {
         setHabits([])
