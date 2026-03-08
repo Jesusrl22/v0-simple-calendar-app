@@ -74,9 +74,6 @@ export default function HabitsPage() {
       if (res.ok) {
         const data = await res.json()
         const habitsData = Array.isArray(data.habits) ? data.habits : []
-        habitsData.forEach((h: any) => {
-          console.log(`[v0] Habit "${h.name}": recurrence_type=${h.recurrence_type}, recurrence_days=${JSON.stringify(h.recurrence_days)}`)
-        })
         setHabits(habitsData)
       } else {
         setHabits([])
@@ -260,7 +257,17 @@ export default function HabitsPage() {
           <h1 className="text-2xl md:text-3xl font-bold text-foreground">{t("habit_tracker") || "Habit Tracker"}</h1>
           <p className="text-xs sm:text-sm text-muted-foreground mt-1">{t("track_daily_habits") || "Track your daily habits"}</p>
         </div>
-        <Button onClick={() => setIsAddOpen(true)} size="sm" className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90 w-full sm:w-auto">
+        <Button 
+          onClick={() => {
+            setNewHabitName("")
+            setNewHabitColor("#54d946")
+            setRecurrenceType("daily")
+            setSelectedDays([0, 1, 2, 3, 4, 5, 6])
+            setIsAddOpen(true)
+          }} 
+          size="sm" 
+          className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90 w-full sm:w-auto"
+        >
           <Plus className="h-4 w-4" />
           <span className="text-sm">{t("add_habit") || "Add Habit"}</span>
         </Button>
@@ -321,7 +328,17 @@ export default function HabitsPage() {
         <div className="flex flex-col items-center justify-center py-12 md:py-20 space-y-3 border-2 border-dashed border-border rounded-lg">
           <p className="text-muted-foreground font-medium text-sm md:text-base">{t("no_habits") || "No habits yet"}</p>
           <p className="text-xs text-muted-foreground text-center px-2">{t("add_first_habit") || "Add your first habit to start tracking"}</p>
-          <Button onClick={() => setIsAddOpen(true)} size="sm" className="gap-2">
+          <Button 
+            onClick={() => {
+              setNewHabitName("")
+              setNewHabitColor("#54d946")
+              setRecurrenceType("daily")
+              setSelectedDays([0, 1, 2, 3, 4, 5, 6])
+              setIsAddOpen(true)
+            }} 
+            size="sm" 
+            className="gap-2"
+          >
             <Plus className="h-4 w-4" />
             {t("add_habit") || "Add Habit"}
           </Button>
