@@ -30,13 +30,24 @@ export async function GET() {
       }
     )
     const habits = await response.json()
-    const habitsWithColor = Array.isArray(habits) ? habits.map((h: any) => ({
-      ...h,
-      color: h.color || "#54d946",
-      icon: h.icon || "",
-      recurrence_type: h.recurrence_type || "daily",
-      recurrence_days: h.recurrence_days || [0, 1, 2, 3, 4, 5, 6],
-    })) : []
+    const habitsWithColor = Array.isArray(habits) ? habits.map((h: any) => {
+      let recurrenceDays = h.recurrence_days || [0, 1, 2, 3, 4, 5, 6]
+      // Parse if it's a string (Supabase stores JSON as string)
+      if (typeof recurrenceDays === 'string') {
+        try {
+          recurrenceDays = JSON.parse(recurrenceDays)
+        } catch {
+          recurrenceDays = [0, 1, 2, 3, 4, 5, 6]
+        }
+      }
+      return {
+        ...h,
+        color: h.color || "#54d946",
+        icon: h.icon || "",
+        recurrence_type: h.recurrence_type || "daily",
+        recurrence_days: Array.isArray(recurrenceDays) ? recurrenceDays : [0, 1, 2, 3, 4, 5, 6],
+      }
+    }) : []
     return NextResponse.json({ habits: habitsWithColor })
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 })
