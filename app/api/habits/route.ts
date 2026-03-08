@@ -96,7 +96,46 @@ export async function POST(request: Request) {
   }
 }
 
-export async function DELETE(request: Request) {
+export async function PATCH(request: Request) {
+  try {
+    const cookieStore = await cookies()
+    const accessToken = cookieStore.get("sb-access-token")?.value
+    if (!accessToken) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    const userId = getUserIdFromToken(accessToken)
+    if (!userId) return NextResponse.json({ error: "Invalid token" }, { status: 401 })
+
+    const { id, name, color, recurrence_type, recurrence_days } = await request.json()
+    if (!id) return NextResponse.json({ error: "ID is required" }, { status: 400 })
+
+    const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/habits?id=eq.${id}&user_id=eq.${userId}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          apikey: serviceKey,
+          Authorization: `Bearer ${serviceKey}`,
+          Prefer: "return=representation",
+        },
+        body: JSON.stringify({
+          name: name?.trim(),
+          color: color || "#54d946",
+          recurrence_type: recurrence_type || "daily",
+          recurrence_days: recurrence_days || [0, 1, 2, 3, 4, 5, 6],
+        }),
+      }
+    )
+    const text = await response.text()
+    if (!response.ok) return NextResponse.json({ error: text }, { status: 500 })
+    return NextResponse.json({ success: true })
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 })
+  }
+}
+
+
   try {
     const cookieStore = await cookies()
     const accessToken = cookieStore.get("sb-access-token")?.value
