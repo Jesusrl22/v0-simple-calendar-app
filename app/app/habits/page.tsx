@@ -32,11 +32,15 @@ const PRESET_COLORS = [
 ]
 
 const DAY_LABELS: Record<string, string[]> = {
-  en: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-  es: ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"],
-  fr: ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"],
-  de: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
+  // Order: Mon, Tue, Wed, Thu, Fri, Sat, Sun (matching the table that starts on Monday)
+  en: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+  es: ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"],
+  fr: ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"],
+  de: ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"],
 }
+
+// Map visual position (0=Mon) to getDay() index (0=Sun, 1=Mon...)
+const DAY_INDEX_MAP = [1, 2, 3, 4, 5, 6, 0] // Mon=1, Tue=2, ..., Sun=0
 
 export default function HabitsPage() {
   const { t } = useTranslation()
@@ -324,14 +328,15 @@ export default function HabitsPage() {
     onChange: (d: number[]) => void
   }) => (
     <div className="grid grid-cols-7 gap-1.5">
-      {dayLabels.map((label, index) => {
-        const isSelected = days.includes(index)
+      {dayLabels.map((label, visualIndex) => {
+        const dayIndex = DAY_INDEX_MAP[visualIndex] // Convert visual position to getDay() index
+        const isSelected = days.includes(dayIndex)
         return (
           <button
-            key={index}
+            key={visualIndex}
             type="button"
             onClick={() =>
-              onChange(isSelected ? days.filter((d) => d !== index) : [...days, index].sort())
+              onChange(isSelected ? days.filter((d) => d !== dayIndex) : [...days, dayIndex].sort())
             }
             className={`p-2 text-xs font-bold rounded transition-all ${
               isSelected
@@ -568,7 +573,6 @@ export default function HabitsPage() {
                     const dow = getDay(date)
                     const recDays = habit.recurrence_days || [0, 1, 2, 3, 4, 5, 6]
                     const shouldShow = recDays.includes(dow)
-                    if (i === 0) console.log(`[v0] Habit "${habit.name}": recurrence_days=${JSON.stringify(recDays)}, dow=${dow}, shouldShow=${shouldShow}`)
                     const done = isCompleted(habit.id, date)
                     const isToday = format(date, "yyyy-MM-dd") === format(new Date(), "yyyy-MM-dd")
                     const key = `${habit.id}-${format(date, "yyyy-MM-dd")}`
