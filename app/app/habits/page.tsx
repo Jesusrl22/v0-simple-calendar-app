@@ -471,8 +471,9 @@ export default function HabitsPage() {
                     const dayIndex = i - firstDayOfWeek
                     const date = dayIndex >= 0 && dayIndex < daysInMonth.length ? daysInMonth[dayIndex] : null
                     const isToday = date ? format(date, "yyyy-MM-dd") === format(new Date(), "yyyy-MM-dd") : false
-                    const dow = date ? getDay(date) : null
-                    const shouldShow = dow !== null ? habit.recurrence_days.includes(dow) : false
+                    const dayOfWeek = date ? getDay(date) : null
+                    const recDays = habit.recurrence_days || [0, 1, 2, 3, 4, 5, 6]
+                    const shouldShow = dayOfWeek !== null ? recDays.includes(dayOfWeek) : false
                     const done = date ? isCompleted(habit.id, date) : false
                     const key = date ? `${habit.id}-${format(date, "yyyy-MM-dd")}` : null
                     const isToggling = key !== null && toggling === key
@@ -565,8 +566,9 @@ export default function HabitsPage() {
                   </td>
                   {currentWeekDays.map((date, i) => {
                     const dow = getDay(date)
-                    const shouldShow = habit.recurrence_days.includes(dow)
-                    if (i === 0) console.log(`[v0] Habit "${habit.name}": recurrence_days=${JSON.stringify(habit.recurrence_days)}, dow=${dow}, shouldShow=${shouldShow}`)
+                    const recDays = habit.recurrence_days || [0, 1, 2, 3, 4, 5, 6]
+                    const shouldShow = recDays.includes(dow)
+                    if (i === 0) console.log(`[v0] Habit "${habit.name}": recurrence_days=${JSON.stringify(recDays)}, dow=${dow}, shouldShow=${shouldShow}`)
                     const done = isCompleted(habit.id, date)
                     const isToday = format(date, "yyyy-MM-dd") === format(new Date(), "yyyy-MM-dd")
                     const key = `${habit.id}-${format(date, "yyyy-MM-dd")}`
@@ -603,7 +605,8 @@ export default function HabitsPage() {
           <h3 className="text-sm font-bold text-foreground">{t("your_habits") || "Your Habits"}</h3>
           {habits.map((habit) => {
             const count = habitCount(habit.id)
-            const daysApplicable = daysInMonth.filter((d) => habit.recurrence_days.includes(getDay(d))).length
+            const recDays = habit.recurrence_days || [0, 1, 2, 3, 4, 5, 6]
+            const daysApplicable = daysInMonth.filter((d) => recDays.includes(getDay(d))).length
             const pct = daysApplicable === 0 ? 0 : Math.round((count / daysApplicable) * 100)
             return (
               <div key={habit.id} className="bg-secondary/20 border border-border rounded-lg p-3 space-y-2">
