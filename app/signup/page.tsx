@@ -136,7 +136,7 @@ export default function SignupPage() {
         const response = await fetch("/api/auth/check-session")
         if (response.ok) {
           const data = await response.json()
-          setHasSession(data.hasSession && data.user)
+          setHasSession(data.authenticated && data.user)
         } else {
           setHasSession(false)
         }
