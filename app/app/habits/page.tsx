@@ -566,6 +566,7 @@ export default function HabitsPage() {
                   {currentWeekDays.map((date, i) => {
                     const dow = getDay(date)
                     const shouldShow = habit.recurrence_days.includes(dow)
+                    if (i === 0) console.log(`[v0] Habit "${habit.name}": recurrence_days=${JSON.stringify(habit.recurrence_days)}, dow=${dow}, shouldShow=${shouldShow}`)
                     const done = isCompleted(habit.id, date)
                     const isToday = format(date, "yyyy-MM-dd") === format(new Date(), "yyyy-MM-dd")
                     const key = `${habit.id}-${format(date, "yyyy-MM-dd")}`
