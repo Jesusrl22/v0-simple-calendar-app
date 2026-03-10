@@ -32,15 +32,11 @@ const PRESET_COLORS = [
 ]
 
 const DAY_LABELS: Record<string, string[]> = {
-  // Order: Mon, Tue, Wed, Thu, Fri, Sat, Sun (matching the table that starts on Monday)
-  en: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-  es: ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"],
-  fr: ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"],
-  de: ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"],
+  en: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+  es: ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"],
+  fr: ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"],
+  de: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
 }
-
-// Map visual position (0=Mon) to getDay() index (0=Sun, 1=Mon...)
-const DAY_INDEX_MAP = [1, 2, 3, 4, 5, 6, 0] // Mon=1, Tue=2, ..., Sun=0
 
 export default function HabitsPage() {
   const { t } = useTranslation()
@@ -328,15 +324,14 @@ export default function HabitsPage() {
     onChange: (d: number[]) => void
   }) => (
     <div className="grid grid-cols-7 gap-1.5">
-      {dayLabels.map((label, visualIndex) => {
-        const dayIndex = DAY_INDEX_MAP[visualIndex] // Convert visual position to getDay() index
-        const isSelected = days.includes(dayIndex)
+      {dayLabels.map((label, index) => {
+        const isSelected = days.includes(index)
         return (
           <button
-            key={visualIndex}
+            key={index}
             type="button"
             onClick={() =>
-              onChange(isSelected ? days.filter((d) => d !== dayIndex) : [...days, dayIndex].sort())
+              onChange(isSelected ? days.filter((d) => d !== index) : [...days, index].sort())
             }
             className={`p-2 text-xs font-bold rounded transition-all ${
               isSelected
