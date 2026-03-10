@@ -36,7 +36,7 @@ export default function AppPage() {
         }
 
         const data = await response.json()
-        if (!data.authenticated || !data.user) {
+        if ((!data.authenticated && !data.hasSession) || !data.user) {
           window.location.href = "/login"
           return
         }

@@ -145,7 +145,7 @@ export default function LoginPage() {
         const response = await fetch("/api/auth/check-session")
         if (response.ok) {
           const data = await response.json()
-          setHasSession(data.authenticated && data.user)
+          setHasSession((data.authenticated || data.hasSession) && !!data.user)
         } else {
           setHasSession(false)
         }
@@ -200,7 +200,6 @@ export default function LoginPage() {
           throw new Error(data.message || data.error || "Login failed")
         }
       } else {
-        console.log("[v0] Login successful, redirecting to /app")
         window.location.href = "/app"
       }
     } catch (err: any) {
