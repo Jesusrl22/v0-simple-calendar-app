@@ -200,6 +200,7 @@ export default function LoginPage() {
           throw new Error(data.message || data.error || "Login failed")
         }
       } else {
+        console.log("[v0] Login successful, redirecting to /app")
         window.location.href = "/app"
       }
     } catch (err: any) {
