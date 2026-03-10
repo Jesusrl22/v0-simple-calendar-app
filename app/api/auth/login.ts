@@ -1,6 +1,4 @@
 import { NextResponse } from "next/server"
-import { createServerClient } from "@/lib/supabase/server"
-import { cookies } from "next/headers"
 
 export async function POST(request: Request) {
   try {
@@ -10,57 +8,60 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Email and password required" }, { status: 400 })
     }
 
-    console.log("[v0] Login attempt:", email)
+    // Call Supabase Auth REST API directly
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/token?grant_type=password`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        },
+        body: JSON.stringify({ email, password }),
+      }
+    )
 
-    const supabase = await createServerClient()
+    const data = await res.json()
 
-    // Sign in with Supabase
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
-
-    if (error) {
-      console.error("[v0] Login error:", error)
-      return NextResponse.json({ error: error.message, message: error.message }, { status: 401 })
+    if (!res.ok) {
+      const message = data.error_description || data.msg || data.error || "Invalid credentials"
+      return NextResponse.json({ error: message, message }, { status: 401 })
     }
 
-    if (!data.user) {
-      console.error("[v0] Login: No user data returned")
-      return NextResponse.json({ error: "No user data returned" }, { status: 401 })
+    if (!data.access_token) {
+      return NextResponse.json({ error: "No access token returned" }, { status: 401 })
     }
 
-    console.log("[v0] Login success for:", data.user.email, "verified:", data.user.email_confirmed_at)
+    // Decode JWT to get user info
+    const base64Payload = data.access_token.split(".")[1]
+    const payload = JSON.parse(Buffer.from(base64Payload, "base64url").toString("utf-8"))
 
-    // Check if email is verified
-    if (!data.user.email_confirmed_at) {
+    // Check email verification
+    if (!payload.email_confirmed_at && !data.user?.email_confirmed_at) {
       return NextResponse.json(
         { error: "email_not_verified", message: "Please verify your email first" },
         { status: 403 }
       )
     }
 
-    // Save tokens to cookies
-    const cookieStore = await cookies()
-    if (data.session) {
-      console.log("[v0] Saving session tokens to cookies")
-      cookieStore.set("sb-access-token", data.session.access_token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        maxAge: 60 * 60 * 24 * 7, // 7 days
-        path: "/",
-      })
-      cookieStore.set("sb-refresh-token", data.session.refresh_token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        maxAge: 60 * 60 * 24 * 7, // 7 days
-        path: "/",
-      })
+    const cookieOptions = {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax" as const,
+      maxAge: 60 * 60 * 24 * 7,
+      path: "/",
     }
 
-    return NextResponse.json({ authenticated: true, user: { id: data.user.id, email: data.user.email } })
+    // Set cookies on the response object so they're sent to the browser
+    const response = NextResponse.json({
+      authenticated: true,
+      user: { id: payload.sub, email: payload.email },
+    })
+
+    response.cookies.set("sb-access-token", data.access_token, cookieOptions)
+    response.cookies.set("sb-refresh-token", data.refresh_token, cookieOptions)
+
+    return response
   } catch (error: any) {
     console.error("[v0] Login error:", error)
     return NextResponse.json({ error: error.message }, { status: 500 })
