@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { createServerClient } from "@/lib/supabase/server"
+import { cookies } from "next/headers"
 
 export async function POST(request: Request) {
   try {
@@ -37,6 +38,26 @@ export async function POST(request: Request) {
         { error: "email_not_verified", message: "Please verify your email first" },
         { status: 403 }
       )
+    }
+
+    // Save tokens to cookies
+    const cookieStore = await cookies()
+    if (data.session) {
+      console.log("[v0] Saving session tokens to cookies")
+      cookieStore.set("sb-access-token", data.session.access_token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 60 * 60 * 24 * 7, // 7 days
+        path: "/",
+      })
+      cookieStore.set("sb-refresh-token", data.session.refresh_token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 60 * 60 * 24 * 7, // 7 days
+        path: "/",
+      })
     }
 
     return NextResponse.json({ authenticated: true, user: { id: data.user.id, email: data.user.email } })
