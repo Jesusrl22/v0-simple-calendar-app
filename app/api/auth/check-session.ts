@@ -10,10 +10,14 @@ export async function GET(request: Request) {
       error,
     } = await supabase.auth.getUser()
 
+    console.log("[v0] check-session: user=", user?.email, "error=", error?.message)
+
     if (error || !user) {
+      console.log("[v0] check-session: No user found")
       return NextResponse.json({ authenticated: false })
     }
 
+    console.log("[v0] check-session: User authenticated -", user.email)
     return NextResponse.json({ authenticated: true, user: { id: user.id, email: user.email } })
   } catch (error: any) {
     console.error("[v0] Error checking session:", error)
