@@ -22,6 +22,7 @@ export async function GET() {
       const userData = await response.json()
       return NextResponse.json({
         hasSession: true,
+        authenticated: true,
         user: userData,
       })
     }
@@ -44,6 +45,7 @@ export async function GET() {
 
         const newResponse = NextResponse.json({
           hasSession: true,
+          authenticated: true,
           user: refreshData.user,
         })
 

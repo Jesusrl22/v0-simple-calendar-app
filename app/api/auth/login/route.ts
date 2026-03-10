@@ -148,9 +148,11 @@ export async function POST(request: Request) {
       console.error("[SERVER][API] Failed to update last login:", updateError)
     }
 
-    const cookieStore = await cookies()
+    console.log("[SERVER][API] Cookies set successfully")
 
-    cookieStore.set("sb-access-token", loginData.access_token, {
+    const loginSuccessResponse = NextResponse.json({ success: true, user: loginData.user })
+
+    loginSuccessResponse.cookies.set("sb-access-token", loginData.access_token, {
       path: "/",
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -158,7 +160,7 @@ export async function POST(request: Request) {
       maxAge: 60 * 60 * 24 * 7,
     })
 
-    cookieStore.set("sb-refresh-token", loginData.refresh_token, {
+    loginSuccessResponse.cookies.set("sb-refresh-token", loginData.refresh_token, {
       path: "/",
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -166,9 +168,7 @@ export async function POST(request: Request) {
       maxAge: 60 * 60 * 24 * 30,
     })
 
-    console.log("[SERVER][API] Cookies set successfully")
-
-    return NextResponse.json({ success: true, user: loginData.user })
+    return loginSuccessResponse
   } catch (error: any) {
     console.error("[SERVER][API] Login exception:", error.message)
     return NextResponse.json({ error: error.message || "Login failed" }, { status: 500 })
