@@ -285,8 +285,8 @@ export default function HabitsPage() {
 
   // Stats - only count applicable days per habit
   const totalPossible = habits.reduce((sum, habit) => {
-    const rd = habit.recurrence_days
-    return sum + daysInMonth.filter((d) => rd.includes(getDay(d))).length
+    const recDays = (habit.recurrence_days || [0,1,2,3,4,5,6]).map(Number)
+    return sum + daysInMonth.filter((d) => recDays.includes(Number(getDay(d)))).length
   }, 0)
   const totalCompleted = logs.length
   const progressPct = totalPossible === 0 ? 0 : Math.round((totalCompleted / totalPossible) * 100)
@@ -472,8 +472,8 @@ export default function HabitsPage() {
                     const date = dayIndex >= 0 && dayIndex < daysInMonth.length ? daysInMonth[dayIndex] : null
                     const isToday = date ? format(date, "yyyy-MM-dd") === format(new Date(), "yyyy-MM-dd") : false
                     const dayOfWeek = date ? getDay(date) : null
-                    const recDays = habit.recurrence_days || [0, 1, 2, 3, 4, 5, 6]
-                    const shouldShow = dayOfWeek !== null ? recDays.includes(dayOfWeek) : false
+                    const recDays = (habit.recurrence_days || [0,1,2,3,4,5,6]).map(Number)
+                    const shouldShow = dayOfWeek !== null ? recDays.includes(Number(dayOfWeek)) : false
                     const done = date ? isCompleted(habit.id, date) : false
                     const key = date ? `${habit.id}-${format(date, "yyyy-MM-dd")}` : null
                     const isToggling = key !== null && toggling === key
@@ -566,8 +566,8 @@ export default function HabitsPage() {
                   </td>
                   {currentWeekDays.map((date, i) => {
                     const dow = getDay(date)
-                    const recDays = habit.recurrence_days || [0, 1, 2, 3, 4, 5, 6]
-                    const shouldShow = recDays.includes(dow)
+                    const recDays = (habit.recurrence_days || [0,1,2,3,4,5,6]).map(Number)
+                    const shouldShow = recDays.includes(Number(dow))
                     const done = isCompleted(habit.id, date)
                     const isToday = format(date, "yyyy-MM-dd") === format(new Date(), "yyyy-MM-dd")
                     const key = `${habit.id}-${format(date, "yyyy-MM-dd")}`
