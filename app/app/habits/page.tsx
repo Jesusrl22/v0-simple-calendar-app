@@ -215,7 +215,7 @@ export default function HabitsPage() {
             recurrence_days: parseRecurrenceDays(data.habit.recurrence_days),
           }
           setHabits((prev) => [...prev, newHabit])
-          setIsAddOpen(false)
+          setTimeout(() => setIsAddOpen(false), 100)
           toast({ title: t("habit_added") || "Habit added!" })
         }
       } else {
@@ -261,7 +261,7 @@ export default function HabitsPage() {
               : h
           )
         )
-        setIsEditOpen(false)
+        setTimeout(() => setIsEditOpen(false), 100)
         toast({ title: t("habit_updated") || "Habit updated!" })
       } else {
         const err = await res.text()
@@ -568,7 +568,6 @@ export default function HabitsPage() {
                     const dow = getDay(date)
                     const recDays = habit.recurrence_days || [0, 1, 2, 3, 4, 5, 6]
                     const shouldShow = recDays.includes(dow)
-                    if (i === 0) console.log(`[v0] Habit "${habit.name}": recDays=${JSON.stringify(recDays)}, dow=${dow}, shouldShow=${shouldShow}`)
                     const done = isCompleted(habit.id, date)
                     const isToday = format(date, "yyyy-MM-dd") === format(new Date(), "yyyy-MM-dd")
                     const key = `${habit.id}-${format(date, "yyyy-MM-dd")}`
