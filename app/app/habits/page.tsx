@@ -707,10 +707,10 @@ export default function HabitsPage() {
             <div className="space-y-2">
               <Label>{t("frequency") || "Frequency"}</Label>
               <div className="flex gap-2">
-                <Button type="button" size="sm" variant={recurrenceType === "daily" ? "default" : "outline"} onClick={() => setRecurrenceType("daily")} className="flex-1">
+                <Button type="button" size="sm" variant={recurrenceType === "daily" ? "default" : "outline"} onClick={() => { setRecurrenceType("daily"); setSelectedDays([0,1,2,3,4,5,6]) }} className="flex-1">
                   {t("daily") || "Daily"}
                 </Button>
-                <Button type="button" size="sm" variant={recurrenceType === "custom" ? "default" : "outline"} onClick={() => setRecurrenceType("custom")} className="flex-1">
+                <Button type="button" size="sm" variant={recurrenceType === "custom" ? "default" : "outline"} onClick={() => { setRecurrenceType("custom"); setSelectedDays([]) }} className="flex-1">
                   {t("custom_days") || "Custom"}
                 </Button>
               </div>
@@ -763,10 +763,10 @@ export default function HabitsPage() {
             <div className="space-y-2">
               <Label>{t("frequency") || "Frequency"}</Label>
               <div className="flex gap-2">
-                <Button type="button" size="sm" variant={editRecurrenceType === "daily" ? "default" : "outline"} onClick={() => setEditRecurrenceType("daily")} className="flex-1">
+                <Button type="button" size="sm" variant={editRecurrenceType === "daily" ? "default" : "outline"} onClick={() => { setEditRecurrenceType("daily"); setEditSelectedDays([0,1,2,3,4,5,6]) }} className="flex-1">
                   {t("daily") || "Daily"}
                 </Button>
-                <Button type="button" size="sm" variant={editRecurrenceType === "custom" ? "default" : "outline"} onClick={() => setEditRecurrenceType("custom")} className="flex-1">
+                <Button type="button" size="sm" variant={editRecurrenceType === "custom" ? "default" : "outline"} onClick={() => { setEditRecurrenceType("custom"); setEditSelectedDays([]) }} className="flex-1">
                   {t("custom_days") || "Custom"}
                 </Button>
               </div>
