@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { createClient } from "@supabase/supabase-js"
+import { sendEmail } from "@/lib/brevo"
 
 export async function POST(request: Request) {
   try {
@@ -26,32 +27,53 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Email already verified" }, { status: 400 })
     }
 
-    // Use Supabase Auth to resend verification email
-    console.log("[SERVER][v0] Resending verification email to:", email)
-    const { error: resendError } = await supabase.auth.resend({
+    // Generate verification link
+    const { data, error: signUpError } = await supabase.auth.admin.generateLink({
       type: "signup",
       email: email,
       options: {
-        redirectTo: `${process.env.NEXT_PUBLIC_BASE_URL || process.env.NEXT_PUBLIC_APP_URL}/auth/verify-email?email=${encodeURIComponent(email)}`,
+        redirectTo: `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/auth/callback?type=signup`,
       },
     })
 
-    if (resendError) {
-      console.error("[SERVER][v0] Resend verification error:", resendError)
+    if (signUpError || !data?.properties?.verification_url) {
+      console.error("[v0] Failed to generate verification link:", signUpError)
+      return NextResponse.json({ error: "Failed to generate verification link" }, { status: 500 })
+    }
+
+    // Send verification email via Brevo
+    const verificationUrl = data.properties.verification_url
+    const htmlContent = `
+      <h2>Verify your email</h2>
+      <p>Click the link below to verify your email address and complete your signup:</p>
+      <a href="${verificationUrl}" style="background-color: #54d946; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;">Verify Email</a>
+      <p>Or copy this link: <a href="${verificationUrl}">${verificationUrl}</a></p>
+      <p>This link will expire in 24 hours.</p>
+    `
+
+    const result = await sendEmail({
+      to: email,
+      subject: "Verify your Future Task email",
+      htmlContent,
+      textContent: `Verify your email: ${verificationUrl}`,
+    })
+
+    if (!result.success) {
+      console.error("[v0] Failed to send verification email:", result.error)
       return NextResponse.json(
-        { error: "Failed to resend verification email" },
+        { error: "Failed to send verification email" },
         { status: 500 }
       )
     }
 
-    console.log("[SERVER][v0] Verification email resent successfully")
+    console.log("[v0] Verification email sent successfully to", email)
 
     return NextResponse.json({
       success: true,
       message: "Verification email sent successfully. Please check your inbox.",
     })
   } catch (error: any) {
-    console.error("[SERVER][v0] Resend verification error:", error)
+    console.error("[v0] Resend verification error:", error)
     return NextResponse.json(
       { error: error.message || "Failed to resend verification email" },
       { status: 500 }
