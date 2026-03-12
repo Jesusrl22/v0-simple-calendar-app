@@ -475,8 +475,7 @@ export default function HabitsPage() {
                     const isToday = date ? format(date, "yyyy-MM-dd") === format(new Date(), "yyyy-MM-dd") : false
                     const dayOfWeek = date ? getDay(date) : null
                     const recDays = (habit.recurrence_days || [0,1,2,3,4,5,6]).map(Number)
-                    const shouldShow = dayOfWeek !== null ? recDays.includes(Number(dayOfWeek)) : false
-                    if (i === 0) console.log(`[v0] Desktop: Habit "${habit.name}": recDays=${JSON.stringify(recDays)}, firstDay dow=${dayOfWeek}, shouldShow=${shouldShow}`)
+                    const shouldShow = dayOfWeek !== null ? !recDays.includes(Number(dayOfWeek)) : false
                     const done = date ? isCompleted(habit.id, date) : false
                     const key = date ? `${habit.id}-${format(date, "yyyy-MM-dd")}` : null
                     const isToggling = key !== null && toggling === key
@@ -570,8 +569,7 @@ export default function HabitsPage() {
                   {currentWeekDays.map((date, i) => {
                     const dow = getDay(date)
                     const recDays = (habit.recurrence_days || [0,1,2,3,4,5,6]).map(Number)
-                    const shouldShow = recDays.includes(Number(dow))
-                    if (i === 0) console.log(`[v0] Mobile: Habit "${habit.name}": recDays=${JSON.stringify(recDays)}, dow=${dow}, shouldShow=${shouldShow}`)
+                    const shouldShow = !recDays.includes(Number(dow))
                     const done = isCompleted(habit.id, date)
                     const isToday = format(date, "yyyy-MM-dd") === format(new Date(), "yyyy-MM-dd")
                     const key = `${habit.id}-${format(date, "yyyy-MM-dd")}`
