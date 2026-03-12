@@ -87,11 +87,13 @@ export default function HabitsPage() {
   const headers = language === "en" ? dayHeadersEn : language === "fr" ? dayHeadersFr : language === "de" ? dayHeadersDe : dayHeaders
 
   const parseRecurrenceDays = (val: any): number[] => {
-    if (Array.isArray(val)) return val
+    let parsed: any = val
     if (typeof val === "string") {
-      try { return JSON.parse(val) } catch { return [0, 1, 2, 3, 4, 5, 6] }
+      try { parsed = JSON.parse(val) } catch { return [0, 1, 2, 3, 4, 5, 6] }
     }
-    return [0, 1, 2, 3, 4, 5, 6]
+    if (!Array.isArray(parsed)) return [0, 1, 2, 3, 4, 5, 6]
+    // Force every element to a real number
+    return parsed.map((d: any) => Number(d)).filter((d) => !isNaN(d))
   }
 
   const fetchHabits = useCallback(async () => {
@@ -474,6 +476,7 @@ export default function HabitsPage() {
                     const dayOfWeek = date ? getDay(date) : null
                     const recDays = (habit.recurrence_days || [0,1,2,3,4,5,6]).map(Number)
                     const shouldShow = dayOfWeek !== null ? recDays.includes(Number(dayOfWeek)) : false
+                    if (i === 0) console.log(`[v0] Desktop: Habit "${habit.name}": recDays=${JSON.stringify(recDays)}, firstDay dow=${dayOfWeek}, shouldShow=${shouldShow}`)
                     const done = date ? isCompleted(habit.id, date) : false
                     const key = date ? `${habit.id}-${format(date, "yyyy-MM-dd")}` : null
                     const isToggling = key !== null && toggling === key
@@ -568,6 +571,7 @@ export default function HabitsPage() {
                     const dow = getDay(date)
                     const recDays = (habit.recurrence_days || [0,1,2,3,4,5,6]).map(Number)
                     const shouldShow = recDays.includes(Number(dow))
+                    if (i === 0) console.log(`[v0] Mobile: Habit "${habit.name}": recDays=${JSON.stringify(recDays)}, dow=${dow}, shouldShow=${shouldShow}`)
                     const done = isCompleted(habit.id, date)
                     const isToday = format(date, "yyyy-MM-dd") === format(new Date(), "yyyy-MM-dd")
                     const key = `${habit.id}-${format(date, "yyyy-MM-dd")}`
