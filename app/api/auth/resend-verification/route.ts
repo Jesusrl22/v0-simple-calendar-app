@@ -4,7 +4,10 @@ import { sendEmail } from "@/lib/brevo"
 
 export async function POST(request: Request) {
   try {
+    console.log("[v0] Resend verification: Request received")
+    
     const { email } = await request.json()
+    console.log("[v0] Resend verification: Email:", email)
 
     if (!email) {
       return NextResponse.json({ error: "Email is required" }, { status: 400 })
@@ -19,6 +22,8 @@ export async function POST(request: Request) {
     const { data: users } = await supabase.auth.admin.listUsers()
     const user = users?.users?.find((u) => u.email === email)
 
+    console.log("[v0] Resend verification: User found:", !!user)
+
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 })
     }
@@ -28,6 +33,8 @@ export async function POST(request: Request) {
     }
 
     // Generate verification link
+    console.log("[v0] Resend verification: Generating verification link...")
+    
     const { data, error: signUpError } = await supabase.auth.admin.generateLink({
       type: "signup",
       email: email,
@@ -43,6 +50,8 @@ export async function POST(request: Request) {
 
     // Send verification email via Brevo
     const verificationUrl = data.properties.verification_url
+    console.log("[v0] Resend verification: URL generated, sending email...")
+    
     const htmlContent = `
       <h2>Verify your email</h2>
       <p>Click the link below to verify your email address and complete your signup:</p>
@@ -51,12 +60,16 @@ export async function POST(request: Request) {
       <p>This link will expire in 24 hours.</p>
     `
 
+    console.log("[v0] Resend verification: Calling sendEmail...")
+    
     const result = await sendEmail({
       to: email,
       subject: "Verify your Future Task email",
       htmlContent,
       textContent: `Verify your email: ${verificationUrl}`,
     })
+
+    console.log("[v0] Resend verification: sendEmail result:", result)
 
     if (!result.success) {
       console.error("[v0] Failed to send verification email:", result.error)
@@ -80,3 +93,4 @@ export async function POST(request: Request) {
     )
   }
 }
+

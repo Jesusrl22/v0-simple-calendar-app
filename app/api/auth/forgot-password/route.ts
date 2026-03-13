@@ -4,7 +4,10 @@ import { sendEmail } from "@/lib/brevo"
 
 export async function POST(request: Request) {
   try {
+    console.log("[v0] Forgot password: Request received")
+    
     const { email } = await request.json()
+    console.log("[v0] Forgot password: Email:", email)
 
     if (!email) {
       return NextResponse.json({ error: "Email is required" }, { status: 400 })
@@ -21,6 +24,8 @@ export async function POST(request: Request) {
       }
     )
 
+    console.log("[v0] Forgot password: Generating recovery link...")
+
     // Generate password recovery link via Supabase
     const { data, error: generateError } = await supabase.auth.admin.generateLink({
       type: "recovery",
@@ -32,10 +37,10 @@ export async function POST(request: Request) {
 
     if (generateError) {
       console.error("[v0] Error generating reset link:", generateError.message)
-      // Continue anyway - we'll try to send email to non-existent user for security
     }
 
     const resetUrl = data?.properties?.action_link
+    console.log("[v0] Forgot password: Reset URL generated:", !!resetUrl)
 
     if (resetUrl) {
       // Send reset email via Brevo
@@ -49,6 +54,7 @@ export async function POST(request: Request) {
         <p style="color: #666; font-size: 12px;">If you didn't request this, please ignore this email or contact support.</p>
       `
 
+      console.log("[v0] Forgot password: Calling sendEmail...")
       const result = await sendEmail({
         to: email,
         subject: "Reset your Future Task password",
@@ -56,9 +62,13 @@ export async function POST(request: Request) {
         textContent: `Reset your password: ${resetUrl}`,
       })
 
+      console.log("[v0] Forgot password: sendEmail result:", result)
+
       if (!result.success) {
         console.error("[v0] Failed to send reset email:", result.error)
       }
+    } else {
+      console.warn("[v0] Forgot password: No reset URL generated")
     }
 
     // Always return success for security (don't reveal if email exists)
@@ -75,4 +85,5 @@ export async function POST(request: Request) {
     })
   }
 }
+
 
