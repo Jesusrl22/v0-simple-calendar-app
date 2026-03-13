@@ -32,6 +32,16 @@ export async function GET(request: Request) {
 
     const plan = user?.subscription_plan || "free"
 
+    // Only Pro and Premium can access habits
+    if (plan === "free") {
+      return NextResponse.json({
+        plan,
+        blocked: true,
+        reason: "Habits feature is only available on Pro and Premium plans",
+        canAddMore: false,
+      })
+    }
+
     // Get subscription plan details
     const { data: planDetails } = await supabase
       .from("subscription_plans")
@@ -45,12 +55,13 @@ export async function GET(request: Request) {
       .select("*", { count: "exact", head: true })
       .eq("user_id", userId)
 
-    const maxHabits = planDetails?.max_habits || 5
+    const maxHabits = planDetails?.max_habits || 15
     const hasReachedLimit = (habitCount || 0) >= maxHabits
     const features = planDetails?.features || []
 
     return NextResponse.json({
       plan,
+      blocked: false,
       currentHabits: habitCount || 0,
       maxHabits,
       hasReachedLimit,

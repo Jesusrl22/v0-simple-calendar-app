@@ -51,6 +51,8 @@ export default function HabitsPage() {
   const [plan, setPlan] = useState<string>("free")
   const [maxHabits, setMaxHabits] = useState<number>(5)
   const [hasReachedLimit, setHasReachedLimit] = useState(false)
+  const [blocked, setBlocked] = useState(false)
+  const [blockReason, setBlockReason] = useState("")
 
   // Add dialog state
   const [isAddOpen, setIsAddOpen] = useState(false)
@@ -142,8 +144,12 @@ export default function HabitsPage() {
       if (res.ok) {
         const data = await res.json()
         setPlan(data.plan)
-        setMaxHabits(data.maxHabits)
-        setHasReachedLimit(data.hasReachedLimit)
+        setBlocked(data.blocked || false)
+        setBlockReason(data.reason || "")
+        if (!data.blocked) {
+          setMaxHabits(data.maxHabits)
+          setHasReachedLimit(data.hasReachedLimit)
+        }
       }
     } catch (error) {
       console.error("Failed to fetch habit limits:", error)
@@ -367,6 +373,34 @@ export default function HabitsPage() {
 
   return (
     <div className="p-3 sm:p-4 md:p-6 space-y-4 md:space-y-6 max-w-full">
+      {/* Blocked message for Free plan */}
+      {blocked && (
+        <div className="bg-amber-50 border border-amber-200 rounded-lg p-6 text-center space-y-4">
+          <div>
+            <h2 className="text-lg font-semibold text-amber-900 mb-2">
+              {t("feature_locked") || "Feature Locked"}
+            </h2>
+            <p className="text-sm text-amber-800 mb-4">{blockReason}</p>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <button
+              onClick={() => window.location.href = "/pricing"}
+              className="bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-2 rounded-lg font-medium text-sm transition-colors"
+            >
+              {t("upgrade_plan") || "Upgrade Plan"}
+            </button>
+            <button
+              onClick={() => window.location.href = "/app/dashboard"}
+              className="bg-secondary text-secondary-foreground hover:bg-secondary/90 px-6 py-2 rounded-lg font-medium text-sm transition-colors"
+            >
+              {t("back_to_dashboard") || "Back to Dashboard"}
+            </button>
+          </div>
+        </div>
+      )}
+      
+      {!blocked && (
+        <>
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div>
@@ -822,6 +856,8 @@ export default function HabitsPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+        </>
+      )}
     </div>
   )
 }
