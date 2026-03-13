@@ -32,12 +32,12 @@ export async function GET(request: Request) {
 
     const plan = user?.subscription_plan || "free"
 
-    // Only Pro and Premium can access habits
-    if (plan === "free") {
+    // Only Pro can access habits
+    if (plan !== "pro") {
       return NextResponse.json({
         plan,
         blocked: true,
-        reason: "Habits feature is only available on Pro and Premium plans",
+        reason: "Habits feature is exclusive to Pro plan members",
         canAddMore: false,
       })
     }
