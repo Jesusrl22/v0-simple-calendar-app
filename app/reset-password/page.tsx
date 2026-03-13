@@ -165,8 +165,26 @@ function ResetPasswordContent() {
         return
       }
 
+      console.log("[v0] Password updated, calling confirm endpoint...")
+
+      // Get current user to send confirmation email
+      const { data: userData } = await supabase.auth.getUser()
+      const userEmail = userData.user?.email
+
+      if (userEmail) {
+        // Call our endpoint to send confirmation email via Brevo
+        const confirmRes = await fetch("/api/auth/confirm-password-reset", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: userEmail, password }),
+        })
+
+        const confirmData = await confirmRes.json()
+        console.log("[v0] Confirmation email result:", confirmData)
+      }
+
       setSuccess(t.success)
-      console.log("[v0] Password updated successfully")
+      console.log("[v0] Password reset complete")
       
       // Wait before redirecting
       setTimeout(() => {
