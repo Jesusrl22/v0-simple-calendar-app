@@ -48,6 +48,11 @@ export default function HabitsPage() {
   const [currentDate, setCurrentDate] = useState(new Date())
   const [loading, setLoading] = useState(true)
   const [toggling, setToggling] = useState<string | null>(null)
+  const [plan, setPlan] = useState<string>("free")
+  const [maxHabits, setMaxHabits] = useState<number>(5)
+  const [hasReachedLimit, setHasReachedLimit] = useState(false)
+  const [blocked, setBlocked] = useState(false)
+  const [blockReason, setBlockReason] = useState("")
 
   // Add dialog state
   const [isAddOpen, setIsAddOpen] = useState(false)
@@ -133,10 +138,28 @@ export default function HabitsPage() {
     }
   }, [currentDate])
 
+  const fetchHabitLimits = useCallback(async () => {
+    try {
+      const res = await fetch("/api/habits/check-limit")
+      if (res.ok) {
+        const data = await res.json()
+        setPlan(data.plan)
+        setBlocked(data.blocked || false)
+        setBlockReason(data.reason || "")
+        if (!data.blocked) {
+          setMaxHabits(data.maxHabits)
+          setHasReachedLimit(data.hasReachedLimit)
+        }
+      }
+    } catch (error) {
+      console.error("Failed to fetch habit limits:", error)
+    }
+  }, [])
+
   useEffect(() => {
     const load = async () => {
       setLoading(true)
-      await Promise.all([fetchHabits(), fetchLogs()])
+      await Promise.all([fetchHabits(), fetchLogs(), fetchHabitLimits()])
       setLoading(false)
     }
     load()
@@ -350,16 +373,59 @@ export default function HabitsPage() {
 
   return (
     <div className="p-3 sm:p-4 md:p-6 space-y-4 md:space-y-6 max-w-full">
+      {/* Blocked message for Free plan */}
+      {blocked && (
+        <div className="bg-amber-50 border border-amber-200 rounded-lg p-6 text-center space-y-4">
+          <div>
+            <h2 className="text-lg font-semibold text-amber-900 mb-2">
+              {t("feature_locked") || "Feature Locked"}
+            </h2>
+            <p className="text-sm text-amber-800 mb-4">{blockReason}</p>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <button
+              onClick={() => window.location.href = "/pricing"}
+              className="bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-2 rounded-lg font-medium text-sm transition-colors"
+            >
+              {t("upgrade_plan") || "Upgrade Plan"}
+            </button>
+            <button
+              onClick={() => window.location.href = "/app/dashboard"}
+              className="bg-secondary text-secondary-foreground hover:bg-secondary/90 px-6 py-2 rounded-lg font-medium text-sm transition-colors"
+            >
+              {t("back_to_dashboard") || "Back to Dashboard"}
+            </button>
+          </div>
+        </div>
+      )}
+      
+      {!blocked && (
+        <>
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl md:text-3xl font-bold text-foreground">{t("habit_tracker") || "Habit Tracker"}</h1>
-          <p className="text-xs sm:text-sm text-muted-foreground mt-1">{t("track_daily_habits") || "Track your daily habits"}</p>
+          <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+            {t("track_daily_habits") || "Track your daily habits"}
+            {maxHabits && <span className="ml-2">({habits.length}/{maxHabits})</span>}
+          </p>
         </div>
-        <Button onClick={openAdd} size="sm" className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90 w-full sm:w-auto">
-          <Plus className="h-4 w-4" />
-          <span className="text-sm">{t("add_habit") || "Add Habit"}</span>
-        </Button>
+        <div className="flex flex-col gap-2 w-full sm:w-auto">
+          <Button 
+            onClick={openAdd} 
+            disabled={hasReachedLimit}
+            size="sm" 
+            className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90 w-full sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <Plus className="h-4 w-4" />
+            <span className="text-sm">{t("add_habit") || "Add Habit"}</span>
+          </Button>
+          {hasReachedLimit && (
+            <p className="text-xs text-destructive text-center sm:text-right">
+              {t("limit_reached") || "Habit limit reached. Upgrade to add more."}
+            </p>
+          )}
+        </div>
       </div>
 
       {/* Month nav + stats */}
@@ -790,6 +856,8 @@ export default function HabitsPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+        </>
+      )}
     </div>
   )
 }
