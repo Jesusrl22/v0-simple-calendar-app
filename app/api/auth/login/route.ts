@@ -64,15 +64,9 @@ export async function POST(request: Request) {
     const userRecord = Array.isArray(confirmCheckResponse) ? confirmCheckResponse[0] : null
     const isEmailConfirmed = loginData.user.email_confirmed_at || userRecord?.email_confirmed_at
     
-    if (!isEmailConfirmed && !userRecord) {
-      console.log("[SERVER][API] Email not confirmed for new user:", loginData.user.email)
-      return NextResponse.json(
-        { 
-          error: "email_not_verified",
-          message: "Email not verified. Please check your inbox for the verification link." 
-        },
-        { status: 403 },
-      )
+    // Don't block login for unverified emails, but note it
+    if (!isEmailConfirmed) {
+      console.log("[SERVER][API] Warning: Login with unverified email:", loginData.user.email)
     }
 
     // Get user agent to detect new device
