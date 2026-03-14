@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { CheckCircle2 } from 'lucide-react'
 
-export default function ConfirmPage() {
+export default function ResetPasswordPage() {
   const router = useRouter()
   const [countdown, setCountdown] = useState(5)
 
@@ -37,10 +37,10 @@ export default function ConfirmPage() {
           {/* Title */}
           <div>
             <h1 className="text-2xl font-bold text-foreground mb-2">
-              Email Verified!
+              Password Reset Successful!
             </h1>
             <p className="text-sm text-muted-foreground">
-              Your email has been successfully verified. You can now log in to your account.
+              Your password has been successfully updated. You can now log in with your new password.
             </p>
           </div>
 

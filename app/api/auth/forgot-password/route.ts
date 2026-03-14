@@ -31,7 +31,7 @@ export async function POST(request: Request) {
       type: "recovery",
       email: email.toLowerCase(),
       options: {
-        redirectTo: `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/auth/callback?type=recovery`,
+        redirectTo: `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/auth/reset-password`,
       },
     })
 
