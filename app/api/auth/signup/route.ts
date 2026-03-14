@@ -32,6 +32,24 @@ export async function POST(request: Request) {
     let userId = existingUser?.id
     const language = "es" // Default language, can be passed from request if needed
 
+    // Generate verification link FIRST via Supabase (before creating user)
+    console.log("[SERVER][v0] Generating verification link...")
+    const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({
+      type: "signup",
+      email: email,
+      options: {
+        redirectTo: `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/auth/confirm`,
+      },
+    })
+
+    if (linkError || !linkData?.properties?.verification_url) {
+      console.error("[SERVER][v0] Failed to generate verification link:", linkError)
+      return NextResponse.json({ error: "Failed to generate verification link" }, { status: 500 })
+    }
+
+    const verificationUrl = linkData.properties.verification_url
+    console.log("[SERVER][v0] Verification link generated successfully")
+
     // Create user in auth if doesn't exist
     if (!userId) {
       console.log("[SERVER][v0] Creating new user in auth...")
@@ -84,23 +102,7 @@ export async function POST(request: Request) {
 
     console.log("[SERVER][v0] Profile created successfully")
 
-    // Generate verification link via Supabase
-    console.log("[SERVER][v0] Generating verification link...")
-    const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({
-      type: "signup",
-      email: email,
-      options: {
-        redirectTo: `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/auth/confirm`,
-      },
-    })
-
-    if (linkError || !linkData?.properties?.verification_url) {
-      console.error("[SERVER][v0] Failed to generate verification link:", linkError)
-      return NextResponse.json({ error: "Failed to generate verification link" }, { status: 500 })
-    }
-
     // Send verification email via Brevo
-    const verificationUrl = linkData.properties.verification_url
     console.log("[SERVER][v0] Sending verification email via Brevo...")
     console.log("[SERVER][v0] BREVO_API_KEY available:", !!process.env.BREVO_API_KEY)
     console.log("[SERVER][v0] Email to send to:", email)
