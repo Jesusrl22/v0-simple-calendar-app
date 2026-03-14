@@ -102,6 +102,8 @@ export async function POST(request: Request) {
     // Send verification email via Brevo
     const verificationUrl = linkData.properties.verification_url
     console.log("[SERVER][v0] Sending verification email via Brevo...")
+    console.log("[SERVER][v0] BREVO_API_KEY available:", !!process.env.BREVO_API_KEY)
+    console.log("[SERVER][v0] Email to send to:", email)
 
     const htmlContent = `
       <h2>Welcome to Future Task!</h2>
