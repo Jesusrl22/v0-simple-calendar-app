@@ -38,7 +38,7 @@ export async function POST(request: Request) {
       type: "signup",
       email: email,
       options: {
-        redirectTo: `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/auth/confirm`,
+        redirectTo: `https://future-task.com/auth/confirm`,
       },
     })
 
