@@ -1,11 +1,19 @@
 import type React from "react"
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import Script from "next/script"
 import "./globals.css"
 import { ThemeLoader } from "@/components/theme-loader"
 import { LanguageProvider } from "@/contexts/language-context"
 import { HelpChatbot } from "@/components/help-chatbot"
 import { ScrollToTop } from "@/components/scroll-to-top"
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  viewportFit: "cover",
+}
 
 export const metadata: Metadata = {
   title: "Future Task - Smart Task Management & Productivity App",
@@ -28,13 +36,6 @@ export const metadata: Metadata = {
     other: {
       "google-adsense-account": ["ca-pub-3746054566396266"],
     },
-  },
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 5,
-    userScalable: true,
-    viewportFit: "cover",
   },
   openGraph: {
     type: "website",
