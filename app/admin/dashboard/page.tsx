@@ -27,6 +27,7 @@ export default function AdminDashboard() {
   const [expirationDate, setExpirationDate] = useState('')
   const [userToDelete, setUserToDelete] = useState<User | null>(null)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [viewUserDialogOpen, setViewUserDialogOpen] = useState(false)
 
   useEffect(() => {
     checkAdmin()
@@ -244,6 +245,18 @@ export default function AdminDashboard() {
                       </td>
                       <td className="p-2">
                         <div className="flex gap-1 justify-center">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-7 text-xs px-2"
+                            onClick={() => {
+                              setSelectedUser(user)
+                              setViewUserDialogOpen(true)
+                            }}
+                          >
+                            View
+                          </Button>
+
                           <Dialog>
                             <DialogTrigger asChild>
                               <Button
@@ -319,6 +332,46 @@ export default function AdminDashboard() {
                 Delete
               </Button>
             </div>
+          </DialogContent>
+        </Dialog>
+
+        <Dialog open={viewUserDialogOpen} onOpenChange={setViewUserDialogOpen}>
+          <DialogContent className="max-w-2xl">
+            <DialogHeader>
+              <DialogTitle>User Details</DialogTitle>
+            </DialogHeader>
+            {selectedUser && (
+              <div className="space-y-4 py-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label className="text-xs text-muted-foreground">Name</Label>
+                    <p className="text-sm font-medium">{selectedUser.name || 'No name set'}</p>
+                  </div>
+                  <div>
+                    <Label className="text-xs text-muted-foreground">Email</Label>
+                    <p className="text-sm font-medium">{selectedUser.email}</p>
+                  </div>
+                  <div>
+                    <Label className="text-xs text-muted-foreground">Plan</Label>
+                    <p className="text-sm font-medium capitalize">{selectedUser.subscription_plan || 'Free'}</p>
+                  </div>
+                  <div>
+                    <Label className="text-xs text-muted-foreground">Expires</Label>
+                    <p className="text-sm font-medium">
+                      {selectedUser.subscription_expires_at ? formatDate(selectedUser.subscription_expires_at) : 'Never'}
+                    </p>
+                  </div>
+                  <div>
+                    <Label className="text-xs text-muted-foreground">Created At</Label>
+                    <p className="text-sm font-medium">{formatDate(selectedUser.created_at)}</p>
+                  </div>
+                  <div>
+                    <Label className="text-xs text-muted-foreground">User ID</Label>
+                    <p className="text-sm font-medium font-mono text-xs truncate">{selectedUser.id}</p>
+                  </div>
+                </div>
+              </div>
+            )}
           </DialogContent>
         </Dialog>
       </div>
