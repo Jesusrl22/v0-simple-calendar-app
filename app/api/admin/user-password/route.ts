@@ -45,15 +45,24 @@ export async function GET(request: Request) {
     }
 
     // Get user password from user_credentials
+    console.log('[v0] Fetching password for user:', userId)
+    
     const { data: credentials, error } = await supabase
       .from('user_credentials')
       .select('password_hash')
-      .eq('user_id', userId)
-      .single()
+      .eq('user_id', userId.toString())
+      .maybeSingle()
 
-    if (error || !credentials) {
-      console.error('Error fetching user credentials:', error)
-      return NextResponse.json({ error: 'User credentials not found' }, { status: 404 })
+    console.log('[v0] Query result:', { credentials, error })
+
+    if (error) {
+      console.error('[v0] Error fetching user credentials:', error)
+      return NextResponse.json({ error: 'Error fetching credentials' }, { status: 404 })
+    }
+
+    if (!credentials) {
+      console.warn('[v0] No credentials found for user:', userId)
+      return NextResponse.json({ error: 'No password found' }, { status: 404 })
     }
 
     // Return the password (stored in plain text in password_hash field for admin)
