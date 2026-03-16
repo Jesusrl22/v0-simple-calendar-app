@@ -22,6 +22,7 @@ import type { Language } from "@/lib/translations"
 
 type ProfileType = {
   email: string
+  name: string
   theme: string
   customThemes: CustomTheme[]
   language: Language
@@ -47,6 +48,7 @@ export default function SettingsPage() {
 
   const [profile, setProfile] = useState<ProfileType>({
     email: "",
+    name: "",
     theme: "default",
     customThemes: [],
     language: globalLanguage,
@@ -109,6 +111,7 @@ export default function SettingsPage() {
 
         const newProfile: ProfileType = {
           email: settingsData.email || "",
+          name: settingsData.profile.name || "",
           theme: settingsData.profile.theme || "default",
           customThemes: customThemes,
           language: settingsData.profile.language || localStorage.getItem("language") || globalLanguage,
@@ -156,6 +159,8 @@ export default function SettingsPage() {
         pomodoro_work_duration: profile.pomodoroWorkDuration,
         pomodoro_break_duration: profile.pomodoroBreakDuration,
         pomodoro_long_break_duration: profile.pomodoroLongBreakDuration,
+        name: profile.name,
+        email: profile.email,
       }
       console.log("[v0] Settings - Sending payload:", payload)
 
@@ -185,15 +190,27 @@ export default function SettingsPage() {
           applyTheme(profile.theme)
         }
 
-        toast({
-          title: "success",
-          description: "Settings saved successfully",
-        })
+        // Check if email changed - if so, logout user
+        if (result.emailChanged) {
+          console.log("[v0] Settings - Email changed, logging out user")
+          toast({
+            title: "success",
+            description: "Email actualizado. Se cerrará la sesión...",
+          })
+          setTimeout(() => {
+            window.location.href = "/api/auth/logout"
+          }, 2000)
+        } else {
+          toast({
+            title: "success",
+            description: "Cambios guardados correctamente",
+          })
+        }
       } else {
         console.error("[v0] Settings - Save failed:", result)
         toast({
           title: "error",
-          description: result.error || "Failed to save settings",
+          description: result.error || "Error al guardar los cambios",
           variant: "destructive",
         })
       }
@@ -201,7 +218,7 @@ export default function SettingsPage() {
       console.error("[v0] Settings - Error saving settings:", error)
       toast({
         title: "error",
-        description: "Failed to save settings",
+        description: "Error al guardar los cambios",
         variant: "destructive",
       })
     } finally {
@@ -398,9 +415,26 @@ export default function SettingsPage() {
               <h2 className="text-lg sm:text-xl font-bold mb-4 sm:mb-6">{t("general_settings")}</h2>
               <div className="space-y-4">
                 <div>
+                  <Label className="text-sm">{t("name") || "Nombre"}</Label>
+                  <Input
+                    value={profile.name}
+                    onChange={(e) => setProfile({ ...profile, name: e.target.value })}
+                    placeholder="Tu nombre"
+                    className="bg-secondary/50 text-sm"
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">Cambia tu nombre de usuario</p>
+                </div>
+
+                <div>
                   <Label className="text-sm">{t("email")}</Label>
-                  <Input value={profile.email} disabled className="bg-secondary/50 text-sm" />
-                  <p className="text-xs text-muted-foreground mt-1">{t("email_cannot_be_changed")}</p>
+                  <Input
+                    value={profile.email}
+                    onChange={(e) => setProfile({ ...profile, email: e.target.value })}
+                    type="email"
+                    placeholder="tu@correo.com"
+                    className="bg-secondary/50 text-sm"
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">Se cerrará la sesión después de cambiar el correo</p>
                 </div>
 
                 <div>

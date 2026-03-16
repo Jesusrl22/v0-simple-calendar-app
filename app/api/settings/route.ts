@@ -100,6 +100,8 @@ export async function PATCH(request: Request) {
       pomodoro_work_duration,
       pomodoro_break_duration,
       pomodoro_long_break_duration,
+      name,
+      email,
     } = body
 
     const userResponse = await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/user`, {
@@ -135,6 +137,7 @@ export async function PATCH(request: Request) {
     if (pomodoro_work_duration !== undefined) updates.pomodoro_work_duration = pomodoro_work_duration
     if (pomodoro_break_duration !== undefined) updates.pomodoro_break_duration = pomodoro_break_duration
     if (pomodoro_long_break_duration !== undefined) updates.pomodoro_long_break_duration = pomodoro_long_break_duration
+    if (name !== undefined) updates.name = name
 
     console.log("[v0] Settings PATCH - Updates to apply:", updates)
 
@@ -162,10 +165,64 @@ export async function PATCH(request: Request) {
       )
     }
 
+    // Handle email change separately
+    let emailChanged = false
+    if (email !== undefined && email !== user.email) {
+      console.log("[v0] Settings PATCH - Changing email from", user.email, "to", email)
+      emailChanged = true
+
+      // Update email in Supabase Auth
+      const emailUpdateResponse = await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/user`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: email }),
+      })
+
+      if (!emailUpdateResponse.ok) {
+        const errorText = await emailUpdateResponse.text()
+        console.error("[v0] Settings PATCH - Email update failed:", errorText)
+        return NextResponse.json(
+          {
+            error: "Failed to update email",
+            details: errorText,
+          },
+          { status: 400 },
+        )
+      }
+
+      // Update email in users table
+      const emailDbUpdateResponse = await fetch(
+        `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/users?id=eq.${user.id}`,
+        {
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`,
+            apikey: process.env.SUPABASE_SERVICE_ROLE_KEY!,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email: email }),
+        },
+      )
+
+      if (!emailDbUpdateResponse.ok) {
+        console.error("[v0] Settings PATCH - Email DB update failed")
+      }
+
+      console.log("[v0] Settings PATCH - Email updated successfully")
+    }
+
     const updatedUser = await updateResponse.json()
     console.log("[v0] Settings PATCH - Successfully updated user:", updatedUser)
 
-    return NextResponse.json({ success: true, user: updatedUser[0] || updatedUser })
+    return NextResponse.json({
+      success: true,
+      user: updatedUser[0] || updatedUser,
+      emailChanged: emailChanged,
+    })
   } catch (error: any) {
     console.error("[v0] Settings PATCH - Error:", error)
     return NextResponse.json(
