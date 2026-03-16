@@ -1,3 +1,4 @@
+// Admin user detail page - v1
 'use client'
 
 import { useState, useEffect } from 'react'
