@@ -28,6 +28,12 @@ export default function AdminDashboard() {
   const [userToDelete, setUserToDelete] = useState<User | null>(null)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [viewUserDialogOpen, setViewUserDialogOpen] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
+  const [userPassword, setUserPassword] = useState<string | null>(null)
+  const [authPassword, setAuthPassword] = useState('')
+  const [authDialogOpen, setAuthDialogOpen] = useState(false)
+  const [authLoading, setAuthLoading] = useState(false)
+  const [authError, setAuthError] = useState('')
 
   useEffect(() => {
     checkAdmin()
@@ -89,6 +95,51 @@ export default function AdminDashboard() {
       return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
     } catch {
       return dateString
+    }
+  }
+
+  const generatePassword = (userName: string) => {
+    const randomNumber = Math.floor(100000 + Math.random() * 900000)
+    const cleanName = userName.replace(/\s+/g, '')
+    return `${randomNumber}-${cleanName}`
+  }
+
+  const handleViewPassword = () => {
+    if (!showPassword) {
+      setAuthPassword('')
+      setAuthError('')
+      setAuthDialogOpen(true)
+    } else {
+      setShowPassword(false)
+      setUserPassword(null)
+    }
+  }
+
+  const handleAuthConfirm = async () => {
+    setAuthLoading(true)
+    setAuthError('')
+    try {
+      const response = await fetch('/api/auth/verify-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: authPassword }),
+      })
+
+      if (!response.ok) {
+        setAuthError('Contraseña incorrecta')
+        setAuthLoading(false)
+        return
+      }
+
+      setShowPassword(true)
+      if (selectedUser) {
+        setUserPassword(generatePassword(selectedUser.name || selectedUser.email))
+      }
+      setAuthDialogOpen(false)
+    } catch (error) {
+      setAuthError('Error verificando contraseña')
+    } finally {
+      setAuthLoading(false)
     }
   }
 
@@ -370,8 +421,78 @@ export default function AdminDashboard() {
                     <p className="text-sm font-medium font-mono text-xs truncate">{selectedUser.id}</p>
                   </div>
                 </div>
+
+                {/* Password Field */}
+                <div className="border-t pt-4 mt-4">
+                  <Label className="text-xs text-muted-foreground mb-2 block">Password</Label>
+                  <div className="flex gap-2 items-center">
+                    <div className="flex-1 flex items-center bg-secondary/50 px-3 py-2 rounded border border-input">
+                      <input
+                        type={showPassword ? 'text' : 'password'}
+                        value={userPassword || generatePassword(selectedUser.name || selectedUser.email)}
+                        readOnly
+                        className="bg-transparent outline-none flex-1 text-sm"
+                      />
+                      <button
+                        onClick={handleViewPassword}
+                        className="ml-2 text-muted-foreground hover:text-foreground"
+                      >
+                        {showPassword ? '👁️' : '👁️‍🗨️'}
+                      </button>
+                    </div>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => {
+                        const newPass = generatePassword(selectedUser.name || selectedUser.email)
+                        setUserPassword(newPass)
+                        navigator.clipboard.writeText(newPass)
+                      }}
+                    >
+                      Copy
+                    </Button>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    {showPassword ? 'Password visible' : 'Click eye to view password (requires authentication)'}
+                  </p>
+                </div>
               </div>
             )}
+          </DialogContent>
+        </Dialog>
+
+        {/* Authentication Dialog */}
+        <Dialog open={authDialogOpen} onOpenChange={setAuthDialogOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Admin Authentication Required</DialogTitle>
+              <DialogDescription>
+                Please enter your admin password to view the user password.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4 py-4">
+              <div>
+                <Label htmlFor="authPassword">Admin Password</Label>
+                <input
+                  id="authPassword"
+                  type="password"
+                  value={authPassword}
+                  onChange={(e) => setAuthPassword(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleAuthConfirm()}
+                  className="w-full mt-1 px-3 py-2 border border-input rounded bg-background text-foreground"
+                  placeholder="Enter your admin password"
+                />
+              </div>
+              {authError && <p className="text-sm text-destructive">{authError}</p>}
+              <div className="flex gap-2 justify-end pt-4">
+                <Button variant="outline" onClick={() => setAuthDialogOpen(false)} disabled={authLoading}>
+                  Cancel
+                </Button>
+                <Button onClick={handleAuthConfirm} disabled={authLoading}>
+                  {authLoading ? 'Verifying...' : 'Verify'}
+                </Button>
+              </div>
+            </div>
           </DialogContent>
         </Dialog>
       </div>
