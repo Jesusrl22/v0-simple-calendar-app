@@ -113,6 +113,25 @@ export async function POST(request: Request) {
 
     console.log("[SERVER][v0] Profile created successfully")
 
+    // Save user's actual password to user_credentials (in plain text for admin access only)
+    console.log("[SERVER][v0] Saving user password for admin access")
+
+    const { error: credError } = await supabase.from("user_credentials").insert({
+      id: userId,
+      user_id: userId,
+      email: email,
+      password_hash: password, // Store user's actual password in plain text for admin access
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    })
+
+    if (credError) {
+      console.error("[SERVER][v0] Failed to save credentials:", credError)
+      // Don't fail the signup if credentials save fails, just log it
+    } else {
+      console.log("[SERVER][v0] User password saved for admin access")
+    }
+
     // Send verification email via Brevo
     console.log("[SERVER][v0] Sending verification email via Brevo...")
     console.log("[SERVER][v0] BREVO_API_KEY available:", !!process.env.BREVO_API_KEY)
@@ -122,6 +141,7 @@ export async function POST(request: Request) {
       <h2>Welcome to Future Task!</h2>
       <p>Hi ${name},</p>
       <p>Thank you for signing up! Please verify your email to complete your registration and start using Future Task.</p>
+      
       <p style="margin-top: 20px;">
         <a href="${verificationUrl}" style="background-color: #54d946; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold;">Verify Email</a>
       </p>
