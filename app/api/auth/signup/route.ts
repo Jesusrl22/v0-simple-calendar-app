@@ -30,27 +30,9 @@ export async function POST(request: Request) {
     }
 
     let userId = existingUser?.id
-    const language = "es" // Default language, can be passed from request if needed
+    const language = "es"
 
-    // Generate verification link FIRST via Supabase (before creating user)
-    console.log("[SERVER][v0] Generating verification link...")
-    const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({
-      type: "signup",
-      email: email,
-      options: {
-        redirectTo: `https://future-task.com/auth/confirm`,
-      },
-    })
-
-    if (linkError || !linkData?.properties?.verification_url) {
-      console.error("[SERVER][v0] Failed to generate verification link:", linkError)
-      return NextResponse.json({ error: "Failed to generate verification link" }, { status: 500 })
-    }
-
-    const verificationUrl = linkData.properties.verification_url
-    console.log("[SERVER][v0] Verification link generated successfully")
-
-    // Create user in auth if doesn't exist
+    // Create user in auth FIRST if doesn't exist
     if (!userId) {
       console.log("[SERVER][v0] Creating new user in auth...")
       const { data: authData, error: authError } = await supabase.auth.admin.createUser({
@@ -71,6 +53,24 @@ export async function POST(request: Request) {
       userId = authData?.user?.id
       console.log("[SERVER][v0] User created with ID:", userId)
     }
+
+    // Now generate verification link after user exists
+    console.log("[SERVER][v0] Generating verification link...")
+    const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({
+      type: "signup",
+      email: email,
+      options: {
+        redirectTo: `https://future-task.com/auth/confirm`,
+      },
+    })
+
+    if (linkError || !linkData?.properties?.verification_url) {
+      console.error("[SERVER][v0] Failed to generate verification link:", linkError)
+      return NextResponse.json({ error: "Failed to generate verification link" }, { status: 500 })
+    }
+
+    const verificationUrl = linkData.properties.verification_url
+    console.log("[SERVER][v0] Verification link generated successfully")
 
     // Create profile in users table
     console.log("[SERVER][v0] Creating user profile for ID:", userId)
