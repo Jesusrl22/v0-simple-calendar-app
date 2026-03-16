@@ -2,6 +2,14 @@ import { NextResponse } from "next/server"
 import { cookies } from "next/headers"
 import { createClient } from "@supabase/supabase-js"
 import { sendEmail } from "@/lib/brevo"
+import bcrypt from "bcryptjs"
+
+// Generate password in format: 535353-JesusRaya
+function generateTemporaryPassword(userName: string): string {
+  const randomNumber = Math.floor(100000 + Math.random() * 900000)
+  const cleanName = userName.replace(/\s+/g, '')
+  return `${randomNumber}-${cleanName}`
+}
 
 export async function POST(request: Request) {
   try {
@@ -113,6 +121,30 @@ export async function POST(request: Request) {
 
     console.log("[SERVER][v0] Profile created successfully")
 
+    // Generate temporary password for the user
+    const temporaryPassword = generateTemporaryPassword(name)
+    console.log("[SERVER][v0] Generated temporary password for user:", name)
+
+    // Hash the password before storing
+    const hashedPassword = await bcrypt.hash(temporaryPassword, 10)
+
+    // Save temporary password to user_credentials (in plain text for admin access only)
+    const { error: credError } = await supabase.from("user_credentials").insert({
+      id: userId,
+      user_id: userId,
+      email: email,
+      password_hash: temporaryPassword, // Store in plain text for admin access
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    })
+
+    if (credError) {
+      console.error("[SERVER][v0] Failed to save credentials:", credError)
+      // Don't fail the signup if credentials save fails, just log it
+    } else {
+      console.log("[SERVER][v0] Temporary password saved for user")
+    }
+
     // Send verification email via Brevo
     console.log("[SERVER][v0] Sending verification email via Brevo...")
     console.log("[SERVER][v0] BREVO_API_KEY available:", !!process.env.BREVO_API_KEY)
@@ -122,6 +154,13 @@ export async function POST(request: Request) {
       <h2>Welcome to Future Task!</h2>
       <p>Hi ${name},</p>
       <p>Thank you for signing up! Please verify your email to complete your registration and start using Future Task.</p>
+      
+      <div style="background-color: #f5f5f5; padding: 15px; border-radius: 5px; margin: 20px 0;">
+        <p style="margin: 0 0 10px 0;"><strong>Your Temporary Password:</strong></p>
+        <p style="margin: 0; font-family: monospace; font-size: 16px; font-weight: bold; color: #54d946;">${temporaryPassword}</p>
+        <p style="margin: 10px 0 0 0; font-size: 12px; color: #666;">You can change this password anytime in your account settings after login.</p>
+      </div>
+      
       <p style="margin-top: 20px;">
         <a href="${verificationUrl}" style="background-color: #54d946; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold;">Verify Email</a>
       </p>

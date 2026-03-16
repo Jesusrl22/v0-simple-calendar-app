@@ -131,10 +131,21 @@ export default function AdminDashboard() {
         return
       }
 
-      setShowPassword(true)
+      // Now fetch the user password from database
       if (selectedUser) {
-        setUserPassword(generatePassword(selectedUser.name || selectedUser.email))
+        const passwordResponse = await fetch(`/api/admin/user-password?userId=${selectedUser.id}`, {
+          method: 'GET',
+        })
+
+        if (passwordResponse.ok) {
+          const { password } = await passwordResponse.json()
+          setUserPassword(password)
+        } else {
+          setUserPassword('No password found')
+        }
       }
+
+      setShowPassword(true)
       setAuthDialogOpen(false)
     } catch (error) {
       setAuthError('Error verificando contraseña')
