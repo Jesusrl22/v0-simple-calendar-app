@@ -98,12 +98,6 @@ export default function AdminDashboard() {
     }
   }
 
-  const generatePassword = (userName: string) => {
-    const randomNumber = Math.floor(100000 + Math.random() * 900000)
-    const cleanName = userName.replace(/\s+/g, '')
-    return `${randomNumber}-${cleanName}`
-  }
-
   const handleViewPassword = () => {
     if (!showPassword) {
       setAuthPassword('')
@@ -440,31 +434,31 @@ export default function AdminDashboard() {
                     <div className="flex-1 flex items-center bg-secondary/50 px-3 py-2 rounded border border-input">
                       <input
                         type={showPassword ? 'text' : 'password'}
-                        value={userPassword || generatePassword(selectedUser.name || selectedUser.email)}
+                        value={userPassword || '••••••••'}
                         readOnly
                         className="bg-transparent outline-none flex-1 text-sm"
                       />
                       <button
                         onClick={handleViewPassword}
-                        className="ml-2 text-muted-foreground hover:text-foreground"
+                        className="ml-2 text-muted-foreground hover:text-foreground cursor-pointer"
                       >
                         {showPassword ? '👁️' : '👁️‍🗨️'}
                       </button>
                     </div>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => {
-                        const newPass = generatePassword(selectedUser.name || selectedUser.email)
-                        setUserPassword(newPass)
-                        navigator.clipboard.writeText(newPass)
-                      }}
-                    >
-                      Copy
-                    </Button>
+                    {showPassword && userPassword && (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => {
+                          navigator.clipboard.writeText(userPassword)
+                        }}
+                      >
+                        Copy
+                      </Button>
+                    )}
                   </div>
                   <p className="text-xs text-muted-foreground mt-2">
-                    {showPassword ? 'Password visible' : 'Click eye to view password (requires authentication)'}
+                    {showPassword ? 'Password visible' : 'Click eye to view password (requires admin authentication)'}
                   </p>
                 </div>
               </div>
