@@ -39,6 +39,9 @@ export async function POST(request: Request) {
       return { error: "Invalid response from auth server" }
     })
 
+    console.log("[SERVER][API] Supabase response status:", loginResponse.status)
+    console.log("[SERVER][API] Login data:", JSON.stringify(loginData, null, 2))
+
     if (!loginResponse.ok || loginData.error) {
       console.error("[SERVER][API] Login error:", loginData.error?.message || loginData.error_description)
       return NextResponse.json(
