@@ -64,6 +64,7 @@ const plans = [
     features: [
       "subscription_feature_ai_credits_pro",
       "subscription_feature_everything_premium",
+      "subscription_feature_habits",
       "subscription_feature_statistics",
       "subscription_feature_custom_themes",
       "subscription_feature_all_themes",

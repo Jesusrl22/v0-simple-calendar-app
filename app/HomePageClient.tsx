@@ -118,6 +118,7 @@ const translations = {
     pro: "Pro",
     proDesc: "For power users",
     proAiCredits: "500 AI credits/month",
+    proHabits: "Habits tracker",
     proStatistics: "Statistics & analytics",
     proCustomTheme: "Custom theme creator",
     proAllThemes: "All 15 themes + custom",
@@ -298,6 +299,7 @@ const translations = {
     pro: "Pro",
     proDesc: "Para usuarios avanzados",
     proAiCredits: "500 créditos IA/mes",
+    proHabits: "Rastreador de hábitos",
     proStatistics: "Estadísticas y análisis",
     proCustomTheme: "Creador de temas personalizados",
     proAllThemes: "Todos los 15 temas + personalizados",
@@ -479,6 +481,7 @@ const translations = {
     pro: "Pro",
     proDesc: "Pour les utilisateurs avancés",
     proAiCredits: "500 crédits IA/mois",
+    proHabits: "Suivi des habitudes",
     proStatistics: "Statistiques et analyses",
     proCustomTheme: "Créateur de thèmes personnalisés",
     proAllThemes: "Tous les 15 thèmes + personnalisés",
@@ -648,6 +651,7 @@ const translations = {
     pro: "Pro",
     proDesc: "Für Power-User",
     proAiCredits: "500 KI-Credits/Monat",
+    proHabits: "Gewohnheits-Tracker",
     proStatistics: "Statistiken & Analysen",
     proCustomTheme: "Benutzerdefinierte Themen-Creator",
     proAllThemes: "Alle 15 Themen + benutzerdefiniert",
@@ -819,6 +823,7 @@ const translations = {
     pro: "Pro",
     proDesc: "Per utenti esperti",
     proAiCredits: "500 crediti IA/mes",
+    proHabits: "Tracciatore di abitudini",
     proStatistics: "Statistiche & Analisi",
     proCustomTheme: "Creatore di temi personalizzato",
     proAllThemes: "Tutti i 15 temi + personalizzato",
@@ -1424,6 +1429,10 @@ export default function HomePageClient() {
                 <li className="flex items-start gap-2">
                   <span className="text-primary mt-1">✓</span>
                   <span className="text-sm">{t("proAiCredits")}</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-primary mt-1">✓</span>
+                  <span className="text-sm">{t("proHabits")}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-primary mt-1">✓</span>
