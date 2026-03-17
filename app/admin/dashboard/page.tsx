@@ -31,6 +31,8 @@ export default function AdminDashboard() {
   const [newPassword, setNewPassword] = useState('')
   const [settingPassword, setSettingPassword] = useState(false)
   const [passwordExpiresIn5Days, setPasswordExpiresIn5Days] = useState(false)
+  const [editingName, setEditingName] = useState('')
+  const [savingName, setSavingName] = useState(false)
 
   useEffect(() => {
     checkAdmin()
@@ -122,6 +124,39 @@ export default function AdminDashboard() {
       alert('Error al guardar la contraseña')
     } finally {
       setSettingPassword(false)
+    }
+  }
+
+  const handleSaveName = async () => {
+    if (!selectedUser || !editingName.trim()) return
+    setSavingName(true)
+    try {
+      const response = await fetch('/api/admin/update-user-name', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: selectedUser.id,
+          name: editingName.trim(),
+        }),
+      })
+
+      if (response.ok) {
+        // Update the user in the local state
+        const updatedUser = { ...selectedUser, name: editingName.trim() }
+        setSelectedUser(updatedUser)
+        
+        // Update the users list
+        setUsers(users.map(u => u.id === selectedUser.id ? updatedUser : u))
+        
+        alert('Nombre actualizado exitosamente')
+      } else {
+        alert('Error al actualizar el nombre')
+      }
+    } catch (error) {
+      console.error('Error updating name:', error)
+      alert('Error al actualizar el nombre')
+    } finally {
+      setSavingName(false)
     }
   }
 
@@ -290,6 +325,7 @@ export default function AdminDashboard() {
                             className="h-7 text-xs px-2"
                             onClick={() => {
                               setSelectedUser(user)
+                              setEditingName(user.name || '')
                               setViewUserDialogOpen(true)
                             }}
                           >
@@ -383,8 +419,24 @@ export default function AdminDashboard() {
               <div className="space-y-4 py-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label className="text-xs text-muted-foreground">Name</Label>
-                    <p className="text-sm font-medium">{selectedUser.name || 'No name set'}</p>
+                    <Label className="text-xs text-muted-foreground mb-2 block">Name</Label>
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={editingName}
+                        onChange={(e) => setEditingName(e.target.value)}
+                        placeholder="Enter user name"
+                        className="flex-1 px-3 py-2 border border-input rounded bg-background text-foreground text-sm"
+                      />
+                      <Button
+                        size="sm"
+                        onClick={handleSaveName}
+                        disabled={!editingName.trim() || savingName}
+                        className="whitespace-nowrap"
+                      >
+                        {savingName ? 'Saving...' : 'Save'}
+                      </Button>
+                    </div>
                   </div>
                   <div>
                     <Label className="text-xs text-muted-foreground">Email</Label>
