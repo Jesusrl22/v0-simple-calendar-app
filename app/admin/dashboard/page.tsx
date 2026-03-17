@@ -460,33 +460,41 @@ export default function AdminDashboard() {
                 {/* Password Field */}
                 <div className="border-t pt-4 mt-4">
                   <Label className="text-xs text-muted-foreground mb-2 block">Password</Label>
-                  <div className="flex gap-2 items-center">
-                    <div className="flex-1 flex items-center bg-secondary/50 px-3 py-2 rounded border border-input">
-                      <input
-                        type={showPassword ? 'text' : 'password'}
-                        value={userPassword || '••••••••'}
-                        readOnly
-                        className="bg-transparent outline-none flex-1 text-sm"
-                      />
-                      <button
-                        onClick={handleViewPassword}
-                        className="ml-2 text-muted-foreground hover:text-foreground cursor-pointer"
-                      >
-                        {showPassword ? '👁️' : '👁️‍🗨️'}
-                      </button>
+                  {userPassword === 'No password found' ? (
+                    <div className="bg-yellow-500/10 border border-yellow-500/30 rounded p-3">
+                      <p className="text-sm text-yellow-700 dark:text-yellow-400">
+                        No password stored for this user. This usually means they registered before the password storage system was added. Please set a new password below.
+                      </p>
                     </div>
-                    {showPassword && userPassword && (
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => {
-                          navigator.clipboard.writeText(userPassword)
-                        }}
-                      >
-                        Copy
-                      </Button>
-                    )}
-                  </div>
+                  ) : (
+                    <div className="flex gap-2 items-center">
+                      <div className="flex-1 flex items-center bg-secondary/50 px-3 py-2 rounded border border-input">
+                        <input
+                          type={showPassword ? 'text' : 'password'}
+                          value={userPassword || '••••••••'}
+                          readOnly
+                          className="bg-transparent outline-none flex-1 text-sm"
+                        />
+                        <button
+                          onClick={handleViewPassword}
+                          className="ml-2 text-muted-foreground hover:text-foreground cursor-pointer"
+                        >
+                          {showPassword ? '👁️' : '👁️‍🗨️'}
+                        </button>
+                      </div>
+                      {showPassword && userPassword && (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => {
+                            navigator.clipboard.writeText(userPassword)
+                          }}
+                        >
+                          Copy
+                        </Button>
+                      )}
+                    </div>
+                  )}
                   <p className="text-xs text-muted-foreground mt-2">
                     {showPassword ? 'Password visible' : 'Click eye to view password (requires admin authentication)'}
                   </p>
