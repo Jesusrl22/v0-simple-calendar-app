@@ -45,24 +45,46 @@ export async function GET(request: Request) {
     }
 
     // Get user password from user_credentials
-    console.log('[v0] Fetching password for user:', userId)
+    console.log('[v0] Fetching password for user:', userId, 'type:', typeof userId)
     
+    // Try direct query first
     const { data: credentials, error } = await supabase
       .from('user_credentials')
-      .select('password_hash')
-      .eq('user_id', userId.toString())
+      .select('password_hash, user_id, id')
+      .eq('user_id', userId)
       .maybeSingle()
 
-    console.log('[v0] Query result:', { credentials, error })
+    console.log('[v0] Query attempt 1 - Direct match:', { credentials, error })
+
+    if (!credentials && userId) {
+      // Try with UUID string conversion
+      const { data: credentials2, error: error2 } = await supabase
+        .from('user_credentials')
+        .select('password_hash, user_id, id')
+        .or(`user_id.eq.${userId},id.eq.${userId}`)
+        .maybeSingle()
+      
+      console.log('[v0] Query attempt 2 - OR match:', { credentials: credentials2, error: error2 })
+      
+      if (credentials2) {
+        return NextResponse.json({ password: credentials2.password_hash || 'No password set' })
+      }
+    }
 
     if (error) {
       console.error('[v0] Error fetching user credentials:', error)
-      return NextResponse.json({ error: 'Error fetching credentials' }, { status: 404 })
+      return NextResponse.json({ error: 'Error fetching credentials', details: error.message }, { status: 404 })
     }
 
     if (!credentials) {
       console.warn('[v0] No credentials found for user:', userId)
-      return NextResponse.json({ error: 'No password found' }, { status: 404 })
+      // List all credentials to debug
+      const { data: allCreds } = await supabase
+        .from('user_credentials')
+        .select('user_id, id, email')
+        .limit(5)
+      console.log('[v0] Sample credentials in DB:', allCreds)
+      return NextResponse.json({ error: 'No password found for this user' }, { status: 404 })
     }
 
     // Return the password (stored in plain text in password_hash field for admin)
