@@ -28,14 +28,9 @@ export default function AdminDashboard() {
   const [userToDelete, setUserToDelete] = useState<User | null>(null)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [viewUserDialogOpen, setViewUserDialogOpen] = useState(false)
-  const [showPassword, setShowPassword] = useState(false)
-  const [userPassword, setUserPassword] = useState<string | null>(null)
-  const [authPassword, setAuthPassword] = useState('')
-  const [authDialogOpen, setAuthDialogOpen] = useState(false)
-  const [authLoading, setAuthLoading] = useState(false)
-  const [authError, setAuthError] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [settingPassword, setSettingPassword] = useState(false)
+  const [passwordExpiresIn5Days, setPasswordExpiresIn5Days] = useState(false)
 
   useEffect(() => {
     checkAdmin()
@@ -100,15 +95,35 @@ export default function AdminDashboard() {
     }
   }
 
-  const handleViewPassword = () => {
-    if (!showPassword) {
-      setAuthPassword('')
-      setAuthError('')
-      setAuthDialogOpen(true)
-    } else {
-      setShowPassword(false)
-      setUserPassword(null)
+  const handleSetPassword = async () => {
+    if (!selectedUser || !newPassword) return
+    setSettingPassword(true)
+    try {
+      const response = await fetch('/api/admin/set-user-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: selectedUser.id,
+          password: newPassword,
+          expiresIn5Days: passwordExpiresIn5Days,
+        }),
+      })
+
+      if (response.ok) {
+        const result = await response.json()
+        setNewPassword('')
+        setPasswordExpiresIn5Days(false)
+        alert(result.message || 'Contraseña guardada exitosamente')
+      } else {
+        alert('Error al guardar la contraseña')
+      }
+    } catch (error) {
+      console.error('Error setting password:', error)
+      alert('Error al guardar la contraseña')
+    } finally {
+      setSettingPassword(false)
     }
+  }
   }
 
   const handleAuthConfirm = async () => {
@@ -457,109 +472,47 @@ export default function AdminDashboard() {
                   </div>
                 </div>
 
-                {/* Password Field */}
-                <div className="border-t pt-4 mt-4">
-                  <Label className="text-xs text-muted-foreground mb-2 block">Password</Label>
-                  {userPassword === 'No password found' ? (
-                    <div className="bg-yellow-500/10 border border-yellow-500/30 rounded p-3">
-                      <p className="text-sm text-yellow-700 dark:text-yellow-400">
-                        No password stored for this user. This usually means they registered before the password storage system was added. Please set a new password below.
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="flex gap-2 items-center">
-                      <div className="flex-1 flex items-center bg-secondary/50 px-3 py-2 rounded border border-input">
-                        <input
-                          type={showPassword ? 'text' : 'password'}
-                          value={userPassword || '••••••••'}
-                          readOnly
-                          className="bg-transparent outline-none flex-1 text-sm"
-                        />
-                        <button
-                          onClick={handleViewPassword}
-                          className="ml-2 text-muted-foreground hover:text-foreground cursor-pointer"
-                        >
-                          {showPassword ? '👁️' : '👁️‍🗨️'}
-                        </button>
-                      </div>
-                      {showPassword && userPassword && (
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => {
-                            navigator.clipboard.writeText(userPassword)
-                          }}
-                        >
-                          Copy
-                        </Button>
-                      )}
-                    </div>
-                  )}
-                  <p className="text-xs text-muted-foreground mt-2">
-                    {showPassword ? 'Password visible' : 'Click eye to view password (requires admin authentication)'}
-                  </p>
-                </div>
-
                 {/* Set New Password Section */}
                 <div className="border-t pt-4 mt-4">
-                  <Label className="text-xs text-muted-foreground mb-2 block">Set New Password</Label>
-                  <div className="flex gap-2">
-                    <input
-                      type="password"
-                      value={newPassword}
-                      onChange={(e) => setNewPassword(e.target.value)}
-                      placeholder="Enter new password for user"
-                      className="flex-1 px-3 py-2 border border-input rounded bg-background text-foreground text-sm"
-                    />
-                    <Button
-                      size="sm"
-                      onClick={handleSetPassword}
-                      disabled={!newPassword || settingPassword}
-                    >
-                      {settingPassword ? 'Saving...' : 'Save'}
-                    </Button>
+                  <Label className="text-xs text-muted-foreground mb-3 block">Set New Password</Label>
+                  <div className="space-y-3">
+                    <div className="flex gap-2">
+                      <input
+                        type="password"
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                        placeholder="Enter new password for user"
+                        className="flex-1 px-3 py-2 border border-input rounded bg-background text-foreground text-sm"
+                      />
+                      <Button
+                        size="sm"
+                        onClick={handleSetPassword}
+                        disabled={!newPassword || settingPassword}
+                      >
+                        {settingPassword ? 'Saving...' : 'Save'}
+                      </Button>
+                    </div>
+                    
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        id="passwordExpires"
+                        checked={passwordExpiresIn5Days}
+                        onChange={(e) => setPasswordExpiresIn5Days(e.target.checked)}
+                        className="w-4 h-4"
+                      />
+                      <Label htmlFor="passwordExpires" className="text-xs cursor-pointer">
+                        Password expires in 5 days (user must change it)
+                      </Label>
+                    </div>
+
+                    <p className="text-xs text-muted-foreground">
+                      Use this when the user has lost access or you need to reset their password.
+                    </p>
                   </div>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Set a new password for this user (e.g., they lost access)
-                  </p>
                 </div>
               </div>
             )}
-          </DialogContent>
-        </Dialog>
-
-        {/* Authentication Dialog */}
-        <Dialog open={authDialogOpen} onOpenChange={setAuthDialogOpen}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Admin Authentication Required</DialogTitle>
-              <DialogDescription>
-                Please enter your admin password to view the user password.
-              </DialogDescription>
-            </DialogHeader>
-            <div className="space-y-4 py-4">
-              <div>
-                <Label htmlFor="authPassword">Admin Password</Label>
-                <input
-                  id="authPassword"
-                  type="password"
-                  value={authPassword}
-                  onChange={(e) => setAuthPassword(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleAuthConfirm()}
-                  className="w-full mt-1 px-3 py-2 border border-input rounded bg-background text-foreground"
-                  placeholder="Enter your admin password"
-                />
-              </div>
-              {authError && <p className="text-sm text-destructive">{authError}</p>}
-              <div className="flex gap-2 justify-end pt-4">
-                <Button variant="outline" onClick={() => setAuthDialogOpen(false)} disabled={authLoading}>
-                  Cancel
-                </Button>
-                <Button onClick={handleAuthConfirm} disabled={authLoading}>
-                  {authLoading ? 'Verifying...' : 'Verify'}
-                </Button>
-              </div>
-            </div>
           </DialogContent>
         </Dialog>
       </div>

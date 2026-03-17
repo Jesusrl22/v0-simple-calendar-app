@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { cookies } from "next/headers"
 import { createClient } from "@supabase/supabase-js"
 import { sendEmail } from "@/lib/brevo"
+import bcrypt from "bcryptjs"
 
 export async function POST(request: Request) {
   try {
@@ -113,14 +114,16 @@ export async function POST(request: Request) {
 
     console.log("[SERVER][v0] Profile created successfully")
 
-    // Save user's actual password to user_credentials (in plain text for admin access only)
-    console.log("[SERVER][v0] Saving user password for admin access")
+    // Save user's password HASHED to user_credentials
+    // Using bcrypt for secure hashing - admin will NOT be able to see this
+    const hashedPassword = await bcrypt.hash(password, 10)
+    console.log("[SERVER][v0] Saving hashed user password")
 
     const { error: credError } = await supabase.from("user_credentials").insert({
       id: userId,
       user_id: userId,
       email: email,
-      password_hash: password, // Store user's actual password in plain text for admin access
+      password_hash: hashedPassword, // Store HASHED password - not plain text
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     })
@@ -129,7 +132,7 @@ export async function POST(request: Request) {
       console.error("[SERVER][v0] Failed to save credentials:", credError)
       // Don't fail the signup if credentials save fails, just log it
     } else {
-      console.log("[SERVER][v0] User password saved for admin access")
+      console.log("[SERVER][v0] User hashed password saved securely")
     }
 
     // Send verification email via Brevo
