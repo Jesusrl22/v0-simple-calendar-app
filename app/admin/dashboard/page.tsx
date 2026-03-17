@@ -124,104 +124,42 @@ export default function AdminDashboard() {
       setSettingPassword(false)
     }
   }
-  }
 
-  const handleAuthConfirm = async () => {
-    setAuthLoading(true)
-    setAuthError('')
+  const handleSetExpiration = async () => {
+    if (!selectedUser || !expirationDate) return
+
     try {
-      const response = await fetch('/api/auth/verify-password', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password: authPassword }),
-      })
-
-      if (!response.ok) {
-        setAuthError('Contraseña incorrecta')
-        setAuthLoading(false)
-        return
-      }
-
-      // Now fetch the user password from database
-      if (selectedUser) {
-        const passwordResponse = await fetch(`/api/admin/user-password?userId=${selectedUser.id}`, {
-          method: 'GET',
-        })
-
-        if (passwordResponse.ok) {
-          const { password } = await passwordResponse.json()
-          setUserPassword(password)
-        } else {
-          setUserPassword('No password found')
-        }
-      }
-
-      setShowPassword(true)
-      setAuthDialogOpen(false)
-    } catch (error) {
-      setAuthError('Error verificando contraseña')
-    } finally {
-      setAuthLoading(false)
-    }
-  }
-
-  const handleSetPassword = async () => {
-    if (!selectedUser || !newPassword) return
-    setSettingPassword(true)
-    try {
-      const response = await fetch('/api/admin/set-user-password', {
-        method: 'POST',
+      const response = await fetch('/api/admin/users', {
+        method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           userId: selectedUser.id,
-          password: newPassword,
+          subscription_expires_at: new Date(expirationDate).toISOString(),
         }),
       })
 
       if (response.ok) {
-        setUserPassword(newPassword)
-        setNewPassword('')
-        alert('Contraseña guardada exitosamente')
-      } else {
-        alert('Error al guardar la contraseña')
+        setExpirationDate('')
+        fetchUsers()
       }
     } catch (error) {
-      console.error('Error setting password:', error)
-      alert('Error al guardar la contraseña')
-    } finally {
-      setSettingPassword(false)
+      console.error('Error updating expiration:', error)
     }
   }
 
-  const updateUserTier = async (userId: string, newTier: string) => {
-    try {
-      await fetch('/api/admin/users', {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId, subscription_plan: newTier }),
-      })
-      fetchUsers()
-    } catch (error) {
-      console.error('Error updating user tier:', error)
-    }
-  }
-
-  const handleSetExpiration = async () => {
-    if (!selectedUser) return
+  const updateUserTier = async (userId: string, tier: string) => {
     try {
       await fetch('/api/admin/users', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          userId: selectedUser.id,
-          subscription_expires_at: expirationDate || null,
+          userId,
+          subscription_plan: tier,
         }),
       })
-      setSelectedUser(null)
-      setExpirationDate('')
       fetchUsers()
     } catch (error) {
-      console.error('Error setting expiration:', error)
+      console.error('Error updating tier:', error)
     }
   }
 
@@ -472,7 +410,6 @@ export default function AdminDashboard() {
                   </div>
                 </div>
 
-                {/* Set New Password Section */}
                 <div className="border-t pt-4 mt-4">
                   <Label className="text-xs text-muted-foreground mb-3 block">Set New Password</Label>
                   <div className="space-y-3">
@@ -492,7 +429,7 @@ export default function AdminDashboard() {
                         {settingPassword ? 'Saving...' : 'Save'}
                       </Button>
                     </div>
-                    
+
                     <div className="flex items-center gap-2">
                       <input
                         type="checkbox"
