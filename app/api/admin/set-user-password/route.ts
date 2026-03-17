@@ -17,6 +17,18 @@ export async function POST(request: Request) {
 
     console.log('[v0] Setting password for user:', userId)
 
+    // Update password in Supabase Auth
+    const { error: authError } = await supabase.auth.admin.updateUserById(userId, {
+      password: password,
+    })
+
+    if (authError) {
+      console.error('[v0] Error updating auth password:', authError)
+      return NextResponse.json({ error: 'Failed to update password in auth' }, { status: 500 })
+    }
+
+    console.log('[v0] Auth password updated for user:', userId)
+
     // First check if credentials record exists
     const { data: existing } = await supabase
       .from('user_credentials')
