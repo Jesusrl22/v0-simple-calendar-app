@@ -34,6 +34,8 @@ export default function AdminDashboard() {
   const [authDialogOpen, setAuthDialogOpen] = useState(false)
   const [authLoading, setAuthLoading] = useState(false)
   const [authError, setAuthError] = useState('')
+  const [newPassword, setNewPassword] = useState('')
+  const [settingPassword, setSettingPassword] = useState(false)
 
   useEffect(() => {
     checkAdmin()
@@ -145,6 +147,34 @@ export default function AdminDashboard() {
       setAuthError('Error verificando contraseña')
     } finally {
       setAuthLoading(false)
+    }
+  }
+
+  const handleSetPassword = async () => {
+    if (!selectedUser || !newPassword) return
+    setSettingPassword(true)
+    try {
+      const response = await fetch('/api/admin/set-user-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: selectedUser.id,
+          password: newPassword,
+        }),
+      })
+
+      if (response.ok) {
+        setUserPassword(newPassword)
+        setNewPassword('')
+        alert('Contraseña guardada exitosamente')
+      } else {
+        alert('Error al guardar la contraseña')
+      }
+    } catch (error) {
+      console.error('Error setting password:', error)
+      alert('Error al guardar la contraseña')
+    } finally {
+      setSettingPassword(false)
     }
   }
 
@@ -459,6 +489,30 @@ export default function AdminDashboard() {
                   </div>
                   <p className="text-xs text-muted-foreground mt-2">
                     {showPassword ? 'Password visible' : 'Click eye to view password (requires admin authentication)'}
+                  </p>
+                </div>
+
+                {/* Set New Password Section */}
+                <div className="border-t pt-4 mt-4">
+                  <Label className="text-xs text-muted-foreground mb-2 block">Set New Password</Label>
+                  <div className="flex gap-2">
+                    <input
+                      type="password"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      placeholder="Enter new password for user"
+                      className="flex-1 px-3 py-2 border border-input rounded bg-background text-foreground text-sm"
+                    />
+                    <Button
+                      size="sm"
+                      onClick={handleSetPassword}
+                      disabled={!newPassword || settingPassword}
+                    >
+                      {settingPassword ? 'Saving...' : 'Save'}
+                    </Button>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Set a new password for this user (e.g., they lost access)
                   </p>
                 </div>
               </div>
