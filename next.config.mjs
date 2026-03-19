@@ -10,7 +10,6 @@ const nextConfig = {
     unoptimized: true,
   },
   serverExternalPackages: ['@upstash/redis'],
-
   async headers() {
     return [
       {
@@ -75,7 +74,6 @@ const nextConfig = {
       },
     ]
   },
-
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.resolve.alias = {

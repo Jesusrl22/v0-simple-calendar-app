@@ -97,6 +97,7 @@ const blogContent = {
       content: [],
     },
   },
+  "pomodoro-technique": {
     en: {
       title: "Master the Pomodoro Technique: Work Smarter, Not Harder",
       author: "Future Task Team",
