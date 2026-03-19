@@ -6,7 +6,97 @@ import Link from "next/link"
 import { useState, useEffect } from "react"
 
 const blogContent = {
-  "pomodoro-technique": {
+  "second-brain": {
+    en: {
+      title: "How to Build a Second Brain with Task Management Apps",
+      author: "Future Task Team",
+      date: "February 1, 2025",
+      readTime: "12 min read",
+      category: "Productivity",
+      image: "/blog-covers/second-brain.jpg",
+      intro: "Your brain is for having ideas, not holding them. Learn how to build your second brain using modern task management apps and organizational systems.",
+      content: [
+        {
+          type: "text",
+          text: "The concept of a 'second brain' isn't new, but it's never been more relevant. In a world of infinite information, our biological brains aren't equipped to remember everything. That's where a digital second brain comes in—a system to capture, organize, and retrieve information when you need it.",
+        },
+        {
+          type: "heading",
+          text: "What is a Second Brain?",
+        },
+        {
+          type: "text",
+          text: "A second brain is an external system that offloads your memory. It captures your ideas, projects, notes, and tasks in one place, freeing your mind to focus on thinking rather than remembering.",
+        },
+        {
+          type: "heading",
+          text: "The Components",
+        },
+        {
+          type: "list",
+          items: [
+            "Capture System: Quickly capture ideas before they disappear",
+            "Organization: Structured folders and tags for easy retrieval",
+            "Review: Regular review sessions to keep everything updated",
+            "Integration: Connect all your tools for seamless workflow",
+          ],
+        },
+      ],
+    },
+    es: {
+      title: "Cómo Construir un Segundo Cerebro con Aplicaciones de Gestión de Tareas",
+      author: "Equipo Future Task",
+      date: "1 de febrero, 2025",
+      readTime: "12 min de lectura",
+      category: "Productividad",
+      image: "/blog-covers/second-brain.jpg",
+      intro: "Tu cerebro es para tener ideas, no para almacenarlas. Aprende cómo construir tu segundo cerebro usando aplicaciones modernas de gestión de tareas.",
+      content: [
+        {
+          type: "text",
+          text: "El concepto de un 'segundo cerebro' no es nuevo, pero nunca ha sido más relevante. En un mundo de información infinita, nuestros cerebros biológicos no están equipados para recordarlo todo.",
+        },
+        {
+          type: "heading",
+          text: "¿Qué es un Segundo Cerebro?",
+        },
+        {
+          type: "text",
+          text: "Un segundo cerebro es un sistema externo que descarga tu memoria.",
+        },
+      ],
+    },
+    fr: {
+      title: "Comment Construire un Deuxième Cerveau avec des Applications de Gestion de Tâches",
+      author: "Équipe Future Task",
+      date: "1er février 2025",
+      readTime: "12 min de lecture",
+      category: "Productivité",
+      image: "/blog-covers/second-brain.jpg",
+      intro: "Votre cerveau est pour avoir des idées, pas les retenir. Apprenez à construire votre deuxième cerveau.",
+      content: [],
+    },
+    de: {
+      title: "Wie Man mit Task-Management-Apps ein Zweites Gehirn aufbaut",
+      author: "Future Task Team",
+      date: "1. Februar 2025",
+      readTime: "12 min Lesen",
+      category: "Produktivität",
+      image: "/blog-covers/second-brain.jpg",
+      intro: "Ihr Gehirn ist zum Haben von Ideen, nicht zum Halten von ihnen.",
+      content: [],
+    },
+    it: {
+      title: "Come Costruire un Secondo Cervello con le App di Gestione delle Attività",
+      author: "Future Task Team",
+      date: "1° febbraio 2025",
+      readTime: "12 min di lettura",
+      category: "Produttività",
+      image: "/blog-covers/second-brain.jpg",
+      intro: "Il tuo cervello è per avere idee, non per conservarle.",
+      content: [],
+    },
+  },
     en: {
       title: "Master the Pomodoro Technique: Work Smarter, Not Harder",
       author: "Future Task Team",

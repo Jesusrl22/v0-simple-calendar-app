@@ -60,25 +60,46 @@ const translations = {
 
 const blogPosts = [
   {
-    id: "pomodoro-technique",
-    emoji: "🍅",
-    gradient: "from-primary/30 to-primary/10",
+    id: "second-brain",
+    title: "How to Build a Second Brain with Task Management Apps",
     category: "productivity",
-    readTime: "5 min",
+    readTime: "12 min",
+    image: "/blog-covers/second-brain.jpg",
   },
   {
-    id: "study-methods",
-    emoji: "📚",
-    gradient: "from-blue-500/30 to-blue-500/10",
-    category: "studyTips",
+    id: "habit-formation",
+    title: "The Science Behind Habit Formation: Why 21 Days Is a Myth",
+    category: "productivity",
+    readTime: "10 min",
+    image: "/blog-covers/habit-formation.jpg",
+  },
+  {
+    id: "deep-work",
+    title: "Deep Work vs Shallow Work: How to Protect Your Focus Time",
+    category: "productivity",
+    readTime: "8 min",
+    image: "/blog-covers/deep-work.jpg",
+  },
+  {
+    id: "morning-routine",
+    title: "Morning Routines of Highly Productive People",
+    category: "productivity",
+    readTime: "9 min",
+    image: "/blog-covers/morning-routine.jpg",
+  },
+  {
+    id: "weekly-review",
+    title: "How to Do a Weekly Review and Why It Changes Everything",
+    category: "productivity",
     readTime: "7 min",
+    image: "/blog-covers/weekly-review.jpg",
   },
   {
-    id: "ai-productivity",
-    emoji: "🤖",
-    gradient: "from-purple-500/30 to-purple-500/10",
-    category: "aiAutomation",
-    readTime: "6 min",
+    id: "pomodoro-technique",
+    title: "Pomodoro vs Time Blocking: Which Method Is Right for You?",
+    category: "productivity",
+    readTime: "8 min",
+    image: "/blog-covers/pomodoro-blocking.jpg",
   },
 ]
 
@@ -118,18 +139,25 @@ export default function BlogPage() {
 
       {/* Blog Grid */}
       <section className="container mx-auto px-4 py-12">
-        <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
           {blogPosts.map((post) => (
             <Link key={post.id} href={`/blog/${post.id}`}>
-              <Card className="glass-card overflow-hidden neon-glow-hover transition-all duration-300 cursor-pointer group h-full">
-                <div className={`h-48 bg-gradient-to-br ${post.gradient} relative overflow-hidden`}>
-                  <div className="absolute inset-0 flex items-center justify-center text-6xl opacity-40">
-                    {post.emoji}
-                  </div>
+              <Card className="glass-card overflow-hidden neon-glow-hover transition-all duration-300 cursor-pointer group h-full flex flex-col">
+                <div className="h-48 bg-gradient-to-br from-primary/20 to-primary/5 relative overflow-hidden">
+                  <img 
+                    src={post.image} 
+                    alt={post.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
                 </div>
-                <div className="p-6 space-y-3">
-                  <div className="text-xs text-primary font-semibold uppercase tracking-wide">
-                    {t[post.category as keyof typeof t]}
+                <div className="p-6 space-y-3 flex-1 flex flex-col justify-between">
+                  <div>
+                    <div className="text-xs text-primary font-semibold uppercase tracking-wide">
+                      {t[post.category as keyof typeof t]}
+                    </div>
+                    <h3 className="text-lg font-semibold mt-2 line-clamp-2 group-hover:text-primary transition-colors">
+                      {post.title}
+                    </h3>
                   </div>
                   <div className="flex items-center justify-between pt-2">
                     <span className="text-xs text-muted-foreground">{post.readTime} read</span>
