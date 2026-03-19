@@ -275,6 +275,7 @@ export default function AdminDashboard() {
                 <tr className="bg-secondary/50">
                   <th className="text-left p-2 font-semibold">Name</th>
                   <th className="text-left p-2 font-semibold">Email</th>
+                  <th className="text-left p-2 font-semibold">Verified</th>
                   <th className="text-left p-2 font-semibold">Plan</th>
                   <th className="text-left p-2 font-semibold">Expires</th>
                   <th className="text-left p-2 font-semibold">Change</th>
@@ -284,13 +285,13 @@ export default function AdminDashboard() {
               <tbody>
                 {loading ? (
                   <tr>
-                    <td colSpan={6} className="p-8 text-center text-muted-foreground">
+                    <td colSpan={7} className="p-8 text-center text-muted-foreground">
                       Loading users...
                     </td>
                   </tr>
                 ) : filteredUsers.length === 0 ? (
                   <tr>
-                    <td colSpan={6} className="p-8 text-center text-muted-foreground">
+                    <td colSpan={7} className="p-8 text-center text-muted-foreground">
                       No users found
                     </td>
                   </tr>
@@ -299,6 +300,17 @@ export default function AdminDashboard() {
                     <tr key={user.id} className="border-b border-border/30 hover:bg-secondary/30 transition-colors">
                       <td className="p-2 text-xs font-medium">{user.name || 'No name'}</td>
                       <td className="p-2 text-xs max-w-[150px] truncate">{user.email}</td>
+                      <td className="p-2 text-xs">
+                        {user.email_verified ? (
+                          <span className="inline-block px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-600 dark:text-green-400">
+                            ✓ Verified
+                          </span>
+                        ) : (
+                          <span className="inline-block px-2 py-1 rounded text-xs font-medium bg-amber-500/20 text-amber-600 dark:text-amber-400">
+                            ✗ Pending
+                          </span>
+                        )}
+                      </td>
                       <td className="p-2">
                         <span className={`inline-block px-2 py-1 rounded text-xs font-medium ${getTierBadge(user.subscription_plan)}`}>
                           {user.subscription_plan?.toUpperCase() || 'FREE'}
@@ -417,7 +429,7 @@ export default function AdminDashboard() {
             </DialogHeader>
             {selectedUser && (
               <div className="space-y-4 py-4">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-4">
                   <div>
                     <Label className="text-xs text-muted-foreground mb-2 block">Name</Label>
                     <div className="flex gap-2">
@@ -438,27 +450,40 @@ export default function AdminDashboard() {
                       </Button>
                     </div>
                   </div>
-                  <div>
-                    <Label className="text-xs text-muted-foreground">Email</Label>
-                    <p className="text-sm font-medium">{selectedUser.email}</p>
-                  </div>
-                  <div>
-                    <Label className="text-xs text-muted-foreground">Plan</Label>
-                    <p className="text-sm font-medium capitalize">{selectedUser.subscription_plan || 'Free'}</p>
-                  </div>
-                  <div>
-                    <Label className="text-xs text-muted-foreground">Expires</Label>
-                    <p className="text-sm font-medium">
-                      {selectedUser.subscription_expires_at ? formatDate(selectedUser.subscription_expires_at) : 'Never'}
-                    </p>
-                  </div>
-                  <div>
-                    <Label className="text-xs text-muted-foreground">Created At</Label>
-                    <p className="text-sm font-medium">{formatDate(selectedUser.created_at)}</p>
-                  </div>
-                  <div>
-                    <Label className="text-xs text-muted-foreground">User ID</Label>
-                    <p className="text-sm font-medium font-mono text-xs truncate">{selectedUser.id}</p>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label className="text-xs text-muted-foreground mb-1 block">Email</Label>
+                      <p className="text-sm font-medium break-all">{selectedUser.email}</p>
+                    </div>
+                    <div>
+                      <Label className="text-xs text-muted-foreground mb-1 block">Verified</Label>
+                      <p className="text-sm font-medium">
+                        {selectedUser.email_verified ? (
+                          <span className="text-green-600 dark:text-green-400">✓ Verified</span>
+                        ) : (
+                          <span className="text-amber-600 dark:text-amber-400">✗ Pending</span>
+                        )}
+                      </p>
+                    </div>
+                    <div>
+                      <Label className="text-xs text-muted-foreground mb-1 block">Plan</Label>
+                      <p className="text-sm font-medium capitalize">{selectedUser.subscription_plan || 'Free'}</p>
+                    </div>
+                    <div>
+                      <Label className="text-xs text-muted-foreground mb-1 block">Expires</Label>
+                      <p className="text-sm font-medium">
+                        {selectedUser.subscription_expires_at ? formatDate(selectedUser.subscription_expires_at) : 'Never'}
+                      </p>
+                    </div>
+                    <div>
+                      <Label className="text-xs text-muted-foreground mb-1 block">Created At</Label>
+                      <p className="text-sm font-medium">{formatDate(selectedUser.created_at)}</p>
+                    </div>
+                    <div>
+                      <Label className="text-xs text-muted-foreground mb-1 block">User ID</Label>
+                      <p className="text-sm font-medium font-mono text-xs truncate">{selectedUser.id}</p>
+                    </div>
                   </div>
                 </div>
 

@@ -11,7 +11,6 @@ const nextConfig = {
   },
   serverExternalPackages: ['@upstash/redis'],
 
-  // Cache control headers to prevent stale content
   async headers() {
     return [
       {
@@ -77,10 +76,8 @@ const nextConfig = {
     ]
   },
 
-  // Optimize bundle size
   webpack: (config, { isServer }) => {
     if (!isServer) {
-      // Don't bundle Upstash Redis in client
       config.resolve.alias = {
         ...config.resolve.alias,
         '@upstash/redis': false,
