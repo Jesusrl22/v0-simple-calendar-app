@@ -1087,9 +1087,9 @@ export default function HomePageClient() {
             <a href="#pricing" className="text-sm hover:text-foreground transition-colors">
               {t("pricing")}
             </a>
-            <a href="#about" className="text-sm hover:text-foreground transition-colors">
-              {t("about")}
-            </a>
+        <a href="/about" className="text-sm hover:text-foreground transition-colors">
+          {t("about")}
+        </a>
             <Link href="/blog" className="text-sm hover:text-foreground transition-colors">
               {t("blogTitle")}
             </Link>
