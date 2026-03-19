@@ -61,42 +61,78 @@ const translations = {
 const blogPosts = [
   {
     id: "second-brain",
-    title: "How to Build a Second Brain with Task Management Apps",
+    titles: {
+      en: "How to Build a Second Brain with Task Management Apps",
+      es: "Cómo Construir un Segundo Cerebro con Aplicaciones de Gestión de Tareas",
+      fr: "Comment Construire un Deuxième Cerveau avec des Applications de Gestion de Tâches",
+      de: "Wie Man mit Task-Management-Apps ein Zweites Gehirn aufbaut",
+      it: "Come Costruire un Secondo Cervello con le App di Gestione delle Attività",
+    },
     category: "productivity",
     readTime: "12 min",
     image: "/blog-covers/second-brain.jpg",
   },
   {
     id: "habit-formation",
-    title: "The Science Behind Habit Formation: Why 21 Days Is a Myth",
+    titles: {
+      en: "The Science Behind Habit Formation: Why 21 Days Is a Myth",
+      es: "La Ciencia Detrás de la Formación de Hábitos: Por Qué 21 Días es un Mito",
+      fr: "La Science Derrière la Formation des Habitudes: Pourquoi 21 Jours est un Mythe",
+      de: "Die Wissenschaft der Gewöhnungsbildung: Warum 21 Tage ein Mythos sind",
+      it: "La Scienza della Formazione di Abitudini: Perché 21 Giorni è un Mito",
+    },
     category: "productivity",
     readTime: "10 min",
     image: "/blog-covers/habit-formation.jpg",
   },
   {
     id: "deep-work",
-    title: "Deep Work vs Shallow Work: How to Protect Your Focus Time",
+    titles: {
+      en: "Deep Work vs Shallow Work: How to Protect Your Focus Time",
+      es: "Trabajo Profundo vs Trabajo Superficial: Cómo Proteger Tu Tiempo de Enfoque",
+      fr: "Travail en Profondeur vs Travail Superficiel: Comment Protéger Votre Temps de Concentration",
+      de: "Tiefe Arbeit vs Oberflächliche Arbeit: Wie Sie Ihre Fokuszeit Schützen",
+      it: "Lavoro Profondo vs Lavoro Superficiale: Come Proteggere il Tuo Tempo di Concentrazione",
+    },
     category: "productivity",
     readTime: "8 min",
     image: "/blog-covers/deep-work.jpg",
   },
   {
     id: "morning-routine",
-    title: "Morning Routines of Highly Productive People",
+    titles: {
+      en: "Morning Routines of Highly Productive People",
+      es: "Rutinas Matutinas de Personas Altamente Productivas",
+      fr: "Routines Matinales des Personnes Très Productives",
+      de: "Morgenroutinen von Hochproduktiven Menschen",
+      it: "Routine Mattutine di Persone Altamente Produttive",
+    },
     category: "productivity",
     readTime: "9 min",
     image: "/blog-covers/morning-routine.jpg",
   },
   {
     id: "weekly-review",
-    title: "How to Do a Weekly Review and Why It Changes Everything",
+    titles: {
+      en: "How to Do a Weekly Review and Why It Changes Everything",
+      es: "Cómo Hacer una Revisión Semanal y Por Qué Lo Cambia Todo",
+      fr: "Comment Faire un Examen Hebdomadaire et Pourquoi Cela Change Tout",
+      de: "Wie Man ein Wochenreview Durchführt und Warum Es Alles Ändert",
+      it: "Come Fare una Revisione Settimanale e Perché Cambia Tutto",
+    },
     category: "productivity",
     readTime: "7 min",
     image: "/blog-covers/weekly-review.jpg",
   },
   {
     id: "pomodoro-technique",
-    title: "Pomodoro vs Time Blocking: Which Method Is Right for You?",
+    titles: {
+      en: "Pomodoro vs Time Blocking: Which Method Is Right for You?",
+      es: "Pomodoro vs Bloqueo de Tiempo: ¿Cuál es el Método Adecuado para Ti?",
+      fr: "Pomodoro vs Blocage du Temps: Quelle Méthode Est Faite Pour Vous?",
+      de: "Pomodoro vs Zeitblockierung: Welche Methode ist Richtig für Sie?",
+      it: "Pomodoro vs Blocco del Tempo: Qual è il Metodo Giusto per Te?",
+    },
     category: "productivity",
     readTime: "8 min",
     image: "/blog-covers/pomodoro-blocking.jpg",
@@ -146,7 +182,7 @@ export default function BlogPage() {
                 <div className="h-48 bg-gradient-to-br from-primary/20 to-primary/5 relative overflow-hidden">
                   <img 
                     src={post.image} 
-                    alt={post.title}
+                    alt={post.titles[lang]}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                 </div>
@@ -156,7 +192,7 @@ export default function BlogPage() {
                       {t[post.category as keyof typeof t]}
                     </div>
                     <h3 className="text-lg font-semibold mt-2 line-clamp-2 group-hover:text-primary transition-colors">
-                      {post.title}
+                      {post.titles[lang]}
                     </h3>
                   </div>
                   <div className="flex items-center justify-between pt-2">
