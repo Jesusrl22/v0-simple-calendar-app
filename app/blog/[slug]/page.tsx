@@ -54,7 +54,7 @@ const blogContent = {
       content: [
         {
           type: "text",
-          text: "El concepto de un 'segundo cerebro' no es nuevo, pero nunca ha sido más relevante. En un mundo de información infinita, nuestros cerebros biológicos no están equipados para recordarlo todo.",
+          text: "El concepto de un 'segundo cerebro' no es nuevo, pero nunca ha sido más relevante. En un mundo de información infinita, nuestros cerebros biológicos no están equipados para recordarlo todo. Ahí es donde entra en juego un segundo cerebro digital—un sistema para capturar, organizar y recuperar información cuando la necesitas.",
         },
         {
           type: "heading",
@@ -62,7 +62,20 @@ const blogContent = {
         },
         {
           type: "text",
-          text: "Un segundo cerebro es un sistema externo que descarga tu memoria.",
+          text: "Un segundo cerebro es un sistema externo que descarga tu memoria. Captura tus ideas, proyectos, notas y tareas en un solo lugar, liberando tu mente para enfocarse en pensar en lugar de recordar.",
+        },
+        {
+          type: "heading",
+          text: "Los Componentes",
+        },
+        {
+          type: "list",
+          items: [
+            "Sistema de Captura: Captura rápidamente ideas antes de que desaparezcan",
+            "Organización: Carpetas estructuradas y etiquetas para fácil recuperación",
+            "Revisión: Sesiones de revisión regulares para mantener todo actualizado",
+            "Integración: Conecta todas tus herramientas para un flujo de trabajo sin interrupciones",
+          ],
         },
       ],
     },
@@ -73,8 +86,21 @@ const blogContent = {
       readTime: "12 min de lecture",
       category: "Productivité",
       image: "/blog-covers/second-brain.jpg",
-      intro: "Votre cerveau est pour avoir des idées, pas les retenir. Apprenez à construire votre deuxième cerveau.",
-      content: [],
+      intro: "Votre cerveau est pour avoir des idées, pas les retenir. Apprenez à construire votre deuxième cerveau avec les applications modernes de gestion de tâches.",
+      content: [
+        {
+          type: "text",
+          text: "Le concept d'un 'deuxième cerveau' n'est pas nouveau, mais il n'a jamais été plus pertinent. Dans un monde d'informations infinies, nos cerveaux biologiques ne sont pas équipés pour tout mémoriser.",
+        },
+        {
+          type: "heading",
+          text: "Qu'est-ce qu'un Deuxième Cerveau?",
+        },
+        {
+          type: "text",
+          text: "Un deuxième cerveau est un système externe qui décharge votre mémoire. Il capture vos idées, projets, notes et tâches en un seul endroit.",
+        },
+      ],
     },
     de: {
       title: "Wie Man mit Task-Management-Apps ein Zweites Gehirn aufbaut",
@@ -83,8 +109,21 @@ const blogContent = {
       readTime: "12 min Lesen",
       category: "Produktivität",
       image: "/blog-covers/second-brain.jpg",
-      intro: "Ihr Gehirn ist zum Haben von Ideen, nicht zum Halten von ihnen.",
-      content: [],
+      intro: "Ihr Gehirn ist zum Haben von Ideen, nicht zum Halten von ihnen. Erfahren Sie, wie Sie Ihr Zweites Gehirn mit modernen Task-Management-Apps aufbauen.",
+      content: [
+        {
+          type: "text",
+          text: "Das Konzept eines 'zweiten Gehirns' ist nicht neu, aber es war noch nie relevanter. In einer Welt unendlicher Informationen sind unsere biologischen Gehirne nicht ausgerüstet, um sich alles zu merken.",
+        },
+        {
+          type: "heading",
+          text: "Was ist ein Zweites Gehirn?",
+        },
+        {
+          type: "text",
+          text: "Ein zweites Gehirn ist ein externes System, das Ihr Gedächtnis entlastet. Es erfasst Ihre Ideen, Projekte, Notizen und Aufgaben an einem Ort.",
+        },
+      ],
     },
     it: {
       title: "Come Costruire un Secondo Cervello con le App di Gestione delle Attività",
@@ -93,8 +132,563 @@ const blogContent = {
       readTime: "12 min di lettura",
       category: "Produttività",
       image: "/blog-covers/second-brain.jpg",
-      intro: "Il tuo cervello è per avere idee, non per conservarle.",
-      content: [],
+      intro: "Il tuo cervello è per avere idee, non per conservarle. Scopri come costruire il tuo secondo cervello con le app di gestione delle attività moderne.",
+      content: [
+        {
+          type: "text",
+          text: "Il concetto di un 'secondo cervello' non è nuovo, ma non è mai stato più rilevante. In un mondo di informazioni infinite, i nostri cervelli biologici non sono attrezzati per ricordare tutto.",
+        },
+        {
+          type: "heading",
+          text: "Cos'è un Secondo Cervello?",
+        },
+        {
+          type: "text",
+          text: "Un secondo cervello è un sistema esterno che scarica la tua memoria. Cattura le tue idee, progetti, note e attività in un unico luogo.",
+        },
+      ],
+    },
+  },
+  "habit-formation": {
+    en: {
+      title: "The Science Behind Habit Formation: Why 21 Days Is a Myth",
+      author: "Future Task Team",
+      date: "February 8, 2025",
+      readTime: "10 min read",
+      category: "Productivity",
+      image: "/blog-covers/habit-formation.jpg",
+      intro: "Discover the real science of habit formation and learn how long it actually takes to build lasting habits.",
+      content: [
+        {
+          type: "text",
+          text: "We've all heard that it takes 21 days to form a habit. But is this actually true? Recent research shows that the truth is much more complex and individualized than this popular myth suggests.",
+        },
+        {
+          type: "heading",
+          text: "The 21-Day Myth",
+        },
+        {
+          type: "text",
+          text: "The 21-day rule originated from a 1960s plastic surgery study, which was misinterpreted and popularized. Modern research shows that habit formation typically takes between 18 and 254 days.",
+        },
+        {
+          type: "heading",
+          text: "The Real Factors",
+        },
+        {
+          type: "list",
+          items: [
+            "Complexity of the habit",
+            "Your prior experience",
+            "Environmental factors",
+            "Motivation levels",
+            "Consistency of practice",
+          ],
+        },
+      ],
+    },
+    es: {
+      title: "La Ciencia Detrás de la Formación de Hábitos: Por Qué 21 Días es un Mito",
+      author: "Equipo Future Task",
+      date: "8 de febrero, 2025",
+      readTime: "10 min de lectura",
+      category: "Productividad",
+      image: "/blog-covers/habit-formation.jpg",
+      intro: "Descubre la verdadera ciencia detrás de la formación de hábitos y aprende cuánto tiempo realmente toma construir hábitos duraderos.",
+      content: [
+        {
+          type: "text",
+          text: "Todos hemos escuchado que toma 21 días formar un hábito. ¿Pero es realmente cierto? La investigación reciente muestra que la verdad es mucho más compleja e individualizada.",
+        },
+        {
+          type: "heading",
+          text: "El Mito de 21 Días",
+        },
+        {
+          type: "text",
+          text: "La regla de 21 días se originó en un estudio de cirugía plástica de los años 60. La investigación moderna muestra que la formación de hábitos típicamente toma entre 18 y 254 días.",
+        },
+      ],
+    },
+    fr: {
+      title: "La Science Derrière la Formation des Habitudes: Pourquoi 21 Jours est un Mythe",
+      author: "Équipe Future Task",
+      date: "8 février 2025",
+      readTime: "10 min de lecture",
+      category: "Productivité",
+      image: "/blog-covers/habit-formation.jpg",
+      intro: "Découvrez la véritable science de la formation des habitudes et apprenez combien de temps cela prend réellement.",
+      content: [
+        {
+          type: "text",
+          text: "Nous avons tous entendu dire qu'il faut 21 jours pour former une habitude. Mais est-ce vraiment vrai? La recherche moderne montre que la vérité est beaucoup plus complexe.",
+        },
+        {
+          type: "heading",
+          text: "Le Mythe des 21 Jours",
+        },
+        {
+          type: "text",
+          text: "La règle des 21 jours est originaire d'une étude de chirurgie plastique des années 1960. La recherche moderne montre que la formation des habitudes prend généralement entre 18 et 254 jours.",
+        },
+      ],
+    },
+    de: {
+      title: "Die Wissenschaft der Gewöhnungsbildung: Warum 21 Tage ein Mythos sind",
+      author: "Future Task Team",
+      date: "8. Februar 2025",
+      readTime: "10 min Lesen",
+      category: "Produktivität",
+      image: "/blog-covers/habit-formation.jpg",
+      intro: "Entdecken Sie die wahre Wissenschaft der Gewöhnungsbildung und erfahren Sie, wie lange es wirklich dauert.",
+      content: [
+        {
+          type: "text",
+          text: "Wir haben alle gehört, dass es 21 Tage dauert, eine Gewohnheit zu bilden. Aber stimmt das wirklich? Moderne Forschung zeigt, dass die Wahrheit viel komplexer ist.",
+        },
+        {
+          type: "heading",
+          text: "Der 21-Tage-Mythos",
+        },
+        {
+          type: "text",
+          text: "Die 21-Tage-Regel stammt aus einer Studie zur plastischen Chirurgie aus den 1960er Jahren. Moderne Forschung zeigt, dass die Gewöhnungsbildung typischerweise zwischen 18 und 254 Tagen dauert.",
+        },
+      ],
+    },
+    it: {
+      title: "La Scienza della Formazione di Abitudini: Perché 21 Giorni è un Mito",
+      author: "Future Task Team",
+      date: "8 febbraio 2025",
+      readTime: "10 min di lettura",
+      category: "Produttività",
+      image: "/blog-covers/habit-formation.jpg",
+      intro: "Scopri la vera scienza della formazione di abitudini e impara quanto tempo ci vuole realmente.",
+      content: [
+        {
+          type: "text",
+          text: "Tutti abbiamo sentito dire che ci vogliono 21 giorni per formare un'abitudine. Ma è davvero vero? La ricerca moderna mostra che la verità è molto più complessa.",
+        },
+        {
+          type: "heading",
+          text: "Il Mito dei 21 Giorni",
+        },
+        {
+          type: "text",
+          text: "La regola dei 21 giorni ha origine da uno studio sulla chirurgia plastica degli anni '60. La ricerca moderna mostra che la formazione di abitudini di solito richiede tra 18 e 254 giorni.",
+        },
+      ],
+    },
+  },
+  "deep-work": {
+    en: {
+      title: "Deep Work vs Shallow Work: How to Protect Your Focus Time",
+      author: "Future Task Team",
+      date: "February 15, 2025",
+      readTime: "8 min read",
+      category: "Productivity",
+      image: "/blog-covers/deep-work.jpg",
+      intro: "Learn how to distinguish between deep work and shallow work, and implement strategies to protect your most valuable resource: focused time.",
+      content: [
+        {
+          type: "text",
+          text: "Deep work is professional activities performed in a state of uninterrupted concentration. In today's distraction-filled world, deep work is becoming increasingly rare and valuable.",
+        },
+        {
+          type: "heading",
+          text: "What is Deep Work?",
+        },
+        {
+          type: "text",
+          text: "Deep work requires sustained attention and produces high-quality outputs. It contrasts with shallow work—tasks that can be performed while distracted and don't produce lasting value.",
+        },
+      ],
+    },
+    es: {
+      title: "Trabajo Profundo vs Trabajo Superficial: Cómo Proteger Tu Tiempo de Enfoque",
+      author: "Equipo Future Task",
+      date: "15 de febrero, 2025",
+      readTime: "8 min de lectura",
+      category: "Productividad",
+      image: "/blog-covers/deep-work.jpg",
+      intro: "Aprende a distinguir entre trabajo profundo y trabajo superficial, e implementa estrategias para proteger tu recurso más valioso.",
+      content: [
+        {
+          type: "text",
+          text: "El trabajo profundo son actividades profesionales realizadas en un estado de concentración ininterrumpida. En el mundo actual lleno de distracciones, el trabajo profundo es cada vez más raro y valioso.",
+        },
+        {
+          type: "heading",
+          text: "¿Qué es el Trabajo Profundo?",
+        },
+        {
+          type: "text",
+          text: "El trabajo profundo requiere atención sostenida y produce resultados de alta calidad. Contrasta con el trabajo superficial—tareas que se pueden realizar distraídamente.",
+        },
+      ],
+    },
+    fr: {
+      title: "Travail en Profondeur vs Travail Superficiel: Comment Protéger Votre Temps de Concentration",
+      author: "Équipe Future Task",
+      date: "15 février 2025",
+      readTime: "8 min de lecture",
+      category: "Productivité",
+      image: "/blog-covers/deep-work.jpg",
+      intro: "Apprenez à distinguer le travail profond du travail superficiel et mettez en place des stratégies pour protéger votre ressource la plus précieuse.",
+      content: [
+        {
+          type: "text",
+          text: "Le travail profond est une activité professionnelle réalisée dans un état de concentration ininterrompue. Dans le monde d'aujourd'hui rempli de distractions, le travail profond devient de plus en plus rare.",
+        },
+        {
+          type: "heading",
+          text: "Qu'est-ce que le Travail Profond?",
+        },
+        {
+          type: "text",
+          text: "Le travail profond nécessite une attention soutenue et produit des résultats de haute qualité. Il contraste avec le travail superficiel—des tâches qui peuvent être effectuées en étant distrait.",
+        },
+      ],
+    },
+    de: {
+      title: "Tiefe Arbeit vs Oberflächliche Arbeit: Wie Sie Ihre Fokuszeit Schützen",
+      author: "Future Task Team",
+      date: "15. Februar 2025",
+      readTime: "8 min Lesen",
+      category: "Produktivität",
+      image: "/blog-covers/deep-work.jpg",
+      intro: "Erfahren Sie, wie Sie tiefe Arbeit von oberflächlicher Arbeit unterscheiden und schützen Sie Ihre wertvollste Ressource.",
+      content: [
+        {
+          type: "text",
+          text: "Tiefe Arbeit sind professionelle Aktivitäten, die in einem Zustand ununterbrochener Konzentration ausgeführt werden. In der heutigen ablenkungsreichen Welt wird tiefe Arbeit immer seltener und wertvoller.",
+        },
+        {
+          type: "heading",
+          text: "Was ist Tiefe Arbeit?",
+        },
+        {
+          type: "text",
+          text: "Tiefe Arbeit erfordert anhaltende Aufmerksamkeit und produziert hochwertige Ergebnisse. Sie kontrastiert mit oberflächlicher Arbeit—Aufgaben, die während Ablenkungen ausgeführt werden können.",
+        },
+      ],
+    },
+    it: {
+      title: "Lavoro Profondo vs Lavoro Superficiale: Come Proteggere il Tuo Tempo di Concentrazione",
+      author: "Future Task Team",
+      date: "15 febbraio 2025",
+      readTime: "8 min di lettura",
+      category: "Produttività",
+      image: "/blog-covers/deep-work.jpg",
+      intro: "Impara a distinguere il lavoro profondo dal lavoro superficiale e proteggi la tua risorsa più preziosa.",
+      content: [
+        {
+          type: "text",
+          text: "Il lavoro profondo è un'attività professionale svolta in uno stato di concentrazione ininterrotta. Nel mondo pieno di distrazioni di oggi, il lavoro profondo sta diventando sempre più raro.",
+        },
+        {
+          type: "heading",
+          text: "Cos'è il Lavoro Profondo?",
+        },
+        {
+          type: "text",
+          text: "Il lavoro profondo richiede attenzione sostenuta e produce risultati di alta qualità. Contrasta con il lavoro superficiale—compiti che possono essere eseguiti mentre si è distratti.",
+        },
+      ],
+    },
+  },
+  "morning-routine": {
+    en: {
+      title: "Morning Routines of Highly Productive People",
+      author: "Future Task Team",
+      date: "February 22, 2025",
+      readTime: "9 min read",
+      category: "Productivity",
+      image: "/blog-covers/morning-routine.jpg",
+      intro: "Discover the morning routines that successful and productive people follow to set the tone for their entire day.",
+      content: [
+        {
+          type: "text",
+          text: "How you spend your morning sets the tone for your entire day. Highly productive people understand this and have crafted morning routines that prime them for success.",
+        },
+        {
+          type: "heading",
+          text: "Common Elements",
+        },
+        {
+          type: "list",
+          items: [
+            "Wake up early without snoozing",
+            "Hydration and light breakfast",
+            "Exercise or movement",
+            "Meditation or journaling",
+            "Priority setting",
+          ],
+        },
+      ],
+    },
+    es: {
+      title: "Rutinas Matutinas de Personas Altamente Productivas",
+      author: "Equipo Future Task",
+      date: "22 de febrero, 2025",
+      readTime: "9 min de lectura",
+      category: "Productividad",
+      image: "/blog-covers/morning-routine.jpg",
+      intro: "Descubre las rutinas matutinas que las personas exitosas y productivas siguen para preparar el día.",
+      content: [
+        {
+          type: "text",
+          text: "Cómo pasas tu mañana establece el tono para todo tu día. Las personas altamente productivas entienden esto y han creado rutinas matutinas que las preparan para el éxito.",
+        },
+        {
+          type: "heading",
+          text: "Elementos Comunes",
+        },
+        {
+          type: "list",
+          items: [
+            "Despertar temprano sin presionar repetición",
+            "Hidratación y desayuno ligero",
+            "Ejercicio o movimiento",
+            "Meditación o journaling",
+            "Establecer prioridades",
+          ],
+        },
+      ],
+    },
+    fr: {
+      title: "Routines Matinales des Personnes Très Productives",
+      author: "Équipe Future Task",
+      date: "22 février 2025",
+      readTime: "9 min de lecture",
+      category: "Productivité",
+      image: "/blog-covers/morning-routine.jpg",
+      intro: "Découvrez les routines matinales que les personnes productives suivent pour préparer leur journée.",
+      content: [
+        {
+          type: "text",
+          text: "La façon dont vous passez votre matin définit le ton pour toute votre journée. Les personnes très productives comprennent cela et ont créé des routines matinales.",
+        },
+        {
+          type: "heading",
+          text: "Éléments Communs",
+        },
+        {
+          type: "list",
+          items: [
+            "Se réveiller tôt sans alarme répétée",
+            "Hydratation et petit-déjeuner léger",
+            "Exercice ou mouvement",
+            "Méditation ou journalisation",
+            "Établir les priorités",
+          ],
+        },
+      ],
+    },
+    de: {
+      title: "Morgenroutinen von Hochproduktiven Menschen",
+      author: "Future Task Team",
+      date: "22. Februar 2025",
+      readTime: "9 min Lesen",
+      category: "Produktivität",
+      image: "/blog-covers/morning-routine.jpg",
+      intro: "Entdecken Sie die Morgenroutinen, die erfolgreiche Menschen verfolgen, um ihren Tag zu prägen.",
+      content: [
+        {
+          type: "text",
+          text: "Wie Sie Ihren Morgen verbringen, bestimmt den Ton für Ihren ganzen Tag. Hochproduktive Menschen verstehen dies und haben Morgenroutinen entwickelt.",
+        },
+        {
+          type: "heading",
+          text: "Gemeinsame Elemente",
+        },
+        {
+          type: "list",
+          items: [
+            "Früh aufwachen ohne Schlummertaste",
+            "Flüssigkeitszufuhr und leichtes Frühstück",
+            "Bewegung oder Sport",
+            "Meditation oder Journaling",
+            "Prioritäten setzen",
+          ],
+        },
+      ],
+    },
+    it: {
+      title: "Routine Mattutine di Persone Altamente Produttive",
+      author: "Future Task Team",
+      date: "22 febbraio 2025",
+      readTime: "9 min di lettura",
+      category: "Produttività",
+      image: "/blog-covers/morning-routine.jpg",
+      intro: "Scopri le routine mattutine che le persone produttive seguono per preparare la loro giornata.",
+      content: [
+        {
+          type: "text",
+          text: "Il modo in cui passi la tua mattina stabilisce il tono per tutta la tua giornata. Le persone altamente produttive capiscono questo e hanno creato routine mattutine.",
+        },
+        {
+          type: "heading",
+          text: "Elementi Comuni",
+        },
+        {
+          type: "list",
+          items: [
+            "Svegliarsi presto senza premere snooze",
+            "Idratazione e colazione leggera",
+            "Esercizio o movimento",
+            "Meditazione o journaling",
+            "Stabilire le priorità",
+          ],
+        },
+      ],
+    },
+  },
+  "weekly-review": {
+    en: {
+      title: "How to Do a Weekly Review and Why It Changes Everything",
+      author: "Future Task Team",
+      date: "March 1, 2025",
+      readTime: "7 min read",
+      category: "Productivity",
+      image: "/blog-covers/weekly-review.jpg",
+      intro: "Master the weekly review process and transform how you manage your work and personal life.",
+      content: [
+        {
+          type: "text",
+          text: "A weekly review is a powerful practice that helps you assess your progress, celebrate wins, and plan for the week ahead. When done consistently, it can transform your productivity.",
+        },
+        {
+          type: "heading",
+          text: "The Weekly Review Process",
+        },
+        {
+          type: "list",
+          items: [
+            "Review past week's accomplishments",
+            "Identify what went well and what didn't",
+            "Clear and organize your inbox",
+            "Plan next week's priorities",
+            "Set goals and intentions",
+          ],
+        },
+      ],
+    },
+    es: {
+      title: "Cómo Hacer una Revisión Semanal y Por Qué Lo Cambia Todo",
+      author: "Equipo Future Task",
+      date: "1 de marzo, 2025",
+      readTime: "7 min de lectura",
+      category: "Productividad",
+      image: "/blog-covers/weekly-review.jpg",
+      intro: "Domina el proceso de revisión semanal y transforma cómo gestiones tu trabajo y vida personal.",
+      content: [
+        {
+          type: "text",
+          text: "Una revisión semanal es una práctica poderosa que te ayuda a evaluar tu progreso, celebrar logros, y planificar la semana siguiente.",
+        },
+        {
+          type: "heading",
+          text: "El Proceso de Revisión Semanal",
+        },
+        {
+          type: "list",
+          items: [
+            "Revisar los logros de la semana pasada",
+            "Identificar qué fue bien y qué no",
+            "Limpiar y organizar tu bandeja de entrada",
+            "Planificar las prioridades de la próxima semana",
+            "Establecer metas e intenciones",
+          ],
+        },
+      ],
+    },
+    fr: {
+      title: "Comment Faire un Examen Hebdomadaire et Pourquoi Cela Change Tout",
+      author: "Équipe Future Task",
+      date: "1er mars 2025",
+      readTime: "7 min de lecture",
+      category: "Productivité",
+      image: "/blog-covers/weekly-review.jpg",
+      intro: "Maîtrisez le processus d'examen hebdomadaire et transformez votre gestion du travail et de la vie personnelle.",
+      content: [
+        {
+          type: "text",
+          text: "Un examen hebdomadaire est une pratique puissante qui vous aide à évaluer vos progrès, à célébrer les réussites et à planifier la semaine à venir.",
+        },
+        {
+          type: "heading",
+          text: "Le Processus d'Examen Hebdomadaire",
+        },
+        {
+          type: "list",
+          items: [
+            "Examiner les réalisations de la semaine précédente",
+            "Identifier ce qui a bien fonctionné et ce qui ne l'a pas",
+            "Vider et organiser votre boîte de réception",
+            "Planifier les priorités de la semaine prochaine",
+            "Définir les objectifs et les intentions",
+          ],
+        },
+      ],
+    },
+    de: {
+      title: "Wie Man ein Wochenreview Durchführt und Warum Es Alles Ändert",
+      author: "Future Task Team",
+      date: "1. März 2025",
+      readTime: "7 min Lesen",
+      category: "Produktivität",
+      image: "/blog-covers/weekly-review.jpg",
+      intro: "Beherrschen Sie den Wochenreview-Prozess und verändern Sie, wie Sie arbeiten und leben.",
+      content: [
+        {
+          type: "text",
+          text: "Eine wöchentliche Überprüfung ist eine mächtige Praxis, die Ihnen hilft, Ihre Fortschritte zu bewerten und die nächste Woche zu planen.",
+        },
+        {
+          type: "heading",
+          text: "Der Wochenreview-Prozess",
+        },
+        {
+          type: "list",
+          items: [
+            "Überprüfen Sie Ihre Erfolge der vergangenen Woche",
+            "Identifizieren Sie, was gut und was nicht funktioniert hat",
+            "Leeren und organisieren Sie Ihren Posteingang",
+            "Planen Sie die Prioritäten der nächsten Woche",
+            "Setzen Sie Ziele und Absichten",
+          ],
+        },
+      ],
+    },
+    it: {
+      title: "Come Fare una Revisione Settimanale e Perché Cambia Tutto",
+      author: "Future Task Team",
+      date: "1° marzo 2025",
+      readTime: "7 min di lettura",
+      category: "Produttività",
+      image: "/blog-covers/weekly-review.jpg",
+      intro: "Padroneggia il processo di revisione settimanale e trasforma come gestisci il tuo lavoro e la tua vita personale.",
+      content: [
+        {
+          type: "text",
+          text: "Una revisione settimanale è una pratica potente che ti aiuta a valutare i tuoi progressi e a pianificare la settimana successiva.",
+        },
+        {
+          type: "heading",
+          text: "Il Processo di Revisione Settimanale",
+        },
+        {
+          type: "list",
+          items: [
+            "Rivedi i successi della settimana scorsa",
+            "Identifica cosa è andato bene e cosa no",
+            "Ripulisci e organizza la tua inbox",
+            "Pianifica le priorità della prossima settimana",
+            "Stabilisci obiettivi e intenzioni",
+          ],
+        },
+      ],
     },
   },
   "pomodoro-technique": {
