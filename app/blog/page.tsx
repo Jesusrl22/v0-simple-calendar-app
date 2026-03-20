@@ -15,6 +15,7 @@ const translations = {
     productivity: "Productivity",
     studyTips: "Study Tips",
     aiAutomation: "AI & Automation",
+    readTime: "read",
   },
   es: {
     title: "Blog y Recursos",
@@ -25,6 +26,7 @@ const translations = {
     productivity: "Productividad",
     studyTips: "Consejos de Estudio",
     aiAutomation: "IA y Automatización",
+    readTime: "de lectura",
   },
   fr: {
     title: "Blog et Ressources",
@@ -35,6 +37,7 @@ const translations = {
     productivity: "Productivité",
     studyTips: "Conseils d'Étude",
     aiAutomation: "IA et Automatisation",
+    readTime: "de lecture",
   },
   de: {
     title: "Blog & Ressourcen",
@@ -45,6 +48,7 @@ const translations = {
     productivity: "Produktivität",
     studyTips: "Lerntipps",
     aiAutomation: "KI & Automatisierung",
+    readTime: "Lesezeit",
   },
   it: {
     title: "Blog e Risorse",
@@ -55,6 +59,7 @@ const translations = {
     productivity: "Produttività",
     studyTips: "Consigli di Studio",
     aiAutomation: "IA e Automazione",
+    readTime: "di lettura",
   },
 }
 
@@ -196,7 +201,7 @@ export default function BlogPage() {
                     </h3>
                   </div>
                   <div className="flex items-center justify-between pt-2">
-                    <span className="text-xs text-muted-foreground">{post.readTime} read</span>
+                    <span className="text-xs text-muted-foreground">{post.readTime} {t.readTime}</span>
                     <Button variant="ghost" size="sm" className="group-hover:translate-x-1 transition-transform">
                       {t.readMore} →
                     </Button>

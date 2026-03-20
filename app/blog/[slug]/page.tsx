@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import Link from "next/link"
 import { useState, useEffect } from "react"
+import { use } from "react"
 
 const blogContent = {
   "second-brain": {
@@ -1759,8 +1760,41 @@ const blogContent = {
 
 type Language = "en" | "es" | "fr" | "de" | "it"
 
-export default function BlogPost({ params }: { params: { slug: string } }) {
-  const { slug } = params
+const ctaTranslations = {
+  en: {
+    backToBlog: "Back to Blog",
+    title: "Ready to boost your productivity?",
+    description: "Join thousands of users who are working smarter with Future Task",
+    button: "Get Started Free",
+  },
+  es: {
+    backToBlog: "Volver al Blog",
+    title: "¿Listo para impulsar tu productividad?",
+    description: "Únete a miles de usuarios que están trabajando más inteligentemente con Future Task",
+    button: "Comenzar Gratis",
+  },
+  fr: {
+    backToBlog: "Retour au Blog",
+    title: "Prêt à booster votre productivité?",
+    description: "Rejoignez des milliers d'utilisateurs qui travaillent plus intelligemment avec Future Task",
+    button: "Commencer Gratuitement",
+  },
+  de: {
+    backToBlog: "Zurück zum Blog",
+    title: "Bereit, Ihre Produktivität zu steigern?",
+    description: "Schließen Sie sich Tausenden von Nutzern an, die intelligenter mit Future Task arbeiten",
+    button: "Kostenlos Starten",
+  },
+  it: {
+    backToBlog: "Torna al Blog",
+    title: "Pronto a potenziare la tua produttività?",
+    description: "Unisciti a migliaia di utenti che lavorano in modo più intelligente con Future Task",
+    button: "Inizia Gratis",
+  },
+}
+
+export default function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = use(params)
   const [lang, setLang] = useState<Language>("en")
 
   useEffect(() => {
@@ -1774,6 +1808,7 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
   }
 
   const content = post[lang]
+  const cta = ctaTranslations[lang]
 
   return (
     <div className="min-h-screen bg-background">
@@ -1782,7 +1817,7 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
         <div className="container mx-auto px-4 py-4">
           <Link href="/blog">
             <Button variant="ghost" size="sm">
-              ← Back to Blog
+              ← {cta.backToBlog}
             </Button>
           </Link>
         </div>
@@ -1858,13 +1893,13 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
 
         {/* CTA */}
         <Card className="glass-card p-8 mt-16 text-center">
-          <h3 className="text-2xl font-bold mb-4">Ready to boost your productivity?</h3>
+          <h3 className="text-2xl font-bold mb-4">{cta.title}</h3>
           <p className="text-muted-foreground mb-6">
-            Join thousands of users who are working smarter with Future Task
+            {cta.description}
           </p>
           <Link href="/signup">
             <Button size="lg" className="neon-glow-hover">
-              Get Started Free
+              {cta.button}
             </Button>
           </Link>
         </Card>
