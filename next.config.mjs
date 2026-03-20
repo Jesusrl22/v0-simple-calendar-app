@@ -86,4 +86,4 @@ const nextConfig = {
 }
 
 export default nextConfig
-// Cache invalidation for clean rebuild
+// Force clean rebuild - cleared stale cache v2

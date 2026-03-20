@@ -1869,15 +1869,25 @@ const ctaTranslations = {
 export default function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params)
   const [lang, setLang] = useState<Language>("en")
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
+    setMounted(true)
     const savedLang = (localStorage.getItem("language") as Language) || "en"
     setLang(savedLang)
   }, [])
 
+  if (!mounted) {
+    return null // Prevent hydration mismatch
+  }
+
   const post = blogContent[slug as keyof typeof blogContent]
   if (!post) {
-    return <div className="container mx-auto px-4 py-16 text-center"><p>{cta.postNotFound}</p></div>
+    return (
+      <div className="container mx-auto px-4 py-16 text-center">
+        <p>{ctaTranslations[lang].postNotFound}</p>
+      </div>
+    )
   }
 
   const content = post[lang]

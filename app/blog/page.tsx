@@ -153,14 +153,20 @@ type Language = "en" | "es" | "fr" | "de" | "it"
 
 export default function BlogPage() {
   const [lang, setLang] = useState<Language>("en")
+  const [mounted, setMounted] = useState(false)
   const t = translations[lang]
 
   useEffect(() => {
+    setMounted(true)
     const savedLang = (localStorage.getItem("language") as Language) || "en"
     if (translations[savedLang]) {
       setLang(savedLang)
     }
   }, [])
+
+  if (!mounted) {
+    return null // Prevent hydration mismatch
+  }
 
   return (
     <div className="min-h-screen bg-background">
