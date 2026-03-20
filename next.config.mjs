@@ -86,3 +86,4 @@ const nextConfig = {
 }
 
 export default nextConfig
+// Cache invalidation for clean rebuild
