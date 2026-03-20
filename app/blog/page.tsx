@@ -16,6 +16,7 @@ const translations = {
     studyTips: "Study Tips",
     aiAutomation: "AI & Automation",
     readTime: "read",
+    habitsScience: "Habits & Science",
   },
   es: {
     title: "Blog y Recursos",
@@ -27,6 +28,7 @@ const translations = {
     studyTips: "Consejos de Estudio",
     aiAutomation: "IA y Automatización",
     readTime: "de lectura",
+    habitsScience: "Hábitos y Ciencia",
   },
   fr: {
     title: "Blog et Ressources",
@@ -38,6 +40,7 @@ const translations = {
     studyTips: "Conseils d'Étude",
     aiAutomation: "IA et Automatisation",
     readTime: "de lecture",
+    habitsScience: "Habitudes et Science",
   },
   de: {
     title: "Blog & Ressourcen",
@@ -49,6 +52,7 @@ const translations = {
     studyTips: "Lerntipps",
     aiAutomation: "KI & Automatisierung",
     readTime: "Lesezeit",
+    habitsScience: "Gewohnheiten und Wissenschaft",
   },
   it: {
     title: "Blog e Risorse",
@@ -60,6 +64,7 @@ const translations = {
     studyTips: "Consigli di Studio",
     aiAutomation: "IA e Automazione",
     readTime: "di lettura",
+    habitsScience: "Abitudini e Scienza",
   },
 }
 
@@ -86,7 +91,7 @@ const blogPosts = [
       de: "Die Wissenschaft der Gewöhnungsbildung: Warum 21 Tage ein Mythos sind",
       it: "La Scienza della Formazione di Abitudini: Perché 21 Giorni è un Mito",
     },
-    category: "productivity",
+    category: "habitsScience",
     readTime: "10 min",
     image: "/blog-covers/habit-formation.jpg",
   },

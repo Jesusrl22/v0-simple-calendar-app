@@ -1831,30 +1831,35 @@ type Language = "en" | "es" | "fr" | "de" | "it"
 const ctaTranslations = {
   en: {
     backToBlog: "Back to Blog",
+    postNotFound: "Post not found",
     title: "Ready to boost your productivity?",
     description: "Join thousands of users who are working smarter with Future Task",
     button: "Get Started Free",
   },
   es: {
     backToBlog: "Volver al Blog",
+    postNotFound: "Artículo no encontrado",
     title: "¿Listo para impulsar tu productividad?",
     description: "Únete a miles de usuarios que están trabajando más inteligentemente con Future Task",
     button: "Comenzar Gratis",
   },
   fr: {
     backToBlog: "Retour au Blog",
+    postNotFound: "Article non trouvé",
     title: "Prêt à booster votre productivité?",
     description: "Rejoignez des milliers d'utilisateurs qui travaillent plus intelligemment avec Future Task",
     button: "Commencer Gratuitement",
   },
   de: {
     backToBlog: "Zurück zum Blog",
+    postNotFound: "Artikel nicht gefunden",
     title: "Bereit, Ihre Produktivität zu steigern?",
     description: "Schließen Sie sich Tausenden von Nutzern an, die intelligenter mit Future Task arbeiten",
     button: "Kostenlos Starten",
   },
   it: {
     backToBlog: "Torna al Blog",
+    postNotFound: "Articolo non trovato",
     title: "Pronto a potenziare la tua produttività?",
     description: "Unisciti a migliaia di utenti che lavorano in modo più intelligente con Future Task",
     button: "Inizia Gratis",
@@ -1872,7 +1877,7 @@ export default function BlogPost({ params }: { params: Promise<{ slug: string }>
 
   const post = blogContent[slug as keyof typeof blogContent]
   if (!post) {
-    return <div>Post not found</div>
+    return <div className="container mx-auto px-4 py-16 text-center"><p>{cta.postNotFound}</p></div>
   }
 
   const content = post[lang]
