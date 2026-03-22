@@ -6,6 +6,8 @@ import { ThemeLoader } from "@/components/theme-loader"
 import { LanguageProvider } from "@/contexts/language-context"
 import { HelpChatbot } from "@/components/help-chatbot"
 import { ScrollToTop } from "@/components/scroll-to-top"
+import { ErrorBoundary } from "@/components/error-boundary"
+import "@/lib/error-suppressor"
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -94,10 +96,13 @@ export default function RootLayout({
           crossOrigin="anonymous"
           strategy="lazyOnload"
         />
-        <LanguageProvider>
-          {children}
-          <ScrollToTop />
-          <HelpChatbot />
+        <ErrorBoundary>
+          <LanguageProvider>
+            {children}
+            <ScrollToTop />
+            <HelpChatbot />
+          </LanguageProvider>
+        </ErrorBoundary>
         </LanguageProvider>
       </body>
     </html>
