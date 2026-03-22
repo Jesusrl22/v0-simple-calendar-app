@@ -3,52 +3,66 @@
 # Supabase Email Template Configuration Script
 # This script helps configure the email templates in Supabase
 
-# Make sure you have the Supabase CLI installed:
-# npm install -g supabase
+# IMPORTANT: You must manually configure these in the Supabase Dashboard
+# The Supabase CLI does not support modifying email templates directly
 
-# Set your project ID
-PROJECT_ID="your-project-id"
-API_URL="your-supabase-url"
-APP_URL="https://yourdomain.com"
+set -e
 
-echo "Configuring Supabase Email Templates..."
-echo "Project ID: $PROJECT_ID"
+APP_URL="${1:-https://future-task.com}"
+
+echo "================================================"
+echo "Supabase Email Template Configuration"
+echo "================================================"
+echo ""
 echo "App URL: $APP_URL"
+echo ""
+echo "IMPORTANT: You must do this manually in Supabase Dashboard"
+echo "================================================"
+echo ""
 
-# Confirm Email Template
-# Supabase will call: {{ .ConfirmationURL }}
-# We need to extract the token and language, then redirect to our confirm page
+echo "STEP 1: Go to Supabase Dashboard"
+echo "  - Navigate to: Project Settings > Email Templates"
+echo ""
 
+echo "STEP 2: Edit 'Confirm Signup' template"
+echo "  - Click on the 'Confirm Signup' email template"
+echo "  - Find the button or link that says 'Confirm your email'"
+echo "  - Edit the href attribute to:"
+echo "  → {{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=signup"
 echo ""
-echo "✓ Confirm Email Template:"
-echo "  - URL: $APP_URL/auth/confirm"
-echo "  - Parameters: token (from Supabase), lang (user language)"
-echo "  - Configuration: Add custom redirect URL in Supabase Auth settings"
 
-# Reset Password Template
-# Supabase will call: {{ .ResetURL }}
-# We need to extract the token and language, then redirect to our reset page
+echo "STEP 3: Edit 'Reset Password' template"
+echo "  - Click on the 'Reset Password' email template"
+echo "  - Find the button or link that says 'Reset your password'"
+echo "  - Edit the href attribute to:"
+echo "  → {{ .SiteURL }}/auth/reset?token_hash={{ .TokenHash }}&type=recovery"
+echo ""
 
+echo "STEP 4 (Optional): Edit 'Invite' template"
+echo "  - Click on the 'Invite' email template"
+echo "  - Find the button or link"
+echo "  - Edit the href attribute to:"
+echo "  → {{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=invite"
 echo ""
-echo "✓ Reset Password Template:"
-echo "  - URL: $APP_URL/auth/reset"
-echo "  - Parameters: token (from Supabase), lang (user language)"
-echo "  - Configuration: Add custom redirect URL in Supabase Auth settings"
 
+echo "================================================"
+echo "IMPORTANT VARIABLES (leave these AS IS):"
+echo "================================================"
+echo "{{ .SiteURL }}     - Supabase will replace with your app URL"
+echo "{{ .TokenHash }}   - The verification token"
+echo "{{ .Email }}       - User's email address"
 echo ""
-echo "IMPORTANT: Configure these in Supabase Dashboard:"
-echo "1. Go to Project Settings → Email Templates"
-echo "2. For Confirm Email:"
-echo "   - Edit the template"
-echo "   - Set redirect URL to: $APP_URL/auth/confirm?token={{ .Token }}&lang={{ .UserLanguage }}"
-echo "   - The {{ .UserLanguage }} will need custom setup in your DB"
+
+echo "IMPORTANT: When modifying templates:"
+echo "✓ Do NOT remove other parts of the template"
+echo "✓ Only change the href URL in the button/link"
+echo "✓ Keep all other template variables intact"
+echo "✓ Click 'Save' after editing each template"
 echo ""
-echo "3. For Reset Password:"
-echo "   - Edit the template"
-echo "   - Set redirect URL to: $APP_URL/auth/reset?token={{ .Token }}&lang={{ .UserLanguage }}"
-echo ""
-echo "4. OR use Supabase custom SMTP:"
-echo "   - Send emails through your own provider with custom templates"
-echo ""
-echo "NOTE: To pass the language to Supabase, store it in user metadata during signup:"
-echo "  user_metadata: { language: 'es', name: 'John Doe' }"
+
+echo "After configuring, test by:"
+echo "1. Creating a new account at $APP_URL/signup"
+echo "2. Check your email for the verification link"
+echo "3. Click the link - it should redirect to the confirm page"
+echo "4. Then you can log in successfully"
+
