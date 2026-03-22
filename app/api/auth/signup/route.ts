@@ -55,34 +55,38 @@ export async function POST(request: Request) {
       console.log("[SERVER][v0] User created with ID:", userId)
     }
 
-    // Generate verification link using the email directly
+    // Generate verification link using Supabase admin API
     console.log("[SERVER][v0] Generating verification link for email:", email)
     let verificationUrl = ""
     
     try {
+      // Use Supabase admin generateLink to create a proper verification link
       const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({
         type: "signup",
         email: email,
         options: {
-          redirectTo: `https://future-task.com/auth/confirm`,
+          redirectTo: `${process.env.NEXT_PUBLIC_APP_URL || 'https://future-task.com'}/auth/confirm`,
         },
       })
 
       if (linkError) {
-        console.error("[SERVER][v0] generateLink error:", linkError)
-        // Fallback: create a simple link with the user id
-        verificationUrl = `https://future-task.com/auth/confirm?email=${encodeURIComponent(email)}`
+        console.error("[SERVER][v0] generateLink error:", linkError?.message)
+        // Fallback to a simpler link structure
+        verificationUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://future-task.com'}/auth/confirm?email=${encodeURIComponent(email)}`
       } else if (linkData?.properties?.verification_url) {
         verificationUrl = linkData.properties.verification_url
         console.log("[SERVER][v0] Verification link generated successfully")
+        console.log("[SERVER][v0] Verification URL length:", verificationUrl.length)
       } else {
-        console.warn("[SERVER][v0] No verification URL in response")
-        verificationUrl = `https://future-task.com/auth/confirm?email=${encodeURIComponent(email)}`
+        console.warn("[SERVER][v0] No verification URL in response, using fallback")
+        verificationUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://future-task.com'}/auth/confirm?email=${encodeURIComponent(email)}`
       }
     } catch (linkGenError) {
       console.error("[SERVER][v0] Exception generating link:", linkGenError)
-      verificationUrl = `https://future-task.com/auth/confirm?email=${encodeURIComponent(email)}`
+      verificationUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://future-task.com'}/auth/confirm?email=${encodeURIComponent(email)}`
     }
+
+    console.log("[SERVER][v0] Final verification URL:", verificationUrl)
 
     // Create profile in users table
     console.log("[SERVER][v0] Creating user profile for ID:", userId)
@@ -90,6 +94,7 @@ export async function POST(request: Request) {
       id: userId,
       email: email,
       name: name,
+      email_verified: false, // Mark as not verified initially
       subscription_tier: "free",
       subscription_plan: "free",
       plan: "free",
