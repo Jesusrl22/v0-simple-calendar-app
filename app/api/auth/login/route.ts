@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { cookies } from "next/headers"
 import { rateLimit } from "@/lib/redis"
+import { createClient } from "@supabase/supabase-js"
 
 export async function POST(request: Request) {
   try {
@@ -52,28 +53,32 @@ export async function POST(request: Request) {
 
     console.log("[SERVER][API] Login successful for user:", loginData.user.id)
 
-    // Check email confirmation in database first (more reliable than checking JWT)
-    const confirmCheckResponse = await fetch(
-      `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/users?id=eq.${loginData.user.id}&select=id,email_confirmed_at`,
-      {
-        headers: {
-          apikey: process.env.SUPABASE_SERVICE_ROLE_KEY!,
-          Authorization: `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY!}`,
-        },
-      },
-    ).then((res) => res.json()).catch(() => [])
+    // Create Supabase client for database operations
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    )
 
-    // If email is not confirmed and user doesn't exist in DB, they need to verify
-    const userRecord = Array.isArray(confirmCheckResponse) ? confirmCheckResponse[0] : null
-    const isEmailConfirmed = loginData.user.email_confirmed_at || userRecord?.email_confirmed_at
+    // Check email confirmation in Supabase auth directly
+    const isEmailConfirmed = loginData.user?.email_confirmed_at !== null
+
+    // Also check in database as backup
+    const { data: userDbCheck } = await supabase
+      .from('users')
+      .select('id, email_verified')
+      .eq('id', loginData.user.id)
+      .single()
+      .catch(() => ({ data: null }))
+
+    const isDbEmailVerified = userDbCheck?.email_verified ?? false
     
     // Block login for unverified emails - users must verify first
-    if (!isEmailConfirmed) {
+    if (!isEmailConfirmed && !isDbEmailVerified) {
       console.log("[SERVER][API] Login blocked: Email not verified for:", loginData.user.email)
       return NextResponse.json(
         { 
           error: "email_not_verified",
-          message: "Please verify your email before logging in. Check your inbox for the verification link." 
+          message: "Please verify your email before logging in. Check your inbox for the verification link. If you don't see it, you can request a new verification email." 
         },
         { status: 403 },
       )

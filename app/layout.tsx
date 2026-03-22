@@ -103,7 +103,6 @@ export default function RootLayout({
             <HelpChatbot />
           </LanguageProvider>
         </ErrorBoundary>
-        </LanguageProvider>
       </body>
     </html>
   )
