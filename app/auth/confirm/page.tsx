@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { CheckCircle2, AlertCircle } from 'lucide-react'
-import { createClient } from '@supabase/supabase-js'
+import { CheckCircle2, AlertCircle, Loader2 } from 'lucide-react'
 
 export default function ConfirmPage() {
   const router = useRouter()
@@ -15,30 +14,66 @@ export default function ConfirmPage() {
   useEffect(() => {
     const processConfirmation = async () => {
       try {
-        // Get the token from Supabase callback
-        const token = searchParams.get('token_hash')
-        const type = searchParams.get('type') // Should be 'signup' or 'email_change'
-        const email = searchParams.get('email')
+        // Supabase can send params as query string OR as hash fragment
+        // We need to check both
+        let token = searchParams.get('token_hash')
+        let type = searchParams.get('type')
+        let email = searchParams.get('email')
 
-        console.log('[CLIENT] Confirm page - token:', token ? 'present' : 'missing', 'type:', type, 'email:', email)
+        // Also check hash fragment (e.g. #access_token=...&type=signup)
+        if (typeof window !== 'undefined' && window.location.hash) {
+          const hashParams = new URLSearchParams(window.location.hash.substring(1))
+          if (!token) token = hashParams.get('token_hash')
+          if (!type) type = hashParams.get('type')
+          if (!email) email = hashParams.get('email')
 
-        if (!token) {
-          console.log('[CLIENT] No token found in URL, checking session...')
-          // No token means user might already be verified or came from resend
-          setStatus('success')
-          setMessage('Your email has already been verified! Redirecting to login...')
+          // Supabase sometimes sends access_token directly in hash after verify
+          const accessToken = hashParams.get('access_token')
+          const hashType = hashParams.get('type')
+          console.log('[CLIENT] Hash params - accessToken:', accessToken ? 'present' : 'missing', 'type:', hashType)
+
+          // If Supabase already verified and sent back an access_token, email is confirmed
+          if (accessToken && (hashType === 'signup' || hashType === 'email_change')) {
+            console.log('[CLIENT] Access token found in hash — Supabase already confirmed the email')
+            // Extract user email from access token to update our DB
+            try {
+              const payload = JSON.parse(atob(accessToken.split('.')[1]))
+              const userEmail = payload.email
+              const userId = payload.sub
+              console.log('[CLIENT] Token payload - email:', userEmail, 'userId:', userId)
+
+              if (userId) {
+                await fetch('/api/auth/verify-email', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ token_hash: token || '', type: hashType, email: userEmail }),
+                })
+              }
+            } catch (e) {
+              console.log('[CLIENT] Could not parse access token, but Supabase already verified')
+            }
+            setStatus('success')
+            setMessage('Your email has been successfully verified! Redirecting to login...')
+            return
+          }
+        }
+
+        console.log('[CLIENT] Confirm params - token:', token ? 'present' : 'missing', 'type:', type, 'email:', email)
+
+        if (!token && !email) {
+          console.log('[CLIENT] No token or email found in URL')
+          setStatus('error')
+          setMessage('Invalid verification link. Please request a new verification email.')
           return
         }
 
-        // Call verify endpoint to mark email as verified in Supabase
-        console.log('[CLIENT] Calling verify endpoint...')
+        // Call our verify endpoint
+        console.log('[CLIENT] Calling /api/auth/verify-email...')
         const verifyResponse = await fetch('/api/auth/verify-email', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            token_hash: token,
+            token_hash: token || '',
             type: type || 'signup',
             email: email,
           }),
@@ -70,11 +105,9 @@ export default function ConfirmPage() {
       const interval = setInterval(() => {
         setCountdown((prev) => prev - 1)
       }, 1000)
-
       const timeout = setTimeout(() => {
         router.push('/login')
       }, 5000)
-
       return () => {
         clearInterval(interval)
         clearTimeout(timeout)
@@ -86,11 +119,10 @@ export default function ConfirmPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted p-4">
       <div className="w-full max-w-md">
         <div className="bg-card border border-border rounded-lg shadow-lg p-8 text-center space-y-6">
-          {/* Icon */}
           <div className="flex justify-center">
             {status === 'loading' && (
-              <div className="bg-blue-100 dark:bg-blue-900/30 p-4 rounded-full animate-pulse">
-                <div className="h-12 w-12 bg-blue-600 rounded-full" />
+              <div className="bg-primary/10 p-4 rounded-full">
+                <Loader2 className="h-12 w-12 text-primary animate-spin" />
               </div>
             )}
             {status === 'success' && (
@@ -105,19 +137,15 @@ export default function ConfirmPage() {
             )}
           </div>
 
-          {/* Title */}
           <div>
             <h1 className="text-2xl font-bold text-foreground mb-2">
               {status === 'loading' && 'Verifying Email...'}
               {status === 'success' && 'Email Verified!'}
               {status === 'error' && 'Verification Failed'}
             </h1>
-            <p className="text-sm text-muted-foreground">
-              {message}
-            </p>
+            <p className="text-sm text-muted-foreground">{message}</p>
           </div>
 
-          {/* Redirect Notice */}
           {status === 'success' && (
             <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
               <p className="text-sm text-blue-900 dark:text-blue-300">
@@ -126,7 +154,12 @@ export default function ConfirmPage() {
             </div>
           )}
 
-          {/* Manual Redirect Button */}
+          {status === 'error' && (
+            <div className="text-sm text-muted-foreground">
+              <p>You can request a new verification email from the login page.</p>
+            </div>
+          )}
+
           <button
             onClick={() => router.push('/login')}
             className="w-full bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-lg font-medium transition-colors"

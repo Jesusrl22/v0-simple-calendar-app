@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server"
-import { cookies } from "next/headers"
 import { rateLimit } from "@/lib/redis"
 import { createClient } from "@supabase/supabase-js"
 
@@ -23,16 +22,14 @@ export async function POST(request: Request) {
 
     console.log("[SERVER][API] Login request for:", email)
 
+    // Authenticate with Supabase
     const loginResponse = await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/token?grant_type=password`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
       },
-      body: JSON.stringify({
-        email,
-        password,
-      }),
+      body: JSON.stringify({ email, password }),
     })
 
     const loginData = await loginResponse.json().catch((e) => {
@@ -41,7 +38,6 @@ export async function POST(request: Request) {
     })
 
     console.log("[SERVER][API] Supabase response status:", loginResponse.status)
-    console.log("[SERVER][API] Login data:", JSON.stringify(loginData, null, 2))
 
     if (!loginResponse.ok || loginData.error) {
       console.error("[SERVER][API] Login error:", loginData.error?.message || loginData.error_description)
@@ -51,113 +47,82 @@ export async function POST(request: Request) {
       )
     }
 
-    console.log("[SERVER][API] Login successful for user:", loginData.user.id)
+    const userId = loginData.user?.id
+    console.log("[SERVER][API] Supabase auth passed for user:", userId)
 
-    // Create Supabase client for database operations
+    // Create Supabase admin client for database operations
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.SUPABASE_SERVICE_ROLE_KEY!
     )
 
-    // Check email confirmation in Supabase auth directly
-    const isEmailConfirmed = loginData.user?.email_confirmed_at !== null
+    // Check email verification: Supabase auth field is the source of truth
+    const emailConfirmedAt = loginData.user?.email_confirmed_at
+    console.log("[SERVER][API] email_confirmed_at from auth:", emailConfirmedAt)
 
-    // Also check in database as backup
-    const { data: userDbCheck } = await supabase
-      .from('users')
-      .select('id, email_verified')
-      .eq('id', loginData.user.id)
+    // Also check our users table as a fallback
+    const { data: userRecord, error: userFetchError } = await supabase
+      .from("users")
+      .select("id, email_verified, last_login_ip")
+      .eq("id", userId)
       .single()
-      .catch(() => ({ data: null }))
 
-    const isDbEmailVerified = userDbCheck?.email_verified ?? false
-    
-    // Block login for unverified emails - users must verify first
-    if (!isEmailConfirmed && !isDbEmailVerified) {
-      console.log("[SERVER][API] Login blocked: Email not verified for:", loginData.user.email)
+    console.log("[SERVER][API] users table record:", userRecord, "error:", userFetchError?.message)
+
+    const isAuthConfirmed = !!emailConfirmedAt
+    const isTableVerified = userRecord?.email_verified === true
+
+    console.log("[SERVER][API] isAuthConfirmed:", isAuthConfirmed, "isTableVerified:", isTableVerified)
+
+    if (!isAuthConfirmed && !isTableVerified) {
+      console.log("[SERVER][API] Login blocked: email not verified for:", email)
       return NextResponse.json(
-        { 
+        {
           error: "email_not_verified",
-          message: "Please verify your email before logging in. Check your inbox for the verification link. If you don't see it, you can request a new verification email." 
+          message: "Please verify your email before logging in. Check your inbox for the verification link.",
         },
         { status: 403 },
       )
     }
 
-    // Get user agent to detect new device
-    const userAgent = request.headers.get("user-agent") || "Unknown device"
+    // If auth is confirmed but table isn't synced, sync it now
+    if (isAuthConfirmed && !isTableVerified && userRecord) {
+      console.log("[SERVER][API] Syncing email_verified flag in users table")
+      await supabase
+        .from("users")
+        .update({ email_verified: true, updated_at: new Date().toISOString() })
+        .eq("id", userId)
+    }
+
     const lastLoginIp = request.headers.get("x-forwarded-for") || "Unknown"
 
-    // Use the userRecord we already fetched instead of fetching again
-    let profiles = [userRecord]
+    // Create profile if missing
     if (!userRecord) {
-      // If userRecord is null, fetch just to check if profile exists
-      const profileCheckResponse = await fetch(
-        `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/users?id=eq.${loginData.user.id}&select=id`,
-        {
-          headers: {
-            apikey: process.env.SUPABASE_SERVICE_ROLE_KEY!,
-            Authorization: `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY!}`,
-          },
-        },
-      ).then(res => res.json()).catch(() => [])
-      profiles = profileCheckResponse
-    }
-
-    if (!profiles || profiles.length === 0) {
       console.log("[SERVER][API] Profile not found, creating...")
-
-      await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/users`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          apikey: process.env.SUPABASE_SERVICE_ROLE_KEY!,
-          Authorization: `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY!}`,
-          Prefer: "return=minimal",
-        },
-        body: JSON.stringify({
-          id: loginData.user.id,
-          email: loginData.user.email,
-          name: loginData.user.user_metadata?.name || loginData.user.email.split("@")[0],
-          subscription_tier: "free",
-          subscription_plan: "free",
-          plan: "free",
-          ai_credits_monthly: 0,
-          ai_credits_purchased: 0,
-        }),
+      await supabase.from("users").insert({
+        id: userId,
+        email: loginData.user.email,
+        name: loginData.user.user_metadata?.name || loginData.user.email.split("@")[0],
+        email_verified: isAuthConfirmed,
+        subscription_tier: "free",
+        subscription_plan: "free",
+        plan: "free",
+        ai_credits_monthly: 0,
+        ai_credits_purchased: 0,
+        last_login_ip: lastLoginIp,
+        last_login_at: new Date().toISOString(),
       })
-
       console.log("[SERVER][API] Profile created")
-    }
-
-    // Check if this is a new device by comparing IP addresses
-    const isNewDevice = userRecord?.last_login_ip !== lastLoginIp
-    
-    // Log new device login for security monitoring
-    if (isNewDevice) {
-      console.log("[SERVER][API] New device login detected from IP:", lastLoginIp, "User Agent:", userAgent)
-      // Supabase Auth can send custom emails if configured in Auth settings
-    }
-
-    // Update last login info
-    try {
-      await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/users?id=eq.${loginData.user.id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          apikey: process.env.SUPABASE_SERVICE_ROLE_KEY!,
-          Authorization: `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY!}`,
-        },
-        body: JSON.stringify({
+    } else {
+      // Update last login info
+      await supabase
+        .from("users")
+        .update({
           last_login_ip: lastLoginIp,
           last_login_at: new Date().toISOString(),
-        }),
-      })
-    } catch (updateError) {
-      console.error("[SERVER][API] Failed to update last login:", updateError)
+        })
+        .eq("id", userId)
     }
-
-    console.log("[SERVER][API] Cookies set successfully")
 
     const loginSuccessResponse = NextResponse.json({ success: true, user: loginData.user })
 
@@ -177,6 +142,7 @@ export async function POST(request: Request) {
       maxAge: 60 * 60 * 24 * 30,
     })
 
+    console.log("[SERVER][API] Login successful, cookies set")
     return loginSuccessResponse
   } catch (error: any) {
     console.error("[SERVER][API] Login exception:", error.message)
