@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server"
-import { createClient } from "@supabase/supabase-js"
 
 /**
  * This endpoint helps configure Supabase email templates
@@ -16,48 +15,61 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    )
-
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
 
-    // Email template configurations
+    // IMPORTANT: Email template configurations for Supabase
+    // These are the EXACT URLs to use in Supabase Dashboard > Project Settings > Email Templates
     const templates = {
       confirm_signup: {
         name: "Confirm Signup",
-        redirectUrl: `${appUrl}/auth/confirm?token={{ .Token }}&lang={{ .UserLanguage }}`,
-        description: "Email confirmation template with language support",
+        url: `${appUrl}/auth/confirm`,
+        // For Supabase, use these variables in email template:
+        // In the Email Editor > Confirm Signup > href: {{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=signup
+        correctTemplate: "{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=signup",
       },
       reset_password: {
         name: "Reset Password",
-        redirectUrl: `${appUrl}/auth/reset?token={{ .Token }}&lang={{ .UserLanguage }}`,
-        description: "Password reset template with language support",
+        url: `${appUrl}/auth/reset`,
+        // In the Email Editor > Reset Password > href: {{ .SiteURL }}/auth/reset?token_hash={{ .TokenHash }}&type=recovery
+        correctTemplate: "{{ .SiteURL }}/auth/reset?token_hash={{ .TokenHash }}&type=recovery",
+      },
+      invite: {
+        name: "Invite User",
+        url: `${appUrl}/auth/confirm`,
+        // In the Email Editor > Invite > href: {{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=invite
+        correctTemplate: "{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=invite",
       },
     }
 
     console.log("[v0] Email template configuration:")
     console.log("App URL:", appUrl)
     console.log("")
-    console.log("Confirm Signup:")
-    console.log("  Redirect URL:", templates.confirm_signup.redirectUrl)
+    console.log("DO THIS IN SUPABASE DASHBOARD:")
+    console.log("1. Go to Project Settings > Email Templates")
     console.log("")
-    console.log("Reset Password:")
-    console.log("  Redirect URL:", templates.reset_password.redirectUrl)
+    console.log("2. Edit 'Confirm Signup' template:")
+    console.log("   - Find the button/link href attribute")
+    console.log("   - Replace with:", templates.confirm_signup.correctTemplate)
+    console.log("")
+    console.log("3. Edit 'Reset Password' template:")
+    console.log("   - Find the button/link href attribute")
+    console.log("   - Replace with:", templates.reset_password.correctTemplate)
+    console.log("")
+    console.log("4. (Optional) Edit 'Invite' template:")
+    console.log("   - Find the button/link href attribute")
+    console.log("   - Replace with:", templates.invite.correctTemplate)
 
     return NextResponse.json({
-      message: "Email templates configured",
+      message: "Email template configuration - Follow the instructions above",
       templates,
       instructions: {
-        note: "These URLs should be configured in Supabase Dashboard > Project Settings > Email Templates",
-        steps: [
-          "Go to Supabase Dashboard",
-          "Navigate to Project Settings > Email Templates",
-          "Edit Confirm Signup template and set the redirect URL",
-          "Edit Reset Password template and set the redirect URL",
-          "Make sure to store language in user_metadata during signup",
-        ],
+        critical: "These are the EXACT URLs to paste in Supabase Dashboard",
+        location: "Project Settings > Email Templates > Edit each template",
+        variables: {
+          TokenHash: "The verification token from Supabase",
+          SiteURL: "Your app URL (e.g., https://future-task.com)",
+          type: "signup | recovery | invite",
+        },
       },
     })
   } catch (error: any) {
