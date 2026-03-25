@@ -9,25 +9,66 @@ export async function checkEmailSetup() {
       process.env.SUPABASE_SERVICE_ROLE_KEY!
     )
 
-    // Try to call a function that requires email to be working
-    // This is a simple test - we're checking if the auth is responding
-    const { data, error } = await supabase.auth.admin.listUsers()
-
-    if (error) {
-      console.error("[SERVER] Email setup error:", error)
-      return { success: false, error: error.message }
+    // 1. Get all auth users
+    const { data: authData, error: authError } = await supabase.auth.admin.listUsers()
+    if (authError) {
+      return { status: "error", message: authError.message }
     }
 
-    // If we got here, the auth system is working
+    const authUsers = authData?.users ?? []
+    const authVerified = authUsers.filter((u) => !!u.email_confirmed_at)
+    const authUnverified = authUsers.filter((u) => !u.email_confirmed_at)
+
+    // 2. Get users table
+    const { data: dbUsers, error: dbError } = await supabase
+      .from("users")
+      .select("email, email_verified, created_at")
+      .order("created_at", { ascending: false })
+
+    if (dbError) {
+      return { status: "error", message: dbError.message }
+    }
+
+    const dbVerified = (dbUsers ?? []).filter((u) => u.email_verified === true)
+
     return {
-      success: true,
-      message: "Supabase auth system is working. Emails should be sent correctly.",
+      status: "ok",
+      auth: {
+        totalUsers: authUsers.length,
+        verified: authVerified.length,
+        unverified: authUnverified.length,
+        unverifiedSample: authUnverified.slice(0, 5).map((u) => ({
+          email: u.email ?? "unknown",
+          createdAt: u.created_at,
+          reason: "email_confirmed_at is NULL",
+        })),
+      },
+      database: {
+        totalUsers: (dbUsers ?? []).length,
+        verified: dbVerified.length,
+        sample: (dbUsers ?? []).slice(0, 10).map((u) => ({
+          email: u.email,
+          email_verified: u.email_verified,
+          created_at: u.created_at,
+        })),
+      },
+      instructions: {
+        problem:
+          authUnverified.length > 0
+            ? `${authUnverified.length} users in Supabase Auth have no email_confirmed_at — email template not configured correctly.`
+            : "All users in Supabase Auth are verified.",
+        solution: "Configure email template in Supabase Dashboard",
+        steps: [
+          "Go to Supabase Dashboard > Project Settings > Email Templates",
+          "Edit 'Confirm Signup' template",
+          "Change the button href to: {{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=signup",
+          "Save and test with a new account",
+        ],
+        testNewUser:
+          "Register a new account — the verification link in the email must contain token_hash and type as query params.",
+      },
     }
   } catch (error: any) {
-    console.error("[SERVER] Email setup check error:", error)
-    return {
-      success: false,
-      error: error.message || "Error checking email setup",
-    }
+    return { status: "error", message: error.message || "Error checking email setup" }
   }
 }

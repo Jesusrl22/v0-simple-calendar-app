@@ -107,7 +107,7 @@ export function PayPalSubscriptionButton({ planId, planName, onSuccess }: PayPal
   }
 
   return (
-    <div ref={containerRef} className="mt-4 min-h-[45px] [&_iframe]:!bg-transparent [&>div]:!bg-transparent">
+    <div ref={containerRef} className="mt-4 min-h-[45px]">
       {!isLoaded && <div className="text-center text-sm text-muted-foreground">Loading PayPal...</div>}
     </div>
   )

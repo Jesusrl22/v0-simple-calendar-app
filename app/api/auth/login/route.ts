@@ -56,26 +56,12 @@ export async function POST(request: Request) {
       process.env.SUPABASE_SERVICE_ROLE_KEY!
     )
 
-    // Check email verification: Supabase auth field is the source of truth
+    // Step 1: Check email verified in Supabase Auth (source of truth)
     const emailConfirmedAt = loginData.user?.email_confirmed_at
-    console.log("[SERVER][API] email_confirmed_at from auth:", emailConfirmedAt)
+    console.log("[SERVER][API] email_confirmed_at:", emailConfirmedAt)
 
-    // Also check our users table as a fallback
-    const { data: userRecord, error: userFetchError } = await supabase
-      .from("users")
-      .select("id, email_verified, last_login_ip")
-      .eq("id", userId)
-      .single()
-
-    console.log("[SERVER][API] users table record:", userRecord, "error:", userFetchError?.message)
-
-    const isAuthConfirmed = !!emailConfirmedAt
-    const isTableVerified = userRecord?.email_verified === true
-
-    console.log("[SERVER][API] isAuthConfirmed:", isAuthConfirmed, "isTableVerified:", isTableVerified)
-
-    if (!isAuthConfirmed && !isTableVerified) {
-      console.log("[SERVER][API] Login blocked: email not verified for:", email)
+    if (!emailConfirmedAt) {
+      console.log("[SERVER][API] Blocked: email not confirmed in auth for:", email)
       return NextResponse.json(
         {
           error: "email_not_verified",
@@ -85,36 +71,57 @@ export async function POST(request: Request) {
       )
     }
 
-    // If auth is confirmed but table isn't synced, sync it now
-    if (isAuthConfirmed && !isTableVerified && userRecord) {
-      console.log("[SERVER][API] Syncing email_verified flag in users table")
+    // Step 2: Check users table profile exists
+    const { data: userRecord, error: userFetchError } = await supabase
+      .from("users")
+      .select("id, email_verified")
+      .eq("id", userId)
+      .single()
+
+    console.log("[SERVER][API] users table record:", userRecord?.id ?? "NOT FOUND", "error:", userFetchError?.message)
+
+    if (!userRecord) {
+      console.log("[SERVER][API] Profile missing in users table — creating it now for:", email)
+      // Auth is confirmed, so create the profile
+      const authUser = loginData.user
+      await supabase.from("users").insert({
+        id: userId,
+        email: authUser.email,
+        name: authUser.user_metadata?.name || authUser.email.split("@")[0],
+        email_verified: true,
+        subscription_tier: "free",
+        subscription_plan: "free",
+        plan: "free",
+        ai_credits_monthly: 0,
+        ai_credits_purchased: 0,
+        theme: "dark",
+        theme_preference: "dark",
+        subscription_status: "active",
+        billing_cycle: "monthly",
+        pomodoro_work_duration: 25,
+        pomodoro_break_duration: 5,
+        pomodoro_long_break_duration: 15,
+        pomodoro_sessions_until_long_break: 4,
+        language: authUser.user_metadata?.language || "es",
+        is_admin: false,
+      })
+    }
+
+    // Step 3: Sync email_verified in users table if needed
+    if (userRecord && !userRecord.email_verified) {
+      console.log("[SERVER][API] Syncing email_verified=true in users table")
       await supabase
         .from("users")
         .update({ email_verified: true, updated_at: new Date().toISOString() })
         .eq("id", userId)
     }
 
-    // Update last login info
-    console.log("[SERVER][API] Updating last login info...")
+    // Step 4: Update last login
+    const lastLoginIp = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown"
     await supabase
       .from("users")
-      .update({
-        last_login_ip: lastLoginIp,
-        last_login_at: new Date().toISOString(),
-      })
+      .update({ last_login_ip: lastLoginIp, last_login_at: new Date().toISOString() })
       .eq("id", userId)
-
-    // Create profile if missing
-    if (!userRecord) {
-      console.log("[SERVER][API] Profile not found - user was created in auth but email verification not completed")
-      return NextResponse.json(
-        {
-          error: "email_not_verified",
-          message: "Please verify your email before logging in. Check your inbox for the verification link.",
-        },
-        { status: 403 },
-      )
-    }
 
     const loginSuccessResponse = NextResponse.json({ success: true, user: loginData.user })
 
