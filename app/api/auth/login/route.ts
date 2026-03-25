@@ -95,6 +95,7 @@ export async function POST(request: Request) {
     }
 
     // Update last login info
+    const lastLoginIp = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown"
     console.log("[SERVER][API] Updating last login info...")
     await supabase
       .from("users")
