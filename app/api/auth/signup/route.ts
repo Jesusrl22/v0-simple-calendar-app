@@ -16,44 +16,36 @@ export async function POST(request: Request) {
 
     const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
 
-    // Check if user already exists
+    // Check if user already exists in auth
     const { data: existingUsers } = await supabase.auth.admin.listUsers()
     const existingUser = existingUsers?.users?.find((u) => u.email === email)
 
     if (existingUser) {
-      // Check if profile exists
-      const { data: profiles } = await supabase.from("users").select("*").eq("id", existingUser.id)
-
-      if (profiles && profiles.length > 0) {
-        console.log("[SERVER][v0] User already exists")
-        return NextResponse.json({ error: "User with this email already exists" }, { status: 400 })
-      }
+      console.log("[SERVER][v0] User already exists in auth")
+      return NextResponse.json({ error: "User with this email already exists" }, { status: 400 })
     }
 
-    let userId = existingUser?.id
     const language = "es"
 
-    // Create user in auth FIRST if doesn't exist
-    if (!userId) {
-      console.log("[SERVER][v0] Creating new user in auth...")
-      const { data: authData, error: authError } = await supabase.auth.admin.createUser({
-        email,
-        password,
-        email_confirm: false, // Require email confirmation before login
-        user_metadata: {
-          name: name,
-          language: language,
-        },
-      })
+    // Create user in auth ONLY - do NOT create in users table yet
+    console.log("[SERVER][v0] Creating new user in auth (email NOT confirmed)...")
+    const { data: authData, error: authError } = await supabase.auth.admin.createUser({
+      email,
+      password,
+      email_confirm: false, // Require email confirmation before login
+      user_metadata: {
+        name: name,
+        language: language,
+      },
+    })
 
-      if (authError) {
-        console.error("[SERVER][v0] Auth creation failed:", authError)
-        return NextResponse.json({ error: authError.message }, { status: 400 })
-      }
-
-      userId = authData?.user?.id
-      console.log("[SERVER][v0] User created with ID:", userId)
+    if (authError) {
+      console.error("[SERVER][v0] Auth creation failed:", authError)
+      return NextResponse.json({ error: authError.message }, { status: 400 })
     }
+
+    const userId = authData?.user?.id
+    console.log("[SERVER][v0] User created in auth with ID:", userId, "- email NOT confirmed yet")
 
     // Generate verification link using Supabase admin API
     console.log("[SERVER][v0] Generating verification link for email:", email)
@@ -71,12 +63,10 @@ export async function POST(request: Request) {
 
       if (linkError) {
         console.error("[SERVER][v0] generateLink error:", linkError?.message)
-        // Fallback to a simpler link structure
         verificationUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://future-task.com'}/auth/confirm?email=${encodeURIComponent(email)}`
       } else if (linkData?.properties?.verification_url) {
         verificationUrl = linkData.properties.verification_url
         console.log("[SERVER][v0] Verification link generated successfully")
-        console.log("[SERVER][v0] Verification URL length:", verificationUrl.length)
       } else {
         console.warn("[SERVER][v0] No verification URL in response, using fallback")
         verificationUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://future-task.com'}/auth/confirm?email=${encodeURIComponent(email)}`
@@ -86,64 +76,10 @@ export async function POST(request: Request) {
       verificationUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://future-task.com'}/auth/confirm?email=${encodeURIComponent(email)}`
     }
 
-    console.log("[SERVER][v0] Final verification URL:", verificationUrl)
-
-    // Create profile in users table
-    console.log("[SERVER][v0] Creating user profile for ID:", userId)
-    const { error: profileError } = await supabase.from("users").insert({
-      id: userId,
-      email: email,
-      name: name,
-      email_verified: false, // Mark as not verified initially
-      subscription_tier: "free",
-      subscription_plan: "free",
-      plan: "free",
-      ai_credits_monthly: 0,
-      ai_credits_purchased: 0,
-      theme: "dark",
-      theme_preference: "dark",
-      subscription_status: "active",
-      billing_cycle: "monthly",
-      pomodoro_work_duration: 25,
-      pomodoro_break_duration: 5,
-      pomodoro_long_break_duration: 15,
-      pomodoro_sessions_until_long_break: 4,
-      language: "es",
-      is_admin: false,
-    })
-
-    if (profileError) {
-      console.error("[SERVER][v0] Failed to create profile:", profileError)
-      return NextResponse.json({ error: "Failed to create user profile. Please try again." }, { status: 500 })
-    }
-
-    console.log("[SERVER][v0] Profile created successfully")
-
-    // Save user's password HASHED to user_credentials
-    // Using bcrypt for secure hashing - admin will NOT be able to see this
-    const hashedPassword = await bcrypt.hash(password, 10)
-    console.log("[SERVER][v0] Saving hashed user password")
-
-    const { error: credError } = await supabase.from("user_credentials").insert({
-      id: userId,
-      user_id: userId,
-      email: email,
-      password_hash: hashedPassword, // Store HASHED password - not plain text
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    })
-
-    if (credError) {
-      console.error("[SERVER][v0] Failed to save credentials:", credError)
-      // Don't fail the signup if credentials save fails, just log it
-    } else {
-      console.log("[SERVER][v0] User hashed password saved securely")
-    }
+    console.log("[SERVER][v0] Verification URL ready for email")
 
     // Send verification email via Brevo
     console.log("[SERVER][v0] Sending verification email via Brevo...")
-    console.log("[SERVER][v0] BREVO_API_KEY available:", !!process.env.BREVO_API_KEY)
-    console.log("[SERVER][v0] Email to send to:", email)
 
     const htmlContent = `
       <h2>Welcome to Future Task!</h2>
@@ -173,7 +109,7 @@ export async function POST(request: Request) {
       )
     }
 
-    console.log("[SERVER][v0] ✓ Verification email sent successfully")
+    console.log("[SERVER][v0] ✓ Verification email sent successfully - user profile will be created after email verification")
 
     return NextResponse.json({
       success: true,
