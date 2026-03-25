@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server"
-import { cookies } from "next/headers"
 import { createClient } from "@supabase/supabase-js"
 import { sendEmail } from "@/lib/brevo"
-import bcrypt from "bcryptjs"
 
 export async function POST(request: Request) {
   try {
