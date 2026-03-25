@@ -94,34 +94,26 @@ export async function POST(request: Request) {
         .eq("id", userId)
     }
 
-    const lastLoginIp = request.headers.get("x-forwarded-for") || "Unknown"
-
-    // Create profile if missing
-    if (!userRecord) {
-      console.log("[SERVER][API] Profile not found, creating...")
-      await supabase.from("users").insert({
-        id: userId,
-        email: loginData.user.email,
-        name: loginData.user.user_metadata?.name || loginData.user.email.split("@")[0],
-        email_verified: isAuthConfirmed,
-        subscription_tier: "free",
-        subscription_plan: "free",
-        plan: "free",
-        ai_credits_monthly: 0,
-        ai_credits_purchased: 0,
+    // Update last login info
+    console.log("[SERVER][API] Updating last login info...")
+    await supabase
+      .from("users")
+      .update({
         last_login_ip: lastLoginIp,
         last_login_at: new Date().toISOString(),
       })
-      console.log("[SERVER][API] Profile created")
-    } else {
-      // Update last login info
-      await supabase
-        .from("users")
-        .update({
-          last_login_ip: lastLoginIp,
-          last_login_at: new Date().toISOString(),
-        })
-        .eq("id", userId)
+      .eq("id", userId)
+
+    // Create profile if missing
+    if (!userRecord) {
+      console.log("[SERVER][API] Profile not found - user was created in auth but email verification not completed")
+      return NextResponse.json(
+        {
+          error: "email_not_verified",
+          message: "Please verify your email before logging in. Check your inbox for the verification link.",
+        },
+        { status: 403 },
+      )
     }
 
     const loginSuccessResponse = NextResponse.json({ success: true, user: loginData.user })

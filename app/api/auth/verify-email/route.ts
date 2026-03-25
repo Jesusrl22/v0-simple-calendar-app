@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { createClient } from "@supabase/supabase-js"
+import bcrypt from "bcryptjs"
 
 export async function POST(request: Request) {
   try {
@@ -26,12 +27,40 @@ export async function POST(request: Request) {
           type: (type as "signup" | "email_change" | "invite") || "signup",
         })
         if (!error && data.user) {
-          console.log("[API][verify-email] verifyOtp success for user:", data.user.id)
-          await supabase
-            .from("users")
-            .update({ email_verified: true, updated_at: new Date().toISOString() })
-            .eq("id", data.user.id)
-          return NextResponse.json({ success: true, message: "Email verified successfully!" })
+    console.log("[API][verify-email] verifyOtp success for user:", data.user.id)
+    
+    // NOW create the user profile in users table upon email verification
+    console.log("[API][verify-email] Creating user profile in users table...")
+    const { error: profileError } = await supabase.from("users").insert({
+      id: data.user.id,
+      email: email,
+      name: data.user.user_metadata?.name || email.split("@")[0],
+      email_verified: true, // Mark as verified
+      subscription_tier: "free",
+      subscription_plan: "free",
+      plan: "free",
+      ai_credits_monthly: 0,
+      ai_credits_purchased: 0,
+      theme: "dark",
+      theme_preference: "dark",
+      subscription_status: "active",
+      billing_cycle: "monthly",
+      pomodoro_work_duration: 25,
+      pomodoro_break_duration: 5,
+      pomodoro_long_break_duration: 15,
+      pomodoro_sessions_until_long_break: 4,
+      language: data.user.user_metadata?.language || "es",
+      is_admin: false,
+    })
+
+    if (profileError) {
+      console.error("[API][verify-email] Failed to create user profile:", profileError.message)
+      // Don't fail verification, but log it
+    } else {
+      console.log("[API][verify-email] User profile created successfully")
+    }
+
+    return NextResponse.json({ success: true, message: "Email verified successfully! You can now login." })
         }
         console.log("[API][verify-email] verifyOtp failed:", error?.message, "— trying admin fallback")
       } catch (e: any) {
@@ -76,19 +105,46 @@ export async function POST(request: Request) {
 
     console.log("[API][verify-email] Auth confirmed for user:", user.id)
 
-    // Sync users table
-    const { error: tableError } = await supabase
-      .from("users")
-      .update({ email_verified: true, updated_at: new Date().toISOString() })
-      .eq("id", user.id)
+    // NOW create the user profile in users table upon email verification
+    console.log("[API][verify-email] Creating user profile in users table (fallback)...")
+    const { error: profileError } = await supabase.from("users").insert({
+      id: user.id,
+      email: user.email || email,
+      name: user.user_metadata?.name || email.split("@")[0],
+      email_verified: true, // Mark as verified
+      subscription_tier: "free",
+      subscription_plan: "free",
+      plan: "free",
+      ai_credits_monthly: 0,
+      ai_credits_purchased: 0,
+      theme: "dark",
+      theme_preference: "dark",
+      subscription_status: "active",
+      billing_cycle: "monthly",
+      pomodoro_work_duration: 25,
+      pomodoro_break_duration: 5,
+      pomodoro_long_break_duration: 15,
+      pomodoro_sessions_until_long_break: 4,
+      language: user.user_metadata?.language || "es",
+      is_admin: false,
+    })
 
-    if (tableError) {
-      console.error("[API][verify-email] users table update error (non-fatal):", tableError.message)
+    if (profileError) {
+      // If profile already exists, just update it
+      if (profileError.code === "23505") { // Unique constraint violation
+        console.log("[API][verify-email] Profile already exists, updating...")
+        await supabase
+          .from("users")
+          .update({ email_verified: true, updated_at: new Date().toISOString() })
+          .eq("id", user.id)
+      } else {
+        console.error("[API][verify-email] Failed to create user profile:", profileError.message)
+      }
     } else {
-      console.log("[API][verify-email] users table updated successfully")
+      console.log("[API][verify-email] User profile created successfully (fallback)")
     }
 
-    return NextResponse.json({ success: true, message: "Email verified successfully!" })
+    return NextResponse.json({ success: true, message: "Email verified successfully! You can now login." })
   } catch (error: any) {
     console.error("[API][verify-email] Exception:", error.message)
     return NextResponse.json(
