@@ -26,13 +26,14 @@ export const metadata: Metadata = {
   authors: [{ name: "Future Task" }],
   icons: {
     icon: [
+      { url: "/future-task-logo-32x32.png", sizes: "32x32", type: "image/png" },
       { url: "/favicon.ico", sizes: "48x48" },
       { url: "/favicon-16x16.jpg", sizes: "16x16", type: "image/jpeg" },
       { url: "/favicon-32x32.jpg", sizes: "32x32", type: "image/jpeg" },
       { url: "/icon.svg", type: "image/svg+xml" },
     ],
     apple: [{ url: "/apple-touch-icon.jpg", sizes: "180x180", type: "image/jpeg" }],
-    shortcut: [{ url: "/favicon.ico" }],
+    shortcut: [{ url: "/future-task-logo-32x32.png" }],
   },
   verification: {
     other: {
