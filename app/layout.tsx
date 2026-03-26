@@ -18,23 +18,16 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  title: "Future Task - Smart Task Management & Productivity App",
+  title: "Future Task",
   description: "Organize your tasks, notes, and projects with AI-powered assistance. Master task management with our intelligent platform.",
   generator: "v0.app",
   manifest: "/manifest.json",
   keywords: ["task management", "productivity app", "AI assistant", "todo list", "team collaboration", "task tracking", "productivity tools"],
   authors: [{ name: "Future Task" }],
   icons: {
-    icon: [
-      { url: "/future-task-logo-32x32.png", sizes: "32x32", type: "image/png" },
-      { url: "/future-task-logo-64x64.png", sizes: "64x64", type: "image/png" },
-      { url: "/favicon-32x32.jpg", sizes: "32x32", type: "image/jpeg" },
-    ],
-    apple: [
-      { url: "/future-task-logo-128x128.png", sizes: "180x180", type: "image/png" },
-      { url: "/apple-touch-icon.jpg", sizes: "180x180", type: "image/jpeg" },
-    ],
-    shortcut: [{ url: "/future-task-logo-32x32.png" }],
+    icon: "/future-task-logo-32x32.png",
+    shortcut: "/future-task-logo-32x32.png",
+    apple: "/future-task-logo-128x128.png",
   },
   verification: {
     other: {
