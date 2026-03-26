@@ -7,7 +7,18 @@ import Image from "next/image"
 import Link from "next/link"
 import { useState, useEffect } from "react"
 import CookieBanner from "@/components/cookie-banner"
-import { useRouter } from "next/navigation" // Import useRouter
+import { useRouter } from "next/navigation"
+import {
+  AreaChart,
+  Area,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts"
 
 // Mock userReviews data - replace with actual data fetching if needed
 const userReviews = [
@@ -77,8 +88,8 @@ const translations = {
     about: "About",
     login: "Login",
     signup: "Sign Up",
-    hero: "Smart Systems, Collaborate Seamlessly, Succeed Efficiently",
-    heroDesc: "Empower your productivity with intelligent task management, AI assistance, and seamless collaboration",
+    hero: "Tu semana organizada en minutos",
+    heroDesc: "Tareas, hábitos, notas e IA en un solo lugar. Sin complicaciones.",
     startNow: "Start now",
     learnMore: "Learn more",
     secure: "Secure & Reliable",
@@ -246,7 +257,7 @@ const translations = {
     footer_privacy: "Privacy Policy",
     footer_support: "Support",
     footer_contact: "Contact Us",
-    footer_copyright: "© 2025 Future Task. All rights reserved.",
+    footer_copyright: "© 2026 Future Task. All rights reserved.",
     footer_terms_short: "Terms",
     footer_privacy_short: "Privacy",
     footer_contact_short: "Contact",
@@ -258,8 +269,8 @@ const translations = {
     about: "Acerca de",
     login: "Iniciar sesión",
     signup: "Registrarse",
-    hero: "Sistemas Inteligentes, Colabora Sin Problemas, Triunfa Eficientemente",
-    heroDesc: "Potencia tu productividad con gestión inteligente de tareas, asistencia IA y colaboración perfecta",
+    hero: "Tu semana organizada en minutos",
+    heroDesc: "Tareas, hábitos, notas e IA en un solo lugar. Sin complicaciones.",
     startNow: "Comenzar ahora",
     learnMore: "Saber más",
     secure: "Seguro y Confiable",
@@ -427,7 +438,7 @@ const translations = {
     footer_privacy: "Política de Privacidad",
     footer_support: "Soporte",
     footer_contact: "Contáctanos",
-    footer_copyright: "© 2025 Future Task. Todos los derechos reservados.",
+    footer_copyright: "© 2026 Future Task. Todos los derechos reservados.",
     footer_terms_short: "Términos",
     footer_privacy_short: "Privacidad",
     footer_contact_short: "Contacto",
@@ -597,7 +608,7 @@ const translations = {
     footer_privacy: "Politique de Confidentialité",
     footer_support: "Support",
     footer_contact: "Contactez-nous",
-    footer_copyright: "© 2025 Future Task. Tous droits réservés.",
+    footer_copyright: "© 2026 Future Task. Tous droits réservés.",
     footer_terms_short: "Termes",
     footer_privacy_short: "Confidentialité",
     footer_contact_short: "Contact",
@@ -769,7 +780,7 @@ const translations = {
     footer_privacy: "Datenschutzrichtlinie",
     footer_support: "Support",
     footer_contact: "Kontaktieren Sie uns",
-    footer_copyright: "© 2025 Future Task. Alle Rechte vorbehalten.",
+    footer_copyright: "© 2026 Future Task. Alle Rechte vorbehalten.",
     footer_terms_short: "Bedingungen",
     footer_privacy_short: "Datenschutz",
     footer_contact_short: "Kontakt",
@@ -939,7 +950,7 @@ const translations = {
     footer_privacy: "Informativa sulla Privacy",
     footer_support: "Supporto",
     footer_contact: "Contattaci",
-    footer_copyright: "© 2025 Future Task. Tutti i diritti riservati.",
+    footer_copyright: "© 2026 Future Task. Tutti i diritti riservati.",
     footer_terms_short: "Termini",
     footer_privacy_short: "Privacy",
     footer_contact_short: "Contatto",
@@ -1209,33 +1220,138 @@ export default function HomePageClient() {
         </div>
       </section>
 
-      {/* Dashboard Preview */}
-      <section id="dashboard" className="container mx-auto px-4 py-20">
-        <Card className="bg-card border border-border p-8 rounded-2xl shadow-xl">
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="space-y-4">
-              <h2 className="text-3xl font-bold text-foreground">{t("powerfulDashboard")}</h2>
-              <p className="text-muted-foreground text-lg">{t("dashboardDesc")}</p>
-              <div className="space-y-3 pt-4">
-                {[
-                  { label: t("tasksCompleted"), value: "156", change: "+12.5%" },
-                  { label: t("productivity"), value: "94%", change: "+8.3%" },
-                  { label: t("timeSaved"), value: "24h", change: "+15.2%" },
-                ].map((stat, i) => (
-                  <div key={i} className="flex items-center justify-between p-4 rounded-xl bg-primary/10 border border-primary/30 hover:border-primary/60 hover:shadow-md hover:shadow-primary/20 transition-all duration-300">
-                    <span className="text-sm font-medium text-foreground">{stat.label}</span>
-                    <div className="flex items-center gap-3">
-                      <span className="font-bold text-lg">{stat.value}</span>
-                      <span className="text-sm font-semibold text-primary bg-primary/20 px-2 py-1 rounded-md">{stat.change}</span>
-                    </div>
-                  </div>
-                ))}
+      {/* Stats / Dashboard Section */}
+      <section id="dashboard" className="container mx-auto px-4 py-24">
+        <div className="text-center mb-14">
+          <h2 className="text-4xl font-bold mb-4">{t("powerfulDashboard")}</h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">{t("dashboardDesc")}</p>
+        </div>
+
+        {/* Top stat cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+          {[
+            { label: t("tasksCompleted"), value: "2,847", change: "+12.5%", icon: "✓" },
+            { label: t("productivity"), value: "94%", change: "+8.3%", icon: "↑" },
+            { label: t("timeSaved"), value: "128h", change: "+15.2%", icon: "◷" },
+          ].map((stat, i) => (
+            <div
+              key={i}
+              className="rounded-2xl border border-primary/20 bg-card p-6 flex flex-col gap-2 hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10 transition-all duration-300"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-muted-foreground font-medium">{stat.label}</span>
+                <span className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary text-sm font-bold">
+                  {stat.icon}
+                </span>
               </div>
+              <span className="text-4xl font-bold text-foreground">{stat.value}</span>
+              <span className="text-sm font-semibold text-primary">{stat.change} this month</span>
             </div>
-            <div className="relative h-[300px] rounded-xl bg-gradient-to-br from-primary/20 via-secondary/10 to-transparent border-2 border-primary/40 flex items-center justify-center overflow-hidden">
-              <div className="text-8xl opacity-40">📊</div>
-              <div
-                className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiHEhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGg``ZD0iTSAxMC
+          ))}
+        </div>
+
+        {/* Charts row */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Area chart — productivity over time */}
+          <div className="rounded-2xl border border-primary/20 bg-card p-6 hover:border-primary/40 transition-all duration-300">
+            <h3 className="text-sm font-semibold text-muted-foreground mb-1">Weekly Productivity</h3>
+            <p className="text-2xl font-bold text-foreground mb-4">
+              94% <span className="text-sm font-normal text-primary">avg this week</span>
+            </p>
+            <ResponsiveContainer width="100%" height={160}>
+              <AreaChart data={[
+                { day: "Mon", value: 72 },
+                { day: "Tue", value: 85 },
+                { day: "Wed", value: 78 },
+                { day: "Thu", value: 91 },
+                { day: "Fri", value: 94 },
+                { day: "Sat", value: 88 },
+                { day: "Sun", value: 96 },
+              ]}>
+                <defs>
+                  <linearGradient id="prodGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#4ade80" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="#4ade80" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                <XAxis dataKey="day" tick={{ fill: "#6b7280", fontSize: 12 }} axisLine={false} tickLine={false} />
+                <YAxis hide />
+                <Tooltip
+                  contentStyle={{ background: "#1a1f2e", border: "1px solid rgba(74,222,128,0.2)", borderRadius: "8px", color: "#fff" }}
+                  formatter={(v: number) => [`${v}%`, "Productivity"]}
+                />
+                <Area type="monotone" dataKey="value" stroke="#4ade80" strokeWidth={2} fill="url(#prodGrad)" dot={false} activeDot={{ r: 4, fill: "#4ade80" }} />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Bar chart — tasks completed per day */}
+          <div className="rounded-2xl border border-primary/20 bg-card p-6 hover:border-primary/40 transition-all duration-300">
+            <h3 className="text-sm font-semibold text-muted-foreground mb-1">Tasks Completed</h3>
+            <p className="text-2xl font-bold text-foreground mb-4">
+              407 <span className="text-sm font-normal text-primary">this week</span>
+            </p>
+            <ResponsiveContainer width="100%" height={160}>
+              <BarChart data={[
+                { day: "Mon", tasks: 48 },
+                { day: "Tue", tasks: 62 },
+                { day: "Wed", tasks: 55 },
+                { day: "Thu", tasks: 71 },
+                { day: "Fri", tasks: 83 },
+                { day: "Sat", tasks: 44 },
+                { day: "Sun", tasks: 44 },
+              ]} barSize={24}>
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                <XAxis dataKey="day" tick={{ fill: "#6b7280", fontSize: 12 }} axisLine={false} tickLine={false} />
+                <YAxis hide />
+                <Tooltip
+                  contentStyle={{ background: "#1a1f2e", border: "1px solid rgba(74,222,128,0.2)", borderRadius: "8px", color: "#fff" }}
+                  formatter={(v: number) => [v, "Tasks"]}
+                />
+                <Bar dataKey="tasks" fill="#4ade80" radius={[4, 4, 0, 0]} fillOpacity={0.85} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* Bottom row — activity grid + AI credits */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+          <div className="md:col-span-2 rounded-2xl border border-primary/20 bg-card p-6 hover:border-primary/40 transition-all duration-300">
+            <h3 className="text-sm font-semibold text-muted-foreground mb-4">Monthly Activity</h3>
+            <div className="grid grid-cols-7 gap-1.5">
+              {[0.1,0.35,0.6,1,0.35,0.1,0.6, 0.85,0.6,0.35,1,0.6,0.85,0.35, 0.1,0.6,1,0.35,0.85,0.6,0.1, 0.35,1,0.6,0.85,0.35,1,0.6, 0.6,0.1,0.35,0.85,0.6,1,0.35].map((opacity, i) => (
+                <div
+                  key={i}
+                  className="aspect-square rounded-sm"
+                  style={{ backgroundColor: `rgba(74,222,128,${opacity})` }}
+                />
+              ))}
+            </div>
+            <div className="flex items-center gap-2 mt-3 text-xs text-muted-foreground">
+              <span>Less</span>
+              {[0.1, 0.35, 0.6, 1].map((o, i) => (
+                <div key={i} className="w-3 h-3 rounded-sm" style={{ backgroundColor: `rgba(74,222,128,${o})` }} />
+              ))}
+              <span>More</span>
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-primary/20 bg-card p-6 flex flex-col justify-between hover:border-primary/40 transition-all duration-300">
+            <div>
+              <h3 className="text-sm font-semibold text-muted-foreground mb-1">AI Credits Used</h3>
+              <p className="text-4xl font-bold text-foreground">342</p>
+              <p className="text-sm text-primary mt-1">of 500 this month</p>
+            </div>
+            <div className="mt-4">
+              <div className="w-full bg-primary/10 rounded-full h-2.5 overflow-hidden">
+                <div className="bg-primary h-2.5 rounded-full" style={{ width: "68%" }} />
+              </div>
+              <p className="text-xs text-muted-foreground mt-2">68% used — 158 credits remaining</p>
+            </div>
+          </div>
+        </div>
+      </section>
 
 
 
@@ -1516,95 +1632,19 @@ export default function HomePageClient() {
         </div>
       </section>
 
-      {/* Testimonials Section - Adding social proof content */}
-      <section id="testimonials" className="container mx-auto px-4 py-20 bg-secondary/10">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold mb-4">{t("testimonialsTitle")}</h2>
-          <p className="text-muted-foreground">{t("testimonialsDesc")}</p>
-        </div>
-
-        <div className="max-w-6xl mx-auto">
-          {/* Testimonials Carousel - 3 fake testimonials */}
-          <div className="flex flex-col gap-8">
-            <div
-              id="testimonials-carousel"
-              className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory flex-1 scroll-smooth scrollbar-hide justify-center"
-            >
-              {/* Testimonial 1 */}
-              <Card className="glass-card p-6 flex-shrink-0 w-80 snap-center">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
-                    <span className="text-xl">👨‍💼</span>
-                  </div>
-                  <div>
-                    <div className="font-semibold">John D.</div>
-                    <div className="text-sm text-muted-foreground">{t("testimonial1Role")}</div>
-                  </div>
-                </div>
-                <div className="flex gap-1 mb-3">
-                  {[...Array(5)].map((_, i) => (
-                    <span key={i} className="text-primary">
-                      ⭐
-                    </span>
-                  ))}
-                </div>
-                <p className="text-sm text-muted-foreground italic">"{t("testimonial1Text")}"</p>
-              </Card>
-
-              {/* Testimonial 2 */}
-              <Card className="glass-card p-6 flex-shrink-0 w-80 snap-center">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
-                    <span className="text-xl">👩‍💻</span>
-                  </div>
-                  <div>
-                    <div className="font-semibold">Sarah M.</div>
-                    <div className="text-sm text-muted-foreground">{t("testimonial2Role")}</div>
-                  </div>
-                </div>
-                <div className="flex gap-1 mb-3">
-                  {[...Array(5)].map((_, i) => (
-                    <span key={i} className="text-primary">
-                      ⭐
-                    </span>
-                  ))}
-                </div>
-                <p className="text-sm text-muted-foreground italic">"{t("testimonial2Text")}"</p>
-              </Card>
-
-              {/* Testimonial 3 */}
-              <Card className="glass-card p-6 flex-shrink-0 w-80 snap-center">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
-                    <span className="text-xl">👨‍💻</span>
-                  </div>
-                  <div>
-                    <div className="font-semibold">Emma K.</div>
-                    <div className="text-sm text-muted-foreground">{t("testimonial3Role")}</div>
-                  </div>
-                </div>
-                <div className="flex gap-1 mb-3">
-                  {[...Array(5)].map((_, i) => (
-                    <span key={i} className="text-primary">
-                      ⭐
-                    </span>
-                  ))}
-                </div>
-                <p className="text-sm text-muted-foreground italic">"{t("testimonial3Text")}"</p>
-              </Card>
-            </div>
-
-            <div className="flex justify-center">
-              <a
-                href={`https://${language === "es" ? "es" : language === "fr" ? "fr" : language === "de" ? "de" : language === "it" ? "it" : "www"}.trustpilot.com/review/future-task.com`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground px-8 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 neon-glow-hover"
-              >
-                {t("seeAndWriteReviews")}
-              </a>
-            </div>
-          </div>
+      {/* Social Proof — no fake testimonials, just honest CTA */}
+      <section id="testimonials" className="container mx-auto px-4 py-20">
+        <div className="rounded-2xl border border-primary/20 bg-card p-12 text-center max-w-3xl mx-auto">
+          <p className="text-5xl font-bold text-primary mb-2">+500</p>
+          <p className="text-xl font-semibold text-foreground mb-4">users already organized with Future Task</p>
+          <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
+            Join a growing community of students, freelancers, and teams who use Future Task to get things done.
+          </p>
+          <Link href="/signup">
+            <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl font-semibold px-10">
+              Start for free
+            </Button>
+          </Link>
         </div>
       </section>
 
