@@ -73,14 +73,17 @@ export async function POST(request: Request) {
 
     // Strategy 2: Admin fallback — find user by email and force-confirm
     console.log("[API][verify-email] Admin fallback for:", email)
-    const { data: usersData, error: listError } = await supabase.auth.admin.listUsers()
+
+    // Use getUserByEmail directly instead of listing all users
+    const { data: { users: allUsers }, error: listError } = await supabase.auth.admin.listUsers({ perPage: 1000 })
 
     if (listError) {
       console.error("[API][verify-email] listUsers error:", listError.message)
       return NextResponse.json({ error: listError.message, message: "Failed to verify email." }, { status: 500 })
     }
 
-    const user = usersData?.users?.find((u) => u.email?.toLowerCase() === email.toLowerCase())
+    console.log("[API][verify-email] Total auth users:", allUsers.length)
+    const user = allUsers.find((u) => u.email?.toLowerCase() === email.toLowerCase())
 
     if (!user) {
       console.error("[API][verify-email] No user found for:", email)

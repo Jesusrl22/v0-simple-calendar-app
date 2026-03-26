@@ -1,38 +1,35 @@
 {
-  "name": "Calendar Task Manager",
-  "short_name": "TaskCal",
-  "description": "Manage your tasks and get notifications",
+  "name": "Future Task",
+  "short_name": "Future Task",
+  "description": "Organize your tasks, notes, and projects with AI-powered assistance.",
   "start_url": "/app",
   "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#8b5cf6",
+  "background_color": "#0d1117",
+  "theme_color": "#54d946",
   "orientation": "portrait-primary",
   "scope": "/",
   "categories": ["productivity"],
-  "screenshots": [
-    {
-      "src": "/favicon.jpg",
-      "sizes": "512x512",
-      "type": "image/jpeg",
-      "form_factor": "wide"
-    }
-  ],
   "icons": [
     {
-      "src": "/favicon.ico",
-      "sizes": "any",
-      "type": "image/x-icon"
+      "src": "/future-task-logo-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
     },
     {
-      "src": "/favicon.jpg",
-      "sizes": "512x512",
-      "type": "image/jpeg",
+      "src": "/future-task-logo-64x64.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    },
+    {
+      "src": "/future-task-logo-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/apple-touch-icon.jpg",
+      "src": "/apple-icon.png",
       "sizes": "180x180",
-      "type": "image/jpeg"
+      "type": "image/png"
     }
   ],
   "permissions": [
