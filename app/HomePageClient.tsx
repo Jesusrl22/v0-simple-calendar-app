@@ -1358,14 +1358,6 @@ export default function HomePageClient() {
 
 
 
-                    0IEwgMCA0MC
-                    0IDEwIiBmaWxsPSJub25lIiBzdHJva2U9InJnYmEoMTg0LDI1NSw3OCwwLjEpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAl"
-              />
-            </div>
-          </div>
-        </Card>
-      </section>
-
       {/* How It Works Section - Adding educational content for AdSense */}
       <section id="how-it-works" className="container mx-auto px-4 py-20 bg-secondary/10">
         <div className="text-center mb-16">
