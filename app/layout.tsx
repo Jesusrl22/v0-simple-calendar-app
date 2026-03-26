@@ -24,6 +24,10 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   keywords: ["task management", "productivity app", "AI assistant", "todo list", "team collaboration", "task tracking", "productivity tools"],
   authors: [{ name: "Future Task" }],
+  icons: {
+    icon: "/favicon.png",
+    apple: "/favicon.png",
+  },
   verification: {
     other: {
       "google-adsense-account": ["ca-pub-3746054566396266"],
@@ -46,8 +50,6 @@ export default function RootLayout({
   return (
     <html lang="en" data-theme="default" suppressHydrationWarning>
       <head>
-        <link rel="icon" href="/future-task-logo-32x32.png" type="image/png" sizes="32x32" />
-        <link rel="apple-touch-icon" href="/future-task-logo-128x128.png" />
         <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
         <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
