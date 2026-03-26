@@ -33,24 +33,28 @@ export default function ConfirmPage() {
           console.log('[CLIENT] Hash params - accessToken:', accessToken ? 'present' : 'missing', 'type:', hashType)
 
           // If Supabase already verified and sent back an access_token, email is confirmed
-          if (accessToken && (hashType === 'signup' || hashType === 'email_change')) {
-            console.log('[CLIENT] Access token found in hash — Supabase already confirmed the email')
-            // Extract user email from access token to update our DB
+          if (accessToken && (hashType === 'signup' || hashType === 'email_change' || !hashType)) {
+            console.log('[CLIENT] Access token in hash — Supabase already confirmed email')
             try {
-              const payload = JSON.parse(atob(accessToken.split('.')[1]))
-              const userEmail = payload.email
-              const userId = payload.sub
-              console.log('[CLIENT] Token payload - email:', userEmail, 'userId:', userId)
+              const parts = accessToken.split('.')
+              if (parts.length === 3) {
+                const payload = JSON.parse(atob(parts[1].replace(/-/g, '+').replace(/_/g, '/')))
+                const userEmail = payload.email
+                console.log('[CLIENT] JWT email:', userEmail)
 
-              if (userId) {
-                await fetch('/api/auth/verify-email', {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ token_hash: token || '', type: hashType, email: userEmail }),
-                })
+                if (userEmail) {
+                  // Call verify-email to create the profile in users table
+                  const res = await fetch('/api/auth/verify-email', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: userEmail, type: 'signup', token_hash: '' }),
+                  })
+                  const data = await res.json()
+                  console.log('[CLIENT] verify-email response:', res.status, data)
+                }
               }
             } catch (e) {
-              console.log('[CLIENT] Could not parse access token, but Supabase already verified')
+              console.log('[CLIENT] Could not parse access token JWT:', e)
             }
             setStatus('success')
             setMessage('Your email has been successfully verified! Redirecting to login...')
