@@ -16,6 +16,7 @@ import {
   Users,
   Activity,
 } from "@/components/icons"
+import Image from "next/image"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
@@ -97,9 +98,13 @@ export function AppSidebar({ onNavigate }: { onNavigate?: () => void }) {
       {/* Logo */}
       <div className="p-4 sm:p-6 border-b border-primary/20 flex-shrink-0">
         <Link href="/app" className="flex items-center gap-2 sm:gap-3 group" onClick={handleNavClick}>
-          <div className="w-9 sm:w-10 h-9 sm:h-10 rounded-lg bg-gradient-to-br from-primary/40 to-accent/20 flex items-center justify-center group-hover:from-primary/60 group-hover:to-accent/40 transition-all duration-300 border border-primary/30 flex-shrink-0">
-            <span className="text-sm sm:text-lg font-bold text-primary">FT</span>
-          </div>
+          <Image
+            src="/future-task-logo-64x64.png"
+            alt="Future Task"
+            width={40}
+            height={40}
+            className="w-9 sm:w-10 h-9 sm:h-10 rounded-lg flex-shrink-0 transition-transform duration-300 group-hover:scale-110"
+          />
           <div className="hidden sm:block">
             <span className="text-lg font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Future</span>
             <span className="text-lg font-bold ml-1">Task</span>
