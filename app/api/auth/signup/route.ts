@@ -45,36 +45,42 @@ export async function POST(request: Request) {
     const userId = authData?.user?.id
     console.log("[SERVER][v0] User created in auth with ID:", userId, "- email NOT confirmed yet")
 
-    // Generate verification link using Supabase admin API
-    console.log("[SERVER][v0] Generating verification link for email:", email)
-    let verificationUrl = ""
-    
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://future-task.com"
+    let verificationUrl = `${appUrl}/auth/confirm?email=${encodeURIComponent(email)}`
+
     try {
-      // Use Supabase admin generateLink to create a proper verification link
       const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({
         type: "signup",
         email: email,
         options: {
-          redirectTo: `${process.env.NEXT_PUBLIC_APP_URL || 'https://future-task.com'}/auth/confirm`,
+          redirectTo: `${appUrl}/auth/confirm`,
         },
       })
 
-      if (linkError) {
+      if (linkError || !linkData) {
         console.error("[SERVER][v0] generateLink error:", linkError?.message)
-        verificationUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://future-task.com'}/auth/confirm?email=${encodeURIComponent(email)}`
-      } else if (linkData?.properties?.verification_url) {
-        verificationUrl = linkData.properties.verification_url
-        console.log("[SERVER][v0] Verification link generated successfully")
       } else {
-        console.warn("[SERVER][v0] No verification URL in response, using fallback")
-        verificationUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://future-task.com'}/auth/confirm?email=${encodeURIComponent(email)}`
+        const props = linkData.properties as any
+        console.log("[SERVER][v0] generateLink props keys:", Object.keys(props || {}).join(", "))
+
+        if (props?.hashed_token) {
+          // Build URL directly to our confirm page with token_hash — avoids Supabase redirect losing the token
+          verificationUrl = `${appUrl}/auth/confirm?token_hash=${props.hashed_token}&type=signup&email=${encodeURIComponent(email)}`
+          console.log("[SERVER][v0] Built confirm URL with hashed_token")
+        } else if (props?.action_link) {
+          verificationUrl = props.action_link
+          console.log("[SERVER][v0] Using action_link from Supabase")
+        } else if (props?.verification_url) {
+          // Last resort — Supabase URL that redirects with hash fragment
+          verificationUrl = props.verification_url
+          console.log("[SERVER][v0] Using verification_url (will arrive as hash fragment)")
+        }
       }
-    } catch (linkGenError) {
-      console.error("[SERVER][v0] Exception generating link:", linkGenError)
-      verificationUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://future-task.com'}/auth/confirm?email=${encodeURIComponent(email)}`
+    } catch (e: any) {
+      console.error("[SERVER][v0] generateLink exception:", e?.message)
     }
 
-    console.log("[SERVER][v0] Verification URL ready for email")
+    console.log("[SERVER][v0] verificationUrl has token_hash:", verificationUrl.includes("token_hash"))
 
     // Send verification email via Brevo
     console.log("[SERVER][v0] Sending verification email via Brevo...")
