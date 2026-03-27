@@ -944,7 +944,6 @@ const translations = {
     footer_privacy_short: "Privacy",
     footer_contact_short: "Contatto",
   },
-  nextGenerationPlatform: "Next Generation Platform",
 }
 
 type Language = "en" | "es" | "fr" | "de" | "it"
