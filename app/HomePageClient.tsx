@@ -450,9 +450,8 @@ const translations = {
     about: "À propos",
     login: "Connexion",
     signup: "S'inscrire",
-    hero: "Systèmes Intelligents, Collaborez Sans Effort, Réussissez Efficacement",
-    heroDesc:
-      "Boostez votre productivité avec une gestion intelligente des tâches, une assistance IA et une collaboration fluide",
+    hero: "Ta semaine organisée en minutes",
+    heroDesc: "Tâches, habitudes, notes et IA en un seul endroit. Sans complications.",
     startNow: "Commencer maintenant",
     learnMore: "En savoir plus",
     secure: "Sécurisé et Fiable",
@@ -484,7 +483,7 @@ const translations = {
     freeTasks: "Tâches illimitées",
     freePomodoro: "Minuteur Pomodoro basique",
     freeThemes: "5 thèmes gratuits",
-    freeAchievements: "Logros gratuitos",
+    freeAchievements: "Réalisations gratuites",
     freeNoTeams: "Pas de collaboration d'équipe",
     aiCredits: "50 crédits IA/mois",
     basicTasks: "Gestion de tâches basique",
@@ -497,7 +496,7 @@ const translations = {
     proStatistics: "Statistiques et analyses",
     proCustomTheme: "Créateur de thèmes personnalisés",
     proAllThemes: "Tous les 15 thèmes + personnalisés",
-    proAchievements: "Tous les achievements",
+    proAchievements: "Toutes les réalisations",
     proUnlimitedTeams: "Collaboration d'équipe illimitée",
     proTeamStats: "Statistiques d'équipe",
     premium: "Premium",
@@ -506,7 +505,7 @@ const translations = {
     premiumPomodoro: "Paramètres Pomodoro avancés",
     premiumNotes: "Notes et liste de souhaits",
     premiumThemes: "10 thèmes (Gratuits + Premium)",
-    premiumAchievements: "Logros Premium",
+    premiumAchievements: "Réalisations Premium",
     premiumTeams: "Collaboration d'équipe",
     premiumSharedTasks: "Tâches partagées",
     teamFeatures: "Collaboration d'équipe",
@@ -519,18 +518,15 @@ const translations = {
     year: "/an",
     blogTitle: "Blog et Ressources",
     blogDesc: "Découvrez des conseils, stratégies et idées pour booster votre productivité",
-    blogPost1Title: "Maîtrisez la Technique Pomodoro",
-    blogPost1Desc:
-      "Apprenez à diviser votre travail en intervalles concentrés pour maximiser la productivité et éviter l'épuisement. Découvrez la science derrière cette méthode de gestion du temps.",
-    blogPost1ReadTime: "5 min read",
-    blogPost2Title: "Méthodes d'Étude Efficaces pour les Étudiants",
-    blogPost2Desc:
-      "Découvrez des techniques d'étude éprouvées, notamment la répétition espacée, le rappel actif et les cartes mentales pour améliorer la rétention et réussir vos examens.",
-    blogPost2ReadTime: "7 min read",
-    blogPost3Title: "Boostez la Productivité avec les Assistants IA",
-    blogPost3Desc:
-      "Explorez comment les outils d'IA peuvent vous aider à automatiser les tâches, générer des idées et rationaliser votre flux de travail pour accomplir plus en moins de temps.",
-    blogPost3ReadTime: "6 min read",
+    blogPost1Title: "Travail Profond vs Travail Superficiel",
+    blogPost1Desc: "Apprenez comment protéger votre temps de concentration et éliminer les distractions",
+    blogPost1ReadTime: "8 min de lecture",
+    blogPost2Title: "Comment Construire un Deuxième Cerveau",
+    blogPost2Desc: "Maîtrisez les applications de gestion des tâches pour organiser vos pensées et idées",
+    blogPost2ReadTime: "12 min de lecture",
+    blogPost3Title: "La Science de la Formation des Habitudes",
+    blogPost3Desc: "Découvrez pourquoi 21 jours est un mythe et comment vraiment construire des habitudes durables",
+    blogPost3ReadTime: "10 min de lecture",
     howItWorksTitle: "Comment ça marche",
     howItWorksDesc: "Commencez en quelques minutes avec notre plateforme simple et intuitive.",
     step1Title: "Inscription",
@@ -590,7 +586,7 @@ const translations = {
     yourReview: "Votre Avis",
     enterReview: "Entrez votre avis ici...",
     submitReview: "Soumettre l'Avis",
-    nextGenerationPlatform: "Next Generation Platform",
+    nextGenerationPlatform: "Plateforme de Nouvelle Génération",
     user_reviews_title: "Avis des Utilisateurs",
     reviews_from_community: "Avis de notre incroyable communauté",
     view_all_reviews: "Voir tous les avis",
@@ -599,7 +595,7 @@ const translations = {
     review_title: "Titre de l'avis",
     submit_review: "Soumettre l'avis",
     all_reviews: "Tous les avis",
-    addReview: "Ajouter un Avis", // Added for the new button
+    addReview: "Ajouter un Avis",
     seeAndWriteReviews: "Voir et Écrire des Avis",
     footer_description: "Gestion intelligente des tâches avec assistance IA pour une productivité accrue.",
     footer_product: "Produit",
@@ -609,7 +605,7 @@ const translations = {
     footer_support: "Support",
     footer_contact: "Contactez-nous",
     footer_copyright: "© 2026 Future Task. Tous droits réservés.",
-    footer_terms_short: "Termes",
+    footer_terms_short: "Conditions",
     footer_privacy_short: "Confidentialité",
     footer_contact_short: "Contact",
   },
@@ -620,9 +616,8 @@ const translations = {
     about: "Über uns",
     login: "Anmelden",
     signup: "Registrieren",
-    hero: "Intelligente Systeme, Nahtlos Zusammenarbeiten, Effizient Erfolgreich Sein",
-    heroDesc:
-      "Steigern Sie Ihre Produktivität mit intelligentem Aufgabenmanagement, KI-Unterstützung und nahtloser Zusammenarbeit",
+    hero: "Deine Woche in Minuten organisiert",
+    heroDesc: "Aufgaben, Gewohnheiten, Notizen und KI an einem Ort. Ohne Komplexität.",
     startNow: "Jetzt starten",
     learnMore: "Mehr erfahren",
     secure: "Sicher & Zuverlässig",
@@ -689,18 +684,15 @@ const translations = {
     year: "/Jahr",
     blogTitle: "Blog & Ressourcen",
     blogDesc: "Entdecken Sie Tipps, Strategien und Erkenntnisse zur Steigerung Ihrer Produktivität",
-    blogPost1Title: "Meistern Sie die Pomodoro-Technik",
-    blogPost1Desc:
-      "Lernen Sie, Ihre Arbeit in fokussierte Intervalle aufzuteilen, um die Produktivität zu maximieren und Burnout zu vermeiden. Entdecken Sie die Wissenschaft hinter dieser Zeitmanagement-Methode.",
-    blogPost1ReadTime: "5 min read",
-    blogPost2Title: "Effektive Lernmethoden für Studenten",
-    blogPost2Desc:
-      "Entdecken Sie bewährte Lerntechniken wie verteiltes Lernen, aktives Abrufen und Mind Mapping, um die Merkfähigkeit zu verbessern und Ihre Prüfungen zu bestehen.",
-    blogPost2ReadTime: "7 min read",
-    blogPost3Title: "Steigern Sie die Produktivität mit KI-Assistenten",
-    blogPost3Desc:
-      "Erkunden Sie, wie KI-Tools Ihnen helfen können, Aufgaben zu automatisieren, Ideen zu generieren und Ihren Arbeitsablauf zu optimieren, um in kürzerer Zeit mehr zu erreichen.",
-    blogPost3ReadTime: "6 min read",
+    blogPost1Title: "Tiefenarbeit vs. Oberflächliche Arbeit",
+    blogPost1Desc: "Erfahren Sie, wie Sie Ihre Fokuszeit schützen und Ablenkungen beseitigen",
+    blogPost1ReadTime: "8 Min. Lesedauer",
+    blogPost2Title: "Wie Man ein Zweites Gehirn Aufbaut",
+    blogPost2Desc: "Beherrschen Sie Task-Management-Apps, um Ihre Gedanken und Ideen zu organisieren",
+    blogPost2ReadTime: "12 Min. Lesedauer",
+    blogPost3Title: "Die Wissenschaft der Gewöhnungsbildung",
+    blogPost3Desc: "Entdecken Sie, warum 21 Tage ein Mythos sind und wie man wirklich dauerhafte Gewohnheiten aufbaut",
+    blogPost3ReadTime: "10 Min. Lesedauer",
     howItWorksTitle: "So funktioniert's",
     howItWorksDesc: "Beginnen Sie in wenigen Minuten mit unserer einfachen und intuitiven Plattform.",
     step1Title: "Anmelden",
@@ -720,8 +712,7 @@ const translations = {
     tip3Title: "Verfolgen Sie Ihren Fortschritt",
     tip3Desc: "Überwachen Sie Ihre Erfolge und identifizieren Sie Verbesserungsmöglichkeiten.",
     tip4Title: "Nutzen Sie KI-Unterstützung",
-    tip4Desc:
-      "Lassen Sie sich von KI bei der Automatisierung von Aufgaben und der Optimierung Ihres Arbeitsablaufs helfen.",
+    tip4Desc: "Lassen Sie sich von KI bei der Automatisierung von Aufgaben und der Optimierung Ihres Arbeitsablaufs helfen.",
     testimonialsTitle: "Was unsere Benutzer sagen",
     testimonialsDesc: "Sehen Sie, wie Future Task Menschen hilft, ihre Ziele zu erreichen.",
     testimonial1Role: "CEO bei Tech Solutions",
@@ -761,7 +752,7 @@ const translations = {
     yourReview: "Ihre Bewertung",
     enterReview: "Geben Sie Ihre Bewertung hier ein...",
     submitReview: "Bewertung senden",
-    nextGenerationPlatform: "Next Generation Platform",
+    nextGenerationPlatform: "Plattform der nächsten Generation",
     user_reviews_title: "Benutzerbewertungen",
     reviews_from_community: "Bewertungen aus unserer großartigen Community",
     view_all_reviews: "Alle Bewertungen anzeigen",
@@ -770,7 +761,7 @@ const translations = {
     review_title: "Titel der Bewertung",
     submit_review: "Bewertung absenden",
     all_reviews: "Alle Bewertungen",
-    addReview: "Bewertung Hinzufügen", // Added for the new button
+    addReview: "Bewertung Hinzufügen",
     seeAndWriteReviews: "Bewertungen Ansehen & Schreiben",
     footer_description:
       "Intelligentes Aufgabenmanagement mit KI-gestützter Unterstützung für verbesserte Produktivität.",
@@ -785,6 +776,8 @@ const translations = {
     footer_privacy_short: "Datenschutz",
     footer_contact_short: "Kontakt",
   },
+    footer_contact_short: "Kontakt",
+  },
   it: {
     features: "Funzionalità",
     dashboard: "Dashboard",
@@ -792,9 +785,8 @@ const translations = {
     about: "Chi siamo",
     login: "Accedi",
     signup: "Registrati",
-    hero: "Sistemi Intelligenti, Collabora Senza Sforzo, Raggiungi il Successo Efficacemente",
-    heroDesc:
-      "Potenzia la tua produttività con gestione intelligente delle attività, assistenza IA e collaborazione fluida",
+    hero: "La tua settimana organizzata in minuti",
+    heroDesc: "Attività, abitudini, note e IA in un unico posto. Senza complicazioni.",
     startNow: "Inizia ora",
     learnMore: "Scopri di più",
     secure: "Sicuro e Affidabile",
@@ -826,7 +818,7 @@ const translations = {
     freeTasks: "Attività illimitate",
     freePomodoro: "Timer Pomodoro di base",
     freeThemes: "5 temi gratuiti",
-    freeAchievements: "Erogazioni gratuite",
+    freeAchievements: "Realizzazioni gratuite",
     freeNoTeams: "Nessuna collaborazione di team",
     aiCredits: "50 crediti IA/mese",
     basicTasks: "Gestione attività base",
@@ -834,12 +826,12 @@ const translations = {
     basicPomodoro: "Timer Pomodoro",
     pro: "Pro",
     proDesc: "Per utenti esperti",
-    proAiCredits: "500 crediti IA/mes",
+    proAiCredits: "500 crediti IA/mese",
     proHabits: "Tracciatore di abitudini",
     proStatistics: "Statistiche & Analisi",
     proCustomTheme: "Creatore di temi personalizzato",
     proAllThemes: "Tutti i 15 temi + personalizzato",
-    proAchievements: "Tutte le erogazioni",
+    proAchievements: "Tutte le realizzazioni",
     proUnlimitedTeams: "Collaborazione illimitata di team",
     proTeamStats: "Statistiche di team",
     premium: "Premium",
@@ -847,8 +839,8 @@ const translations = {
     premiumAiCredits: "100 crediti IA/mese",
     premiumPomodoro: "Impostazioni Pomodoro avanzate",
     premiumNotes: "Note e lista desideri",
-    premiumThemes: "10 temi ( gratuiti + Premium)",
-    premiumAchievements: "Erogazioni Premium",
+    premiumThemes: "10 temi (Gratuiti + Premium)",
+    premiumAchievements: "Realizzazioni Premium",
     premiumTeams: "Collaborazione di team",
     premiumSharedTasks: "Attività condivise",
     teamFeatures: "Collaborazione di team",
@@ -861,18 +853,15 @@ const translations = {
     year: "/anno",
     blogTitle: "Blog e Risorse",
     blogDesc: "Scopri consigli, strategie e intuizioni per aumentare la tua produttività",
-    blogPost1Title: "Padroneggia la Tecnica Pomodoro",
-    blogPost1Desc:
-      "Impara a dividere il tuo lavoro in intervalli concentrati per massimizzare la produttività ed evitare il burnout. Scopri la scienza dietro questo metodo di gestione del tempo.",
-    blogPost1ReadTime: "5 min read",
-    blogPost2Title: "Metodi di Studio Efficaci per Studenti",
-    blogPost2Desc:
-      "Scopri tecniche di studio comprovate tra cui ripetizione spaziata, richiamo attivo e mappe mentali per migliorare la ritenzione e superare gli esami.",
-    blogPost2ReadTime: "7 min read",
-    blogPost3Title: "Aumenta la Produttività con Assistenti IA",
-    blogPost3Desc:
-      "Esplora come gli strumenti di IA possono aiutarti ad automatizzare le attività, generare idee e ottimizzare il tuo flusso di lavoro per ottenere di più in meno tempo.",
-    blogPost3ReadTime: "6 min read",
+    blogPost1Title: "Lavoro Profondo vs Lavoro Superficiale",
+    blogPost1Desc: "Scopri come proteggere il tuo tempo di concentrazione ed eliminare le distrazioni",
+    blogPost1ReadTime: "8 min di lettura",
+    blogPost2Title: "Come Costruire un Secondo Cervello",
+    blogPost2Desc: "Padroneggia le app di gestione delle attività per organizzare i tuoi pensieri e idee",
+    blogPost2ReadTime: "12 min di lettura",
+    blogPost3Title: "La Scienza della Formazione di Abitudini",
+    blogPost3Desc: "Scopri perché 21 giorni è un mito e come costruire veramente abitudini durature",
+    blogPost3ReadTime: "10 min di lettura",
     howItWorksTitle: "Come Funziona",
     howItWorksDesc: "Inizia in pochi minuti con la nostra piattaforma semplice e intuitiva.",
     step1Title: "Registrati",
@@ -909,7 +898,7 @@ const translations = {
     faq1Question: "Cos'è Future Task?",
     faq1Answer:
       "Future Task è una piattaforma di produttività intelligente progettata per aiutare individui e team a gestire attività, collaborare e raggiungere i propri obiettivi in modo più efficiente con assistenza basata sull'IA.",
-    faq2Question: "Esiste un plan gratuito?",
+    faq2Question: "Esiste un piano gratuito?",
     faq2Answer:
       "Sì, offriamo un piano gratuito con funzionalità essenziali perfette per iniziare. Puoi passare ai nostri piani Pro o Premium per capacità più avanzate.",
     faq3Question: "Come funziona l'assistenza IA?",
@@ -932,7 +921,7 @@ const translations = {
     yourReview: "La tua recensione",
     enterReview: "Inserisci la tua recensione qui...",
     submitReview: "Invia Recensione",
-    nextGenerationPlatform: "Next Generation Platform",
+    nextGenerationPlatform: "Piattaforma di Prossima Generazione",
     user_reviews_title: "Recensioni Utenti",
     reviews_from_community: "Recensioni dalla nostra fantastica community",
     view_all_reviews: "Visualizza Tutte le Recensioni",
@@ -941,7 +930,7 @@ const translations = {
     review_title: "Titolo della recensione",
     submit_review: "Invia recensione",
     all_reviews: "Tutte le recensioni",
-    addReview: "Aggiungi Recensione", // Added for the new button
+    addReview: "Aggiungi Recensione",
     seeAndWriteReviews: "Visualizza e Scrivi Recensioni",
     footer_description: "Gestione attività intelligente con assistenza AI per una maggiore produttività.",
     footer_product: "Prodotto",
@@ -955,7 +944,6 @@ const translations = {
     footer_privacy_short: "Privacy",
     footer_contact_short: "Contatto",
   },
-  nextGenerationPlatform: "Next Generation Platform",
 }
 
 type Language = "en" | "es" | "fr" | "de" | "it"
@@ -1683,11 +1671,15 @@ export default function HomePageClient() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          {/* Blog Post 1 - Pomodoro Technique */}
-          <Link href="/blog/pomodoro-technique">
+          {/* Blog Post 1 - Deep Work */}
+          <Link href="/blog/deep-work">
             <Card className="glass-card overflow-hidden neon-glow-hover transition-all duration-300 cursor-pointer group">
               <div className="h-48 bg-gradient-to-br from-primary/30 to-primary/10 relative overflow-hidden">
-                <div className="absolute inset-0 flex items-center justify-center text-6xl opacity-40">🍅</div>
+                <img 
+                  src="/blog-covers/deep-work.jpg" 
+                  alt="Deep Work"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
               </div>
               <div className="p-6 space-y-3">
                 <div className="text-xs text-primary font-semibold uppercase tracking-wide">
@@ -1697,10 +1689,22 @@ export default function HomePageClient() {
                   {lang === "de" && "Produktivität"}
                   {lang === "it" && "Produttività"}
                 </div>
-                <h3 className="text-xl font-bold group-hover:text-primary transition-colors">{t("blogPost1Title")}</h3>
-                <p className="text-sm text-muted-foreground line-clamp-3">{t("blogPost1Desc")}</p>
+                <h3 className="text-xl font-bold group-hover:text-primary transition-colors">
+                  {lang === "en" && "Deep Work vs Shallow Work"}
+                  {lang === "es" && "Trabajo Profundo vs Trabajo Superficial"}
+                  {lang === "fr" && "Travail en Profondeur vs Travail Superficiel"}
+                  {lang === "de" && "Tiefe Arbeit vs Oberflächliche Arbeit"}
+                  {lang === "it" && "Lavoro Profondo vs Lavoro Superficiale"}
+                </h3>
+                <p className="text-sm text-muted-foreground line-clamp-2">
+                  {lang === "en" && "Learn how to protect your focus time and eliminate distractions"}
+                  {lang === "es" && "Aprende cómo proteger tu tiempo de enfoque y eliminar distracciones"}
+                  {lang === "fr" && "Découvrez comment protéger votre temps de concentration"}
+                  {lang === "de" && "Erfahren Sie, wie Sie Ihre Fokuszeit schützen"}
+                  {lang === "it" && "Scopri come proteggere il tuo tempo di concentrazione"}
+                </p>
                 <div className="flex items-center justify-between pt-2">
-                  <span className="text-xs text-muted-foreground">{t("blogPost1ReadTime")}</span>
+                  <span className="text-xs text-muted-foreground">8 min {lang === "en" && "read" || lang === "es" && "de lectura" || lang === "fr" && "de lecture" || lang === "de" && "Lesezeit" || lang === "it" && "di lettura"}</span>
                   <span className="text-primary text-sm font-medium group-hover:translate-x-1 transition-transform inline-block">
                     →
                   </span>
@@ -1709,24 +1713,40 @@ export default function HomePageClient() {
             </Card>
           </Link>
 
-          {/* Blog Post 2 - Study Techniques */}
-          <Link href="/blog/study-methods">
+          {/* Blog Post 2 - Second Brain */}
+          <Link href="/blog/second-brain">
             <Card className="glass-card overflow-hidden neon-glow-hover transition-all duration-300 cursor-pointer group">
               <div className="h-48 bg-gradient-to-br from-blue-500/30 to-blue-500/10 relative overflow-hidden">
-                <div className="absolute inset-0 flex items-center justify-center text-6xl opacity-40">📚</div>
+                <img 
+                  src="/blog-covers/second-brain.jpg" 
+                  alt="Second Brain"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
               </div>
               <div className="p-6 space-y-3">
                 <div className="text-xs text-blue-400 font-semibold uppercase tracking-wide">
-                  {lang === "en" && "Study Tips"}
-                  {lang === "es" && "Consejos de Estudio"}
-                  {lang === "fr" && "Conseils d'Étude"}
-                  {lang === "de" && "Lerntipps"}
-                  {lang === "it" && "Consigli di Studio"}
+                  {lang === "en" && "Productivity"}
+                  {lang === "es" && "Productividad"}
+                  {lang === "fr" && "Productivité"}
+                  {lang === "de" && "Produktivität"}
+                  {lang === "it" && "Produttività"}
                 </div>
-                <h3 className="text-xl font-bold group-hover:text-primary transition-colors">{t("blogPost2Title")}</h3>
-                <p className="text-sm text-muted-foreground line-clamp-3">{t("blogPost2Desc")}</p>
+                <h3 className="text-xl font-bold group-hover:text-primary transition-colors">
+                  {lang === "en" && "How to Build a Second Brain"}
+                  {lang === "es" && "Cómo Construir un Segundo Cerebro"}
+                  {lang === "fr" && "Comment Construire un Deuxième Cerveau"}
+                  {lang === "de" && "Wie Man ein Zweites Gehirn Aufbaut"}
+                  {lang === "it" && "Come Costruire un Secondo Cervello"}
+                </h3>
+                <p className="text-sm text-muted-foreground line-clamp-2">
+                  {lang === "en" && "Master task management apps to organize your thoughts and ideas"}
+                  {lang === "es" && "Domina las apps de gestión de tareas para organizar tus ideas"}
+                  {lang === "fr" && "Maîtrisez les applications de gestion des tâches"}
+                  {lang === "de" && "Beherrsche Task-Management-Apps für Produktivität"}
+                  {lang === "it" && "Padroneggia le app di gestione delle attività"}
+                </p>
                 <div className="flex items-center justify-between pt-2">
-                  <span className="text-xs text-muted-foreground">{t("blogPost2ReadTime")}</span>
+                  <span className="text-xs text-muted-foreground">12 min {lang === "en" && "read" || lang === "es" && "de lectura" || lang === "fr" && "de lecture" || lang === "de" && "Lesezeit" || lang === "it" && "di lettura"}</span>
                   <span className="text-primary text-sm font-medium group-hover:translate-x-1 transition-transform inline-block">
                     →
                   </span>
@@ -1735,24 +1755,40 @@ export default function HomePageClient() {
             </Card>
           </Link>
 
-          {/* Blog Post 3 - AI Productivity */}
-          <Link href="/blog/ai-productivity">
+          {/* Blog Post 3 - Habit Formation */}
+          <Link href="/blog/habit-formation">
             <Card className="glass-card overflow-hidden neon-glow-hover transition-all duration-300 cursor-pointer group">
               <div className="h-48 bg-gradient-to-br from-purple-500/30 to-purple-500/10 relative overflow-hidden">
-                <div className="absolute inset-0 flex items-center justify-center text-6xl opacity-40">🤖</div>
+                <img 
+                  src="/blog-covers/habit-formation.jpg" 
+                  alt="Habit Formation"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
               </div>
               <div className="p-6 space-y-3">
                 <div className="text-xs text-purple-400 font-semibold uppercase tracking-wide">
-                  {lang === "en" && "AI & Automation"}
-                  {lang === "es" && "IA y Automatización"}
-                  {lang === "fr" && "IA et Automatisation"}
-                  {lang === "de" && "KI & Automatisierung"}
-                  {lang === "it" && "IA e Automazione"}
+                  {lang === "en" && "Habits & Science"}
+                  {lang === "es" && "Hábitos y Ciencia"}
+                  {lang === "fr" && "Habitudes et Science"}
+                  {lang === "de" && "Gewohnheiten und Wissenschaft"}
+                  {lang === "it" && "Abitudini e Scienza"}
                 </div>
-                <h3 className="text-xl font-bold group-hover:text-primary transition-colors">{t("blogPost3Title")}</h3>
-                <p className="text-sm text-muted-foreground line-clamp-3">{t("blogPost3Desc")}</p>
+                <h3 className="text-xl font-bold group-hover:text-primary transition-colors">
+                  {lang === "en" && "The Science Behind Habit Formation"}
+                  {lang === "es" && "La Ciencia de la Formación de Hábitos"}
+                  {lang === "fr" && "La Science de la Formation des Habitudes"}
+                  {lang === "de" && "Die Wissenschaft der Gewöhnungsbildung"}
+                  {lang === "it" && "La Scienza della Formazione di Abitudini"}
+                </h3>
+                <p className="text-sm text-muted-foreground line-clamp-2">
+                  {lang === "en" && "Why 21 days is a myth and how to really build lasting habits"}
+                  {lang === "es" && "Por qué 21 días es un mito y cómo construir hábitos duraderos"}
+                  {lang === "fr" && "Pourquoi 21 jours est un mythe"}
+                  {lang === "de" && "Warum 21 Tage ein Mythos sind"}
+                  {lang === "it" && "Perché 21 giorni è un mito"}
+                </p>
                 <div className="flex items-center justify-between pt-2">
-                  <span className="text-xs text-muted-foreground">{t("blogPost3ReadTime")}</span>
+                  <span className="text-xs text-muted-foreground">10 min {lang === "en" && "read" || lang === "es" && "de lectura" || lang === "fr" && "de lecture" || lang === "de" && "Lesezeit" || lang === "it" && "di lettura"}</span>
                   <span className="text-primary text-sm font-medium group-hover:translate-x-1 transition-transform inline-block">
                     →
                   </span>
