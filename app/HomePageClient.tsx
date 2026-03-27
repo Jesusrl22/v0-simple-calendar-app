@@ -1683,11 +1683,15 @@ export default function HomePageClient() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          {/* Blog Post 1 - Pomodoro Technique */}
-          <Link href="/blog/pomodoro-technique">
+          {/* Blog Post 1 - Deep Work */}
+          <Link href="/blog/deep-work">
             <Card className="glass-card overflow-hidden neon-glow-hover transition-all duration-300 cursor-pointer group">
               <div className="h-48 bg-gradient-to-br from-primary/30 to-primary/10 relative overflow-hidden">
-                <div className="absolute inset-0 flex items-center justify-center text-6xl opacity-40">🍅</div>
+                <img 
+                  src="/blog-covers/deep-work.jpg" 
+                  alt="Deep Work"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
               </div>
               <div className="p-6 space-y-3">
                 <div className="text-xs text-primary font-semibold uppercase tracking-wide">
@@ -1697,10 +1701,22 @@ export default function HomePageClient() {
                   {lang === "de" && "Produktivität"}
                   {lang === "it" && "Produttività"}
                 </div>
-                <h3 className="text-xl font-bold group-hover:text-primary transition-colors">{t("blogPost1Title")}</h3>
-                <p className="text-sm text-muted-foreground line-clamp-3">{t("blogPost1Desc")}</p>
+                <h3 className="text-xl font-bold group-hover:text-primary transition-colors">
+                  {lang === "en" && "Deep Work vs Shallow Work"}
+                  {lang === "es" && "Trabajo Profundo vs Trabajo Superficial"}
+                  {lang === "fr" && "Travail en Profondeur vs Travail Superficiel"}
+                  {lang === "de" && "Tiefe Arbeit vs Oberflächliche Arbeit"}
+                  {lang === "it" && "Lavoro Profondo vs Lavoro Superficiale"}
+                </h3>
+                <p className="text-sm text-muted-foreground line-clamp-2">
+                  {lang === "en" && "Learn how to protect your focus time and eliminate distractions"}
+                  {lang === "es" && "Aprende cómo proteger tu tiempo de enfoque y eliminar distracciones"}
+                  {lang === "fr" && "Découvrez comment protéger votre temps de concentration"}
+                  {lang === "de" && "Erfahren Sie, wie Sie Ihre Fokuszeit schützen"}
+                  {lang === "it" && "Scopri come proteggere il tuo tempo di concentrazione"}
+                </p>
                 <div className="flex items-center justify-between pt-2">
-                  <span className="text-xs text-muted-foreground">{t("blogPost1ReadTime")}</span>
+                  <span className="text-xs text-muted-foreground">8 min {lang === "en" && "read" || lang === "es" && "de lectura" || lang === "fr" && "de lecture" || lang === "de" && "Lesezeit" || lang === "it" && "di lettura"}</span>
                   <span className="text-primary text-sm font-medium group-hover:translate-x-1 transition-transform inline-block">
                     →
                   </span>
@@ -1709,24 +1725,40 @@ export default function HomePageClient() {
             </Card>
           </Link>
 
-          {/* Blog Post 2 - Study Techniques */}
-          <Link href="/blog/study-methods">
+          {/* Blog Post 2 - Second Brain */}
+          <Link href="/blog/second-brain">
             <Card className="glass-card overflow-hidden neon-glow-hover transition-all duration-300 cursor-pointer group">
               <div className="h-48 bg-gradient-to-br from-blue-500/30 to-blue-500/10 relative overflow-hidden">
-                <div className="absolute inset-0 flex items-center justify-center text-6xl opacity-40">📚</div>
+                <img 
+                  src="/blog-covers/second-brain.jpg" 
+                  alt="Second Brain"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
               </div>
               <div className="p-6 space-y-3">
                 <div className="text-xs text-blue-400 font-semibold uppercase tracking-wide">
-                  {lang === "en" && "Study Tips"}
-                  {lang === "es" && "Consejos de Estudio"}
-                  {lang === "fr" && "Conseils d'Étude"}
-                  {lang === "de" && "Lerntipps"}
-                  {lang === "it" && "Consigli di Studio"}
+                  {lang === "en" && "Productivity"}
+                  {lang === "es" && "Productividad"}
+                  {lang === "fr" && "Productivité"}
+                  {lang === "de" && "Produktivität"}
+                  {lang === "it" && "Produttività"}
                 </div>
-                <h3 className="text-xl font-bold group-hover:text-primary transition-colors">{t("blogPost2Title")}</h3>
-                <p className="text-sm text-muted-foreground line-clamp-3">{t("blogPost2Desc")}</p>
+                <h3 className="text-xl font-bold group-hover:text-primary transition-colors">
+                  {lang === "en" && "How to Build a Second Brain"}
+                  {lang === "es" && "Cómo Construir un Segundo Cerebro"}
+                  {lang === "fr" && "Comment Construire un Deuxième Cerveau"}
+                  {lang === "de" && "Wie Man ein Zweites Gehirn Aufbaut"}
+                  {lang === "it" && "Come Costruire un Secondo Cervello"}
+                </h3>
+                <p className="text-sm text-muted-foreground line-clamp-2">
+                  {lang === "en" && "Master task management apps to organize your thoughts and ideas"}
+                  {lang === "es" && "Domina las apps de gestión de tareas para organizar tus ideas"}
+                  {lang === "fr" && "Maîtrisez les applications de gestion des tâches"}
+                  {lang === "de" && "Beherrsche Task-Management-Apps für Produktivität"}
+                  {lang === "it" && "Padroneggia le app di gestione delle attività"}
+                </p>
                 <div className="flex items-center justify-between pt-2">
-                  <span className="text-xs text-muted-foreground">{t("blogPost2ReadTime")}</span>
+                  <span className="text-xs text-muted-foreground">12 min {lang === "en" && "read" || lang === "es" && "de lectura" || lang === "fr" && "de lecture" || lang === "de" && "Lesezeit" || lang === "it" && "di lettura"}</span>
                   <span className="text-primary text-sm font-medium group-hover:translate-x-1 transition-transform inline-block">
                     →
                   </span>
@@ -1735,24 +1767,40 @@ export default function HomePageClient() {
             </Card>
           </Link>
 
-          {/* Blog Post 3 - AI Productivity */}
-          <Link href="/blog/ai-productivity">
+          {/* Blog Post 3 - Habit Formation */}
+          <Link href="/blog/habit-formation">
             <Card className="glass-card overflow-hidden neon-glow-hover transition-all duration-300 cursor-pointer group">
               <div className="h-48 bg-gradient-to-br from-purple-500/30 to-purple-500/10 relative overflow-hidden">
-                <div className="absolute inset-0 flex items-center justify-center text-6xl opacity-40">🤖</div>
+                <img 
+                  src="/blog-covers/habit-formation.jpg" 
+                  alt="Habit Formation"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
               </div>
               <div className="p-6 space-y-3">
                 <div className="text-xs text-purple-400 font-semibold uppercase tracking-wide">
-                  {lang === "en" && "AI & Automation"}
-                  {lang === "es" && "IA y Automatización"}
-                  {lang === "fr" && "IA et Automatisation"}
-                  {lang === "de" && "KI & Automatisierung"}
-                  {lang === "it" && "IA e Automazione"}
+                  {lang === "en" && "Habits & Science"}
+                  {lang === "es" && "Hábitos y Ciencia"}
+                  {lang === "fr" && "Habitudes et Science"}
+                  {lang === "de" && "Gewohnheiten und Wissenschaft"}
+                  {lang === "it" && "Abitudini e Scienza"}
                 </div>
-                <h3 className="text-xl font-bold group-hover:text-primary transition-colors">{t("blogPost3Title")}</h3>
-                <p className="text-sm text-muted-foreground line-clamp-3">{t("blogPost3Desc")}</p>
+                <h3 className="text-xl font-bold group-hover:text-primary transition-colors">
+                  {lang === "en" && "The Science Behind Habit Formation"}
+                  {lang === "es" && "La Ciencia de la Formación de Hábitos"}
+                  {lang === "fr" && "La Science de la Formation des Habitudes"}
+                  {lang === "de" && "Die Wissenschaft der Gewöhnungsbildung"}
+                  {lang === "it" && "La Scienza della Formazione di Abitudini"}
+                </h3>
+                <p className="text-sm text-muted-foreground line-clamp-2">
+                  {lang === "en" && "Why 21 days is a myth and how to really build lasting habits"}
+                  {lang === "es" && "Por qué 21 días es un mito y cómo construir hábitos duraderos"}
+                  {lang === "fr" && "Pourquoi 21 jours est un mythe"}
+                  {lang === "de" && "Warum 21 Tage ein Mythos sind"}
+                  {lang === "it" && "Perché 21 giorni è un mito"}
+                </p>
                 <div className="flex items-center justify-between pt-2">
-                  <span className="text-xs text-muted-foreground">{t("blogPost3ReadTime")}</span>
+                  <span className="text-xs text-muted-foreground">10 min {lang === "en" && "read" || lang === "es" && "de lectura" || lang === "fr" && "de lecture" || lang === "de" && "Lesezeit" || lang === "it" && "di lettura"}</span>
                   <span className="text-primary text-sm font-medium group-hover:translate-x-1 transition-transform inline-block">
                     →
                   </span>
