@@ -948,6 +948,11 @@ const translations = {
   },
 }
 
+type Language = "en" | "es" | "fr" | "de" | "it"
+
+export default function HomePageClient() {
+  const [language, setLanguage] = useState<Language>("en")
+  const t = translations[language]
 
   useEffect(() => {
     // Load language from localStorage or user profile
