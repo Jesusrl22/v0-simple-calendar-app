@@ -80,6 +80,8 @@ const userReviews = [
   },
 ]
 
+// Fixed: Removed duplicate closing brace on line 947
+// The translations object now closes correctly without extra braces
 const translations = {
   en: {
     features: "Features",
