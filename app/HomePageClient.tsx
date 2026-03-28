@@ -948,32 +948,6 @@ const translations = {
   },
 }
 
-type Language = "en" | "es" | "fr" | "de" | "it"
-
-export default function HomePageClient() {
-  const router = useRouter() // Initialize useRouter
-  const [lang, setLang] = useState<Language>("en")
-  const [billingPeriod, setBillingPeriod] = useState<"monthly" | "annually">("monthly")
-
-  const [language, setLanguage] = useState<Language>("en")
-  const [theme, setTheme] = useState<"light" | "dark">("light") // Assuming a theme state
-
-  // State for review modal
-  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false)
-  const [newReview, setNewReview] = useState({ name: "", title: "", rating: 5, comment: "" }) // State for new review input
-  const [isAllReviewsModalOpen, setIsAllReviewsModalOpen] = useState(false) // State for all reviews modal
-  const [isWriteReviewModalOpen, setIsWriteReviewModalOpen] = useState(false) // State for write review modal
-  const [currentReviewPage, setCurrentReviewPage] = useState(0) // State for current review page
-  const [showReviewModal, setShowReviewModal] = useState(false) // New state for review modal visibility
-
-  // Mock function to submit a review
-  const handleSubmitReview = () => {
-    console.log("Submitting review:", newReview)
-    // In a real app, you would send this data to an API
-    setIsReviewModalOpen(false)
-    setNewReview({ name: "", title: "", rating: 5, comment: "" }) // Reset form
-    setShowReviewModal(false) // Close the modal after submission
-  }
 
   useEffect(() => {
     // Load language from localStorage or user profile
