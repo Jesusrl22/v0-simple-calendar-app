@@ -44,7 +44,7 @@ export async function GET(request: Request) {
     const { data: users, error } = await supabase
       .from("users")
       .select(
-        "id, email, name, subscription_tier, subscription_expires_at, created_at, ai_credits, ai_credits_purchased",
+        "id, email, name, email_verified, subscription_tier, subscription_expires_at, created_at, ai_credits, ai_credits_purchased",
       )
       .order("created_at", { ascending: false })
 
