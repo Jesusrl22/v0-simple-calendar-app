@@ -953,6 +953,8 @@ export default function HomePageClient() {
   const [billingPeriod, setBillingPeriod] = useState<"monthly" | "annually">("monthly")
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false)
   const [isWriteReviewModalOpen, setIsWriteReviewModalOpen] = useState(false)
+  const [isAllReviewsModalOpen, setIsAllReviewsModalOpen] = useState(false)
+  const [showReviewModal, setShowReviewModal] = useState(false)
   const [newReview, setNewReview] = useState({ name: "", title: "", comment: "", rating: 5 })
   const [isSubmittingReview, setIsSubmittingReview] = useState(false)
 
