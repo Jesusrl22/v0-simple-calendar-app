@@ -951,6 +951,29 @@ type Language = "en" | "es" | "fr" | "de" | "it"
 export default function HomePageClient() {
   const [language, setLanguage] = useState<Language>("en")
   const [billingPeriod, setBillingPeriod] = useState<"monthly" | "annually">("monthly")
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false)
+  const [isWriteReviewModalOpen, setIsWriteReviewModalOpen] = useState(false)
+  const [newReview, setNewReview] = useState({ name: "", title: "", comment: "", rating: 5 })
+  const [isSubmittingReview, setIsSubmittingReview] = useState(false)
+
+  const handleSubmitReview = async () => {
+    if (!newReview.name || !newReview.comment) return
+    setIsSubmittingReview(true)
+    try {
+      await fetch("/api/reviews", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newReview),
+      })
+      setNewReview({ name: "", title: "", comment: "", rating: 5 })
+      setIsReviewModalOpen(false)
+      setIsWriteReviewModalOpen(false)
+    } catch (e) {
+      console.error("[v0] Failed to submit review:", e)
+    } finally {
+      setIsSubmittingReview(false)
+    }
+  }
 
   useEffect(() => {
     // Load language from localStorage or user profile
