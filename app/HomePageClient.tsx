@@ -778,8 +778,6 @@ const translations = {
     footer_privacy_short: "Datenschutz",
     footer_contact_short: "Kontakt",
   },
-    footer_contact_short: "Kontakt",
-  },
   it: {
     features: "Funzionalità",
     dashboard: "Dashboard",
@@ -952,6 +950,32 @@ type Language = "en" | "es" | "fr" | "de" | "it"
 
 export default function HomePageClient() {
   const [language, setLanguage] = useState<Language>("en")
+  const [billingPeriod, setBillingPeriod] = useState<"monthly" | "annually">("monthly")
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false)
+  const [isWriteReviewModalOpen, setIsWriteReviewModalOpen] = useState(false)
+  const [isAllReviewsModalOpen, setIsAllReviewsModalOpen] = useState(false)
+  const [showReviewModal, setShowReviewModal] = useState(false)
+  const [newReview, setNewReview] = useState({ name: "", title: "", comment: "", rating: 5 })
+  const [isSubmittingReview, setIsSubmittingReview] = useState(false)
+
+  const handleSubmitReview = async () => {
+    if (!newReview.name || !newReview.comment) return
+    setIsSubmittingReview(true)
+    try {
+      await fetch("/api/reviews", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newReview),
+      })
+      setNewReview({ name: "", title: "", comment: "", rating: 5 })
+      setIsReviewModalOpen(false)
+      setIsWriteReviewModalOpen(false)
+    } catch (e) {
+      console.error("[v0] Failed to submit review:", e)
+    } finally {
+      setIsSubmittingReview(false)
+    }
+  }
 
   useEffect(() => {
     // Load language from localStorage or user profile
@@ -1047,7 +1071,7 @@ export default function HomePageClient() {
   }
 
   return (
-    <div className={theme === "dark" ? "bg-gray-900" : "bg-background text-foreground"}>
+    <div className="bg-background text-foreground">
       {/* Header */}
       <header className="border-b border-border/50 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
