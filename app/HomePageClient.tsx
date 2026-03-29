@@ -952,7 +952,6 @@ type Language = "en" | "es" | "fr" | "de" | "it"
 
 export default function HomePageClient() {
   const [language, setLanguage] = useState<Language>("en")
-  const t = translations[language]
 
   useEffect(() => {
     // Load language from localStorage or user profile
@@ -1664,28 +1663,28 @@ export default function HomePageClient() {
               </div>
               <div className="p-6 space-y-3">
                 <div className="text-xs text-primary font-semibold uppercase tracking-wide">
-                  {lang === "en" && "Productivity"}
-                  {lang === "es" && "Productividad"}
-                  {lang === "fr" && "Productivité"}
-                  {lang === "de" && "Produktivität"}
-                  {lang === "it" && "Produttività"}
+                  {language === "en" && "Productivity"}
+                  {language === "es" && "Productividad"}
+                  {language === "fr" && "Productivité"}
+                  {language === "de" && "Produktivität"}
+                  {language === "it" && "Produttività"}
                 </div>
                 <h3 className="text-xl font-bold group-hover:text-primary transition-colors">
-                  {lang === "en" && "Deep Work vs Shallow Work"}
-                  {lang === "es" && "Trabajo Profundo vs Trabajo Superficial"}
-                  {lang === "fr" && "Travail en Profondeur vs Travail Superficiel"}
-                  {lang === "de" && "Tiefe Arbeit vs Oberflächliche Arbeit"}
-                  {lang === "it" && "Lavoro Profondo vs Lavoro Superficiale"}
+                  {language === "en" && "Deep Work vs Shallow Work"}
+                  {language === "es" && "Trabajo Profundo vs Trabajo Superficial"}
+                  {language === "fr" && "Travail en Profondeur vs Travail Superficiel"}
+                  {language === "de" && "Tiefe Arbeit vs Oberflächliche Arbeit"}
+                  {language === "it" && "Lavoro Profondo vs Lavoro Superficiale"}
                 </h3>
                 <p className="text-sm text-muted-foreground line-clamp-2">
-                  {lang === "en" && "Learn how to protect your focus time and eliminate distractions"}
-                  {lang === "es" && "Aprende cómo proteger tu tiempo de enfoque y eliminar distracciones"}
-                  {lang === "fr" && "Découvrez comment protéger votre temps de concentration"}
-                  {lang === "de" && "Erfahren Sie, wie Sie Ihre Fokuszeit schützen"}
-                  {lang === "it" && "Scopri come proteggere il tuo tempo di concentrazione"}
+                  {language === "en" && "Learn how to protect your focus time and eliminate distractions"}
+                  {language === "es" && "Aprende cómo proteger tu tiempo de enfoque y eliminar distracciones"}
+                  {language === "fr" && "Découvrez comment protéger votre temps de concentration"}
+                  {language === "de" && "Erfahren Sie, wie Sie Ihre Fokuszeit schützen"}
+                  {language === "it" && "Scopri come proteggere il tuo tempo di concentrazione"}
                 </p>
                 <div className="flex items-center justify-between pt-2">
-                  <span className="text-xs text-muted-foreground">8 min {lang === "en" && "read" || lang === "es" && "de lectura" || lang === "fr" && "de lecture" || lang === "de" && "Lesezeit" || lang === "it" && "di lettura"}</span>
+                  <span className="text-xs text-muted-foreground">8 min {language === "en" && "read" || language === "es" && "de lectura" || language === "fr" && "de lecture" || language === "de" && "Lesezeit" || language === "it" && "di lettura"}</span>
                   <span className="text-primary text-sm font-medium group-hover:translate-x-1 transition-transform inline-block">
                     →
                   </span>
@@ -1706,28 +1705,28 @@ export default function HomePageClient() {
               </div>
               <div className="p-6 space-y-3">
                 <div className="text-xs text-blue-400 font-semibold uppercase tracking-wide">
-                  {lang === "en" && "Productivity"}
-                  {lang === "es" && "Productividad"}
-                  {lang === "fr" && "Productivité"}
-                  {lang === "de" && "Produktivität"}
-                  {lang === "it" && "Produttività"}
+                  {language === "en" && "Productivity"}
+                  {language === "es" && "Productividad"}
+                  {language === "fr" && "Productivité"}
+                  {language === "de" && "Produktivität"}
+                  {language === "it" && "Produttività"}
                 </div>
                 <h3 className="text-xl font-bold group-hover:text-primary transition-colors">
-                  {lang === "en" && "How to Build a Second Brain"}
-                  {lang === "es" && "Cómo Construir un Segundo Cerebro"}
-                  {lang === "fr" && "Comment Construire un Deuxième Cerveau"}
-                  {lang === "de" && "Wie Man ein Zweites Gehirn Aufbaut"}
-                  {lang === "it" && "Come Costruire un Secondo Cervello"}
+                  {language === "en" && "How to Build a Second Brain"}
+                  {language === "es" && "Cómo Construir un Segundo Cerebro"}
+                  {language === "fr" && "Comment Construire un Deuxième Cerveau"}
+                  {language === "de" && "Wie Man ein Zweites Gehirn Aufbaut"}
+                  {language === "it" && "Come Costruire un Secondo Cervello"}
                 </h3>
                 <p className="text-sm text-muted-foreground line-clamp-2">
-                  {lang === "en" && "Master task management apps to organize your thoughts and ideas"}
-                  {lang === "es" && "Domina las apps de gestión de tareas para organizar tus ideas"}
-                  {lang === "fr" && "Maîtrisez les applications de gestion des tâches"}
-                  {lang === "de" && "Beherrsche Task-Management-Apps für Produktivität"}
-                  {lang === "it" && "Padroneggia le app di gestione delle attività"}
+                  {language === "en" && "Master task management apps to organize your thoughts and ideas"}
+                  {language === "es" && "Domina las apps de gestión de tareas para organizar tus ideas"}
+                  {language === "fr" && "Maîtrisez les applications de gestion des tâches"}
+                  {language === "de" && "Beherrsche Task-Management-Apps für Produktivität"}
+                  {language === "it" && "Padroneggia le app di gestione delle attività"}
                 </p>
                 <div className="flex items-center justify-between pt-2">
-                  <span className="text-xs text-muted-foreground">12 min {lang === "en" && "read" || lang === "es" && "de lectura" || lang === "fr" && "de lecture" || lang === "de" && "Lesezeit" || lang === "it" && "di lettura"}</span>
+                  <span className="text-xs text-muted-foreground">12 min {language === "en" && "read" || language === "es" && "de lectura" || language === "fr" && "de lecture" || language === "de" && "Lesezeit" || language === "it" && "di lettura"}</span>
                   <span className="text-primary text-sm font-medium group-hover:translate-x-1 transition-transform inline-block">
                     →
                   </span>
@@ -1748,28 +1747,28 @@ export default function HomePageClient() {
               </div>
               <div className="p-6 space-y-3">
                 <div className="text-xs text-purple-400 font-semibold uppercase tracking-wide">
-                  {lang === "en" && "Habits & Science"}
-                  {lang === "es" && "Hábitos y Ciencia"}
-                  {lang === "fr" && "Habitudes et Science"}
-                  {lang === "de" && "Gewohnheiten und Wissenschaft"}
-                  {lang === "it" && "Abitudini e Scienza"}
+                  {language === "en" && "Habits & Science"}
+                  {language === "es" && "Hábitos y Ciencia"}
+                  {language === "fr" && "Habitudes et Science"}
+                  {language === "de" && "Gewohnheiten und Wissenschaft"}
+                  {language === "it" && "Abitudini e Scienza"}
                 </div>
                 <h3 className="text-xl font-bold group-hover:text-primary transition-colors">
-                  {lang === "en" && "The Science Behind Habit Formation"}
-                  {lang === "es" && "La Ciencia de la Formación de Hábitos"}
-                  {lang === "fr" && "La Science de la Formation des Habitudes"}
-                  {lang === "de" && "Die Wissenschaft der Gewöhnungsbildung"}
-                  {lang === "it" && "La Scienza della Formazione di Abitudini"}
+                  {language === "en" && "The Science Behind Habit Formation"}
+                  {language === "es" && "La Ciencia de la Formación de Hábitos"}
+                  {language === "fr" && "La Science de la Formation des Habitudes"}
+                  {language === "de" && "Die Wissenschaft der Gewöhnungsbildung"}
+                  {language === "it" && "La Scienza della Formazione di Abitudini"}
                 </h3>
                 <p className="text-sm text-muted-foreground line-clamp-2">
-                  {lang === "en" && "Why 21 days is a myth and how to really build lasting habits"}
-                  {lang === "es" && "Por qué 21 días es un mito y cómo construir hábitos duraderos"}
-                  {lang === "fr" && "Pourquoi 21 jours est un mythe"}
-                  {lang === "de" && "Warum 21 Tage ein Mythos sind"}
-                  {lang === "it" && "Perché 21 giorni è un mito"}
+                  {language === "en" && "Why 21 days is a myth and how to really build lasting habits"}
+                  {language === "es" && "Por qué 21 días es un mito y cómo construir hábitos duraderos"}
+                  {language === "fr" && "Pourquoi 21 jours est un mythe"}
+                  {language === "de" && "Warum 21 Tage ein Mythos sind"}
+                  {language === "it" && "Perché 21 giorni è un mito"}
                 </p>
                 <div className="flex items-center justify-between pt-2">
-                  <span className="text-xs text-muted-foreground">10 min {lang === "en" && "read" || lang === "es" && "de lectura" || lang === "fr" && "de lecture" || lang === "de" && "Lesezeit" || lang === "it" && "di lettura"}</span>
+                  <span className="text-xs text-muted-foreground">10 min {language === "en" && "read" || language === "es" && "de lectura" || language === "fr" && "de lecture" || language === "de" && "Lesezeit" || language === "it" && "di lettura"}</span>
                   <span className="text-primary text-sm font-medium group-hover:translate-x-1 transition-transform inline-block">
                     →
                   </span>
