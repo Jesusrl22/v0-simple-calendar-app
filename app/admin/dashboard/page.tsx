@@ -12,6 +12,7 @@ interface User {
   id: string
   email: string
   name: string | null
+  email_verified: boolean
   subscription_plan: string | null
   subscription_expires_at: string | null
   created_at: string
