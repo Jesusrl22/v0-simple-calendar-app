@@ -32,24 +32,41 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Email already verified" }, { status: 400 })
     }
 
-    // Generate verification link
+    // Generate verification link using hashed_token to avoid Supabase redirect losing token
     console.log("[v0] Resend verification: Generating verification link...")
-    
+
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://future-task.com"
+
     const { data, error: signUpError } = await supabase.auth.admin.generateLink({
       type: "signup",
       email: email,
       options: {
-        redirectTo: `https://future-task.com/auth/confirm`,
+        redirectTo: `${appUrl}/auth/confirm`,
       },
     })
 
-    if (signUpError || !data?.properties?.verification_url) {
+    if (signUpError || !data) {
       console.error("[v0] Failed to generate verification link:", signUpError)
       return NextResponse.json({ error: "Failed to generate verification link" }, { status: 500 })
     }
 
-    // Send verification email via Brevo
-    const verificationUrl = data.properties.verification_url
+    // Prefer hashed_token to build a direct link that doesn't go through Supabase redirects
+    const props = data.properties as any
+    let verificationUrl: string
+    if (props?.hashed_token) {
+      verificationUrl = `${appUrl}/auth/confirm?token_hash=${props.hashed_token}&type=signup&email=${encodeURIComponent(email)}`
+      console.log("[v0] Resend: Using hashed_token URL")
+    } else if (props?.action_link) {
+      verificationUrl = props.action_link
+      console.log("[v0] Resend: Using action_link")
+    } else if (props?.verification_url) {
+      verificationUrl = props.verification_url
+      console.log("[v0] Resend: Using verification_url (fallback)")
+    } else {
+      console.error("[v0] No link found in generateLink response")
+      return NextResponse.json({ error: "Failed to generate verification link" }, { status: 500 })
+    }
+
     console.log("[v0] Resend verification: URL generated, sending email...")
     
     const htmlContent = `
