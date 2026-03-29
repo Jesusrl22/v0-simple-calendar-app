@@ -950,6 +950,7 @@ type Language = "en" | "es" | "fr" | "de" | "it"
 
 export default function HomePageClient() {
   const [language, setLanguage] = useState<Language>("en")
+  const [billingPeriod, setBillingPeriod] = useState<"monthly" | "annually">("monthly")
 
   useEffect(() => {
     // Load language from localStorage or user profile
