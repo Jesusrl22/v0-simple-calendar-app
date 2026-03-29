@@ -778,8 +778,6 @@ const translations = {
     footer_privacy_short: "Datenschutz",
     footer_contact_short: "Kontakt",
   },
-    footer_contact_short: "Kontakt",
-  },
   it: {
     features: "Funzionalità",
     dashboard: "Dashboard",
