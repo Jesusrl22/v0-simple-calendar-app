@@ -365,6 +365,8 @@ const blogs = [
     image: '/blog-covers/productivity-tools.jpg',
   },
 ]
+
+export default function BlogPageClient({ initialLanguage = 'en' }: { initialLanguage?: Language }) {
   const [language, setLanguage] = useState<Language>(initialLanguage as Language)
   const [searchQuery, setSearchQuery] = useState('')
 
