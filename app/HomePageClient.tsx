@@ -1687,28 +1687,28 @@ export default function HomePageClient() {
               </div>
               <div className="p-6 space-y-3">
                 <div className="text-xs text-primary font-semibold uppercase tracking-wide">
-                  {language === "en" && "Productivity"}
-                  {language === "es" && "Productividad"}
-                  {language === "fr" && "Productivité"}
-                  {language === "de" && "Produktivität"}
-                  {language === "it" && "Produttività"}
+                  {language === "en" && "Productivity & Focus"}
+                  {language === "es" && "Productividad y Enfoque"}
+                  {language === "fr" && "Productivité et Concentration"}
+                  {language === "de" && "Produktivität und Fokus"}
+                  {language === "it" && "Produttività e Concentrazione"}
                 </div>
                 <h3 className="text-xl font-bold group-hover:text-primary transition-colors">
-                  {language === "en" && "Deep Work vs Shallow Work"}
-                  {language === "es" && "Trabajo Profundo vs Trabajo Superficial"}
-                  {language === "fr" && "Travail en Profondeur vs Travail Superficiel"}
-                  {language === "de" && "Tiefe Arbeit vs Oberflächliche Arbeit"}
-                  {language === "it" && "Lavoro Profondo vs Lavoro Superficiale"}
+                  {language === "en" && "Deep Work vs Shallow Work: Protect Your Focus Time"}
+                  {language === "es" && "Trabajo Profundo vs Superficial: Protege tu Tiempo de Concentración"}
+                  {language === "fr" && "Travail en Profondeur vs Travail Superficiel: Protégez votre Temps de Concentration"}
+                  {language === "de" && "Tiefe Arbeit vs Oberflächliche Arbeit: Schütze deine Fokuszeit"}
+                  {language === "it" && "Lavoro Profondo vs Lavoro Superficiale: Proteggi il tuo Tempo di Concentrazione"}
                 </h3>
                 <p className="text-sm text-muted-foreground line-clamp-2">
-                  {language === "en" && "Learn how to protect your focus time and eliminate distractions"}
-                  {language === "es" && "Aprende cómo proteger tu tiempo de enfoque y eliminar distracciones"}
-                  {language === "fr" && "Découvrez comment protéger votre temps de concentration"}
-                  {language === "de" && "Erfahren Sie, wie Sie Ihre Fokuszeit schützen"}
-                  {language === "it" && "Scopri come proteggere il tuo tempo di concentrazione"}
+                  {language === "en" && "Master the most valuable skill in knowledge work: sustained deep concentration"}
+                  {language === "es" && "Domina la habilidad más valiosa en el trabajo del conocimiento: concentración profunda sostenida"}
+                  {language === "fr" && "Maîtrisez la compétence la plus précieuse du travail de connaissance"}
+                  {language === "de" && "Beherrsche die wertvollste Fähigkeit in der Wissensarbeit"}
+                  {language === "it" && "Padroneggia l'abilità più preziosa nel lavoro della conoscenza"}
                 </p>
                 <div className="flex items-center justify-between pt-2">
-                  <span className="text-xs text-muted-foreground">8 min {language === "en" && "read" || language === "es" && "de lectura" || language === "fr" && "de lecture" || language === "de" && "Lesezeit" || language === "it" && "di lettura"}</span>
+                  <span className="text-xs text-muted-foreground">11 min {language === "en" && "read" || language === "es" && "de lectura" || language === "fr" && "de lecture" || language === "de" && "Lesezeit" || language === "it" && "di lettura"}</span>
                   <span className="text-primary text-sm font-medium group-hover:translate-x-1 transition-transform inline-block">
                     →
                   </span>
@@ -1736,21 +1736,21 @@ export default function HomePageClient() {
                   {language === "it" && "Produttività"}
                 </div>
                 <h3 className="text-xl font-bold group-hover:text-primary transition-colors">
-                  {language === "en" && "How to Build a Second Brain"}
-                  {language === "es" && "Cómo Construir un Segundo Cerebro"}
-                  {language === "fr" && "Comment Construire un Deuxième Cerveau"}
-                  {language === "de" && "Wie Man ein Zweites Gehirn Aufbaut"}
-                  {language === "it" && "Come Costruire un Secondo Cervello"}
+                  {language === "en" && "Build a Second Brain with Task Management"}
+                  {language === "es" && "Construye un Segundo Cerebro con Apps de Gestión de Tareas"}
+                  {language === "fr" && "Construisez un Deuxième Cerveau avec la Gestion des Tâches"}
+                  {language === "de" && "Baue ein Zweites Gehirn mit Task-Management auf"}
+                  {language === "it" && "Costruisci un Secondo Cervello con la Gestione delle Attività"}
                 </h3>
                 <p className="text-sm text-muted-foreground line-clamp-2">
-                  {language === "en" && "Master task management apps to organize your thoughts and ideas"}
-                  {language === "es" && "Domina las apps de gestión de tareas para organizar tus ideas"}
-                  {language === "fr" && "Maîtrisez les applications de gestion des tâches"}
-                  {language === "de" && "Beherrsche Task-Management-Apps für Produktivität"}
-                  {language === "it" && "Padroneggia le app di gestione delle attività"}
+                  {language === "en" && "Capture, organize, distill and express: the CODE method for personal knowledge management"}
+                  {language === "es" && "Captura, organiza, destila y expresa: el método CODE para gestión del conocimiento personal"}
+                  {language === "fr" && "Capturez, organisez, distillez et exprimez: la méthode CODE"}
+                  {language === "de" && "Erfasse, organisiere, destilliere und drücke aus: die CODE-Methode"}
+                  {language === "it" && "Cattura, organizza, distilla ed esprimi: il metodo CODE"}
                 </p>
                 <div className="flex items-center justify-between pt-2">
-                  <span className="text-xs text-muted-foreground">12 min {language === "en" && "read" || language === "es" && "de lectura" || language === "fr" && "de lecture" || language === "de" && "Lesezeit" || language === "it" && "di lettura"}</span>
+                  <span className="text-xs text-muted-foreground">10 min {language === "en" && "read" || language === "es" && "de lectura" || language === "fr" && "de lecture" || language === "de" && "Lesezeit" || language === "it" && "di lettura"}</span>
                   <span className="text-primary text-sm font-medium group-hover:translate-x-1 transition-transform inline-block">
                     →
                   </span>
@@ -1778,27 +1778,38 @@ export default function HomePageClient() {
                   {language === "it" && "Abitudini e Scienza"}
                 </div>
                 <h3 className="text-xl font-bold group-hover:text-primary transition-colors">
-                  {language === "en" && "The Science Behind Habit Formation"}
-                  {language === "es" && "La Ciencia de la Formación de Hábitos"}
-                  {language === "fr" && "La Science de la Formation des Habitudes"}
-                  {language === "de" && "Die Wissenschaft der Gewöhnungsbildung"}
-                  {language === "it" && "La Scienza della Formazione di Abitudini"}
+                  {language === "en" && "Why 21 Days is a Myth: The Real Science of Habits"}
+                  {language === "es" && "Por Qué los 21 Días es un Mito: La Ciencia Real de los Hábitos"}
+                  {language === "fr" && "Pourquoi 21 Jours est un Mythe: La Vraie Science des Habitudes"}
+                  {language === "de" && "Warum 21 Tage ein Mythos sind: Die echte Wissenschaft der Gewohnheiten"}
+                  {language === "it" && "Perché 21 Giorni è un Mito: La Vera Scienza delle Abitudini"}
                 </h3>
                 <p className="text-sm text-muted-foreground line-clamp-2">
-                  {language === "en" && "Why 21 days is a myth and how to really build lasting habits"}
-                  {language === "es" && "Por qué 21 días es un mito y cómo construir hábitos duraderos"}
-                  {language === "fr" && "Pourquoi 21 jours est un mythe"}
-                  {language === "de" && "Warum 21 Tage ein Mythos sind"}
-                  {language === "it" && "Perché 21 giorni è un mito"}
+                  {language === "en" && "Research shows habits take 18-254 days to form. Learn the real timeline and strategies"}
+                  {language === "es" && "La investigación muestra que los hábitos tardan 18-254 días. Aprende el cronograma real"}
+                  {language === "fr" && "La recherche montre que les habitudes prennent 18-254 jours à se former"}
+                  {language === "de" && "Forschung zeigt, dass Gewohnheiten 18-254 Tage dauern. Lerne die wahre Zeitleiste"}
+                  {language === "it" && "La ricerca mostra che le abitudini impiegano 18-254 giorni. Scopri la vera tempistica"}
                 </p>
                 <div className="flex items-center justify-between pt-2">
-                  <span className="text-xs text-muted-foreground">10 min {language === "en" && "read" || language === "es" && "de lectura" || language === "fr" && "de lecture" || language === "de" && "Lesezeit" || language === "it" && "di lettura"}</span>
+                  <span className="text-xs text-muted-foreground">9 min {language === "en" && "read" || language === "es" && "de lectura" || language === "fr" && "de lecture" || language === "de" && "Lesezeit" || language === "it" && "di lettura"}</span>
                   <span className="text-primary text-sm font-medium group-hover:translate-x-1 transition-transform inline-block">
                     →
                   </span>
                 </div>
               </div>
             </Card>
+          </Link>
+        </div>
+
+        <div className="text-center mt-10">
+          <Link href="/blog" className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors">
+            {language === "en" && "View All Blogs"}
+            {language === "es" && "Ver Todos los Blogs"}
+            {language === "fr" && "Voir Tous les Blogs"}
+            {language === "de" && "Alle Blogs Ansehen"}
+            {language === "it" && "Visualizza Tutti i Blog"}
+            <span>→</span>
           </Link>
         </div>
       </section>
