@@ -1800,131 +1800,16 @@ export default function HomePageClient() {
               </div>
             </Card>
           </Link>
+        </div>
 
-          {/* Blog Post 4 - Morning Routines */}
-          <Link href="/blog/morning-routines">
-            <Card className="glass-card overflow-hidden neon-glow-hover transition-all duration-300 cursor-pointer group">
-              <div className="h-48 bg-gradient-to-br from-orange-500/30 to-orange-500/10 relative overflow-hidden">
-                <img 
-                  src="/blog-covers/morning-routines.jpg" 
-                  alt="Morning Routines"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-              </div>
-              <div className="p-6 space-y-3">
-                <div className="text-xs text-orange-400 font-semibold uppercase tracking-wide">
-                  {language === "en" && "Habits & Routines"}
-                  {language === "es" && "Hábitos y Rutinas"}
-                  {language === "fr" && "Habitudes et Routines"}
-                  {language === "de" && "Gewohnheiten und Routinen"}
-                  {language === "it" && "Abitudini e Routine"}
-                </div>
-                <h3 className="text-xl font-bold group-hover:text-primary transition-colors">
-                  {language === "en" && "Morning Routines of Highly Productive People"}
-                  {language === "es" && "Rutinas Matutinas de Personas Altamente Productivas"}
-                  {language === "fr" && "Routines Matinales des Personnes Très Productives"}
-                  {language === "de" && "Morgenroutinen hochproduktiver Menschen"}
-                  {language === "it" && "Routine Mattutine di Persone Altamente Produttive"}
-                </h3>
-                <p className="text-sm text-muted-foreground line-clamp-2">
-                  {language === "en" && "Waking up early doesn't make you productive. What you do matters. Learn the science"}
-                  {language === "es" && "Madrugar no te hace productivo. Lo que hagas sí. Aprende la ciencia detrás"}
-                  {language === "fr" && "Se lever tôt ne vous rend pas productif. Ce que vous faites oui"}
-                  {language === "de" && "Früh aufstehen macht dich nicht produktiv. Was du tust, schon"}
-                  {language === "it" && "Svegliarsi presto non ti rende produttivo. Quello che fai, sì"}
-                </p>
-                <div className="flex items-center justify-between pt-2">
-                  <span className="text-xs text-muted-foreground">10 min {language === "en" && "read" || language === "es" && "de lectura" || language === "fr" && "de lecture" || language === "de" && "Lesezeit" || language === "it" && "di lettura"}</span>
-                  <span className="text-primary text-sm font-medium group-hover:translate-x-1 transition-transform inline-block">
-                    →
-                  </span>
-                </div>
-              </div>
-            </Card>
-          </Link>
-
-          {/* Blog Post 5 - Weekly Review */}
-          <Link href="/blog/weekly-review">
-            <Card className="glass-card overflow-hidden neon-glow-hover transition-all duration-300 cursor-pointer group">
-              <div className="h-48 bg-gradient-to-br from-cyan-500/30 to-cyan-500/10 relative overflow-hidden">
-                <img 
-                  src="/blog-covers/weekly-review.jpg" 
-                  alt="Weekly Review"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-              </div>
-              <div className="p-6 space-y-3">
-                <div className="text-xs text-cyan-400 font-semibold uppercase tracking-wide">
-                  {language === "en" && "Productivity Systems"}
-                  {language === "es" && "Sistemas de Productividad"}
-                  {language === "fr" && "Systèmes de Productivité"}
-                  {language === "de" && "Produktivitätssysteme"}
-                  {language === "it" && "Sistemi di Produttività"}
-                </div>
-                <h3 className="text-xl font-bold group-hover:text-primary transition-colors">
-                  {language === "en" && "The Weekly Review: The Missing Piece of GTD"}
-                  {language === "es" && "La Revisión Semanal: La Pieza Faltante del GTD"}
-                  {language === "fr" && "L'Examen Hebdomadaire: La Pièce Manquante de GTD"}
-                  {language === "de" && "Die Wochenrückschau: Das fehlende Stück von GTD"}
-                  {language === "it" && "La Revisione Settimanale: Il Pezzo Mancante di GTD"}
-                </h3>
-                <p className="text-sm text-muted-foreground line-clamp-2">
-                  {language === "en" && "Why most productivity systems fail in weeks and how a 45-minute ritual changes everything"}
-                  {language === "es" && "Por qué la mayoría de sistemas de productividad colapsan en semanas y cómo un ritual de 45 min lo cambia todo"}
-                  {language === "fr" && "Pourquoi la plupart des systèmes s'effondrent et comment un rituel change tout"}
-                  {language === "de" && "Warum die meisten Systeme zusammenbrechen und wie ein Ritual alles ändert"}
-                  {language === "it" && "Perché la maggior parte dei sistemi crolla e come un rituale cambia tutto"}
-                </p>
-                <div className="flex items-center justify-between pt-2">
-                  <span className="text-xs text-muted-foreground">9 min {language === "en" && "read" || language === "es" && "de lectura" || language === "fr" && "de lecture" || language === "de" && "Lesezeit" || language === "it" && "di lettura"}</span>
-                  <span className="text-primary text-sm font-medium group-hover:translate-x-1 transition-transform inline-block">
-                    →
-                  </span>
-                </div>
-              </div>
-            </Card>
-          </Link>
-
-          {/* Blog Post 6 - Pomodoro vs Time Blocking */}
-          <Link href="/blog/pomodoro-time-blocking">
-            <Card className="glass-card overflow-hidden neon-glow-hover transition-all duration-300 cursor-pointer group">
-              <div className="h-48 bg-gradient-to-br from-rose-500/30 to-rose-500/10 relative overflow-hidden">
-                <img 
-                  src="/blog-covers/pomodoro-time-blocking.jpg" 
-                  alt="Pomodoro vs Time Blocking"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-              </div>
-              <div className="p-6 space-y-3">
-                <div className="text-xs text-rose-400 font-semibold uppercase tracking-wide">
-                  {language === "en" && "Time Management"}
-                  {language === "es" && "Gestión del Tiempo"}
-                  {language === "fr" && "Gestion du Temps"}
-                  {language === "de" && "Zeitmanagement"}
-                  {language === "it" && "Gestione del Tempo"}
-                </div>
-                <h3 className="text-xl font-bold group-hover:text-primary transition-colors">
-                  {language === "en" && "Pomodoro vs Time Blocking: Which Works Better?"}
-                  {language === "es" && "Pomodoro vs Bloqueo de Tiempo: ¿Cuál Funciona Mejor?"}
-                  {language === "fr" && "Pomodoro vs Time Blocking: Lequel Fonctionne Mieux?"}
-                  {language === "de" && "Pomodoro vs Time Blocking: Was funktioniert besser?"}
-                  {language === "it" && "Pomodoro vs Time Blocking: Quale Funziona Meglio?"}
-                </h3>
-                <p className="text-sm text-muted-foreground line-clamp-2">
-                  {language === "en" && "The ultimate guide to choosing and combining two powerful productivity frameworks"}
-                  {language === "es" && "La guía definitiva para elegir y combinar dos frameworks poderosos de productividad"}
-                  {language === "fr" && "Le guide ultime pour choisir et combiner deux frameworks puissants"}
-                  {language === "de" && "Der ultimative Leitfaden zur Auswahl und Kombination zweier mächtiger Rahmen"}
-                  {language === "it" && "La guida definitiva per scegliere e combinare due framework potenti"}
-                </p>
-                <div className="flex items-center justify-between pt-2">
-                  <span className="text-xs text-muted-foreground">10 min {language === "en" && "read" || language === "es" && "de lectura" || language === "fr" && "de lecture" || language === "de" && "Lesezeit" || language === "it" && "di lettura"}</span>
-                  <span className="text-primary text-sm font-medium group-hover:translate-x-1 transition-transform inline-block">
-                    →
-                  </span>
-                </div>
-              </div>
-            </Card>
+        <div className="text-center mt-10">
+          <Link href="/blog" className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors">
+            {language === "en" && "View All Blogs"}
+            {language === "es" && "Ver Todos los Blogs"}
+            {language === "fr" && "Voir Tous les Blogs"}
+            {language === "de" && "Alle Blogs Ansehen"}
+            {language === "it" && "Visualizza Tutti i Blog"}
+            <span>→</span>
           </Link>
         </div>
       </section>
