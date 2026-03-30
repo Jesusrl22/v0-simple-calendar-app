@@ -365,6 +365,8 @@ const blogs = [
     image: '/blog-covers/productivity-tools.jpg',
   },
 ]
+
+export default function BlogPageClient({ initialLanguage = 'en' }: { initialLanguage?: Language }) {
   const [language, setLanguage] = useState<Language>(initialLanguage as Language)
   const [searchQuery, setSearchQuery] = useState('')
 
@@ -389,6 +391,14 @@ const blogs = [
       {/* Hero Section */}
       <div className="relative py-20 px-4 sm:px-6 lg:px-8 border-b border-border">
         <div className="max-w-6xl mx-auto">
+          <Link href="/" className="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors mb-8 font-medium text-sm">
+            <span>←</span>
+            {language === 'en' && 'Back to Home'}
+            {language === 'es' && 'Volver al Inicio'}
+            {language === 'fr' && "Retour à l'Accueil"}
+            {language === 'de' && 'Zurück zur Startseite'}
+            {language === 'it' && 'Torna alla Home'}
+          </Link>
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4 text-balance">{t.title}</h1>
             <p className="text-lg text-muted-foreground mb-8">{t.subtitle}</p>
@@ -457,5 +467,4 @@ const blogs = [
       </div>
     </div>
   )
-}
 }
