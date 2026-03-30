@@ -95,7 +95,7 @@ const blogs = [
     titles: {
       en: 'The Weekly Review: The Missing Piece of GTD',
       es: 'La Revisión Semanal: La Pieza Faltante del GTD',
-      fr: 'L'Examen Hebdomadaire: La Pièce Manquante de GTD',
+      fr: "L'Examen Hebdomadaire: La Pièce Manquante de GTD",
       de: 'Die Wochenrückschau: Das fehlende Stück von GTD',
       it: 'La Revisione Settimanale: Il Pezzo Mancante di GTD',
     },
@@ -162,7 +162,7 @@ const blogs = [
     descriptions: {
       en: 'Flow state, elaboration, active recovery, and interleaving practice explained',
       es: 'Estado de flujo, elaboración, recuperación activa e interleaving explicados',
-      fr: 'L\'état de flux, l\'élaboration, la récupération active et l\'interleaving',
+      fr: "L'état de flux, l'élaboration, la récupération active et l'interleaving",
       de: 'Flow-State, Elaboration, Active Recovery und Interleaving erklärt',
       it: 'Lo stato di flusso, l\'elaborazione, il recupero attivo e l\'interleaving spiegati',
     },
@@ -195,7 +195,7 @@ const blogs = [
     titles: {
       en: 'AI Prompts That Actually Help with Productivity',
       es: 'Prompts de IA que Realmente te Ayudan con tu Productividad',
-      fr: 'Les Prompts d\'IA qui Vous Aident Vraiment avec la Productivité',
+      fr: "Les Prompts d'IA qui Vous Aident Vraiment avec la Productivité",
       de: 'KI-Prompts die wirklich bei der Produktivität helfen',
       it: 'Prompt di IA che Realmente Ti Aiutano con la Produttività',
     },
@@ -215,7 +215,7 @@ const blogs = [
     titles: {
       en: 'The Future of Work: How AI Is Transforming Productivity',
       es: 'El Futuro del Trabajo: Cómo la IA está Transformando la Productividad',
-      fr: 'L\'Avenir du Travail: Comment l\'IA Transforme la Productivité',
+      fr: "L'Avenir du Travail: Comment l'IA Transforme la Productivité",
       de: 'Die Zukunft der Arbeit: Wie KI die Produktivität verändert',
       it: 'Il Futuro del Lavoro: Come l\'IA sta Trasformando la Produttività',
     },
@@ -235,7 +235,7 @@ const blogs = [
     titles: {
       en: 'Remote Team Productivity: Building a Async-First Culture',
       es: 'Productividad de Equipos Remotos: Construyendo una Cultura Asincrónica',
-      fr: 'Productivité d\'Équipe Distante: Construire une Culture Asynchrone',
+      fr: "Productivité d'Équipe Distante: Construire une Culture Asynchrone",
       de: 'Remote Team Produktivität: Aufbau einer Async-First Kultur',
       it: 'Produttività dei Team Remoti: Costruire una Cultura Asincrona',
     },
@@ -255,7 +255,7 @@ const blogs = [
     titles: {
       en: 'How to Run an Effective Weekly Team Standup',
       es: 'Cómo Llevar un Standup Semanal de Equipo Efectivo',
-      fr: 'Comment Diriger un Standup d\'Équipe Hebdomadaire Efficace',
+      fr: "Comment Diriger un Standup d'Équipe Hebdomadaire Efficace",
       de: 'Wie man ein effektives Weekly Team Standup durchführt',
       it: 'Come Condurre un Standup Settimanale del Team Efficace',
     },
