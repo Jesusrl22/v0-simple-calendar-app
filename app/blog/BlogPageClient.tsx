@@ -468,4 +468,3 @@ export default function BlogPageClient({ initialLanguage = 'en' }: { initialLang
     </div>
   )
 }
-}
