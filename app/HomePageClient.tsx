@@ -156,7 +156,7 @@ const translations = {
     choosePremiumPlan: "Upgrade to Premium",
     month: "/month",
     year: "/year",
-    blogTitle: "Blog & Resources",
+    blogTitle: "Blogs",
     blogDesc: "Discover tips, strategies, and insights to boost your productivity",
     blogPost1Title: "Master the Pomodoro Technique",
     blogPost1Desc:
@@ -337,7 +337,7 @@ const translations = {
     choosePremiumPlan: "Actualizar a Premium",
     month: "/mes",
     year: "/año",
-    blogTitle: "Blog y Recursos",
+    blogTitle: "Blogs",
     blogDesc: "Descubre consejos, estrategias e ideas para impulsar tu productividad",
     blogPost1Title: "Domina la Técnica Pomodoro",
     blogPost1Desc:
@@ -518,7 +518,7 @@ const translations = {
     choosePremiumPlan: "Passer à Premium",
     month: "/mois",
     year: "/an",
-    blogTitle: "Blog et Ressources",
+    blogTitle: "Blogs",
     blogDesc: "Découvrez des conseils, stratégies et idées pour booster votre productivité",
     blogPost1Title: "Travail Profond vs Travail Superficiel",
     blogPost1Desc: "Apprenez comment protéger votre temps de concentration et éliminer les distractions",
@@ -684,7 +684,7 @@ const translations = {
     choosePremiumPlan: "Auf Premium upgraden",
     month: "/Monat",
     year: "/Jahr",
-    blogTitle: "Blog & Ressourcen",
+    blogTitle: "Blogs",
     blogDesc: "Entdecken Sie Tipps, Strategien und Erkenntnisse zur Steigerung Ihrer Produktivität",
     blogPost1Title: "Tiefenarbeit vs. Oberflächliche Arbeit",
     blogPost1Desc: "Erfahren Sie, wie Sie Ihre Fokuszeit schützen und Ablenkungen beseitigen",
@@ -1617,16 +1617,20 @@ export default function HomePageClient() {
       </section>
 
       {/* Social Proof — no fake testimonials, just honest CTA */}
-      <section id="testimonials" className="container mx-auto px-4 py-20">
-        <div className="rounded-2xl border border-primary/20 bg-card p-12 text-center max-w-3xl mx-auto">
-          <p className="text-5xl font-bold text-primary mb-2">+500</p>
-          <p className="text-xl font-semibold text-foreground mb-4">users already organized with Future Task</p>
-          <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
-            Join a growing community of students, freelancers, and teams who use Future Task to get things done.
+      <section id="testimonials" className="container mx-auto px-4 py-16 md:py-20">
+        <div className="rounded-2xl border border-primary/20 bg-card p-8 md:p-12 text-center max-w-3xl mx-auto">
+          <p className="text-4xl md:text-5xl font-bold text-primary mb-2">+500</p>
+          <p className="text-lg md:text-xl font-semibold text-foreground mb-4">{t("testimonialsTitle")}</p>
+          <p className="text-muted-foreground mb-8 max-w-xl mx-auto text-sm md:text-base">
+            {language === "en" && "Join a growing community of students, freelancers, and teams who use Future Task to get things done."}
+            {language === "es" && "Únete a una creciente comunidad de estudiantes, freelancers y equipos que usan Future Task para lograr cosas."}
+            {language === "fr" && "Rejoignez une communauté croissante d'étudiants, de indépendants et d'équipes qui utilisent Future Task pour accomplir les choses."}
+            {language === "de" && "Schließen Sie sich einer wachsenden Gemeinschaft von Schülern, Freiberuflern und Teams an, die Future Task nutzen, um Dinge zu erledigen."}
+            {language === "it" && "Unisciti a una crescente comunità di studenti, freelancer e team che utilizzano Future Task per portare a termine le cose."}
           </p>
           <Link href="/signup">
-            <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl font-semibold px-10">
-              Start for free
+            <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl font-semibold px-8 md:px-10 text-sm md:text-base">
+              {t("startNow")}
             </Button>
           </Link>
         </div>

@@ -377,11 +377,46 @@ export default function BlogPageClient({ initialLanguage = 'en' }: { initialLang
   )
 
   const translations = {
-    en: { title: 'Blogs', subtitle: 'Master productivity with in-depth guides and strategies' },
-    es: { title: 'Blogs', subtitle: 'Domina la productividad con guías y estrategias en profundidad' },
-    fr: { title: 'Blogs', subtitle: 'Maîtrisez la productivité avec des guides et stratégies approfondis' },
-    de: { title: 'Blogs', subtitle: 'Beherrsche Produktivität mit umfassenden Leitfäden und Strategien' },
-    it: { title: 'Blogs', subtitle: 'Padroneggia la produttività con guide e strategie approfondite' },
+    en: { 
+      title: 'Blogs', 
+      subtitle: 'Master productivity with in-depth guides and strategies',
+      backToHome: 'Back to Home',
+      searchPlaceholder: 'Search articles...',
+      readTime: 'read',
+      noResults: 'No articles found matching your search.',
+    },
+    es: { 
+      title: 'Blogs', 
+      subtitle: 'Domina la productividad con guías y estrategias en profundidad',
+      backToHome: 'Volver al Inicio',
+      searchPlaceholder: 'Buscar artículos...',
+      readTime: 'de lectura',
+      noResults: 'No hay artículos que coincidan con tu búsqueda.',
+    },
+    fr: { 
+      title: 'Blogs', 
+      subtitle: 'Maîtrisez la productivité avec des guides et stratégies approfondis',
+      backToHome: "Retour à l'Accueil",
+      searchPlaceholder: 'Rechercher des articles...',
+      readTime: 'de lecture',
+      noResults: 'Aucun article ne correspond à votre recherche.',
+    },
+    de: { 
+      title: 'Blogs', 
+      subtitle: 'Beherrsche Produktivität mit umfassenden Leitfäden und Strategien',
+      backToHome: 'Zurück zur Startseite',
+      searchPlaceholder: 'Artikel durchsuchen...',
+      readTime: 'Lesezeit',
+      noResults: 'Keine Artikel gefunden, die Ihrer Suche entsprechen.',
+    },
+    it: { 
+      title: 'Blogs', 
+      subtitle: 'Padroneggia la produttività con guide e strategie approfondite',
+      backToHome: 'Torna alla Home',
+      searchPlaceholder: 'Ricerca articoli...',
+      readTime: 'di lettura',
+      noResults: 'Nessun articolo trovato che corrisponde alla tua ricerca.',
+    },
   }
 
   const t = translations[language]
@@ -393,11 +428,7 @@ export default function BlogPageClient({ initialLanguage = 'en' }: { initialLang
         <div className="max-w-6xl mx-auto">
           <Link href="/" className="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors mb-8 font-medium text-sm">
             <span>←</span>
-            {language === 'en' && 'Back to Home'}
-            {language === 'es' && 'Volver al Inicio'}
-            {language === 'fr' && "Retour à l'Accueil"}
-            {language === 'de' && 'Zurück zur Startseite'}
-            {language === 'it' && 'Torna alla Home'}
+            {t.backToHome}
           </Link>
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4 text-balance">{t.title}</h1>
@@ -407,7 +438,7 @@ export default function BlogPageClient({ initialLanguage = 'en' }: { initialLang
             <div className="relative max-w-2xl mx-auto">
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
               <Input
-                placeholder={language === 'en' ? 'Search articles...' : language === 'es' ? 'Buscar artículos...' : language === 'fr' ? 'Rechercher des articles...' : language === 'de' ? 'Artikel durchsuchen...' : 'Ricerca articoli...'}
+                placeholder={t.searchPlaceholder}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-12 pr-4 py-3 rounded-lg border border-border bg-card text-foreground"
@@ -447,7 +478,7 @@ export default function BlogPageClient({ initialLanguage = 'en' }: { initialLang
 
                       <div className="flex items-center justify-between pt-2 mt-auto">
                         <span className="text-xs text-muted-foreground">
-                          {blog.readTime} min {language === 'en' ? 'read' : language === 'es' ? 'de lectura' : language === 'fr' ? 'de lecture' : language === 'de' ? 'Lesezeit' : 'di lettura'}
+                          {blog.readTime} min {t.readTime}
                         </span>
                         <ArrowRight className="w-4 h-4 text-primary group-hover:translate-x-1 transition-transform" />
                       </div>
@@ -459,7 +490,7 @@ export default function BlogPageClient({ initialLanguage = 'en' }: { initialLang
           ) : (
             <div className="text-center py-16">
               <p className="text-lg text-muted-foreground">
-                {language === 'en' ? 'No articles found matching your search.' : language === 'es' ? 'No hay artículos que coincidan con tu búsqueda.' : language === 'fr' ? 'Aucun article ne correspond à votre recherche.' : language === 'de' ? 'Keine Artikel gefunden, die Ihrer Suche entsprechen.' : 'Nessun articolo trovato che corrisponde alla tua ricerca.'}
+                {t.noResults}
               </p>
             </div>
           )}
