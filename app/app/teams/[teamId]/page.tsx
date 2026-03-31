@@ -19,20 +19,27 @@ import {
   Shield,
   Plus,
   Edit,
+  MessageSquare,
+  Calendar,
 } from "@/components/icons"
 import { useTranslation } from "@/hooks/useTranslation"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
+import { TeamChat } from "@/components/TeamChat"
+import { TeamCalendar } from "@/components/TeamCalendar"
+import { createClient } from "@/lib/supabase/client"
 
 export default function TeamDetailPage() {
   const { t } = useTranslation()
   const params = useParams()
   const router = useRouter()
   const teamId = params.teamId as string
+  const supabase = createClient()
   const [loading, setLoading] = useState(true)
   const [team, setTeam] = useState<any>(null)
+  const [currentUserId, setCurrentUserId] = useState<string>("")
   const [inviteDialogOpen, setInviteDialogOpen] = useState(false)
   const [teamInviteLink, setTeamInviteLink] = useState<string>("")
   const [inviting, setInviting] = useState(false)
@@ -80,6 +87,7 @@ export default function TeamDetailPage() {
       fetchTeamDetails()
       fetchTeamTasks()
       fetchTeamStats()
+      getCurrentUser()
     }
   }, [teamId])
 
@@ -174,6 +182,17 @@ export default function TeamDetailPage() {
       }
     } catch (error) {
       console.error("Error fetching team stats:", error)
+    }
+  }
+
+  const getCurrentUser = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user?.id) {
+        setCurrentUserId(user.id)
+      }
+    } catch (error) {
+      console.error("Error fetching current user:", error)
     }
   }
 
@@ -520,24 +539,29 @@ export default function TeamDetailPage() {
         </Card>
       )}
 
-      <Tabs defaultValue="tasks" className="w-full">
-        <TabsList className="grid w-full grid-cols-3 gap-1 p-1 overflow-hidden rounded-lg">
-          <TabsTrigger value="tasks" className="text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-2 truncate">
-            <CheckSquare className="w-3 h-3 sm:w-4 sm:h-4 mr-0 sm:mr-1 shrink-0" />
-            <span className="hidden xs:inline truncate">{t("teamTasks")}</span>
-            <span className="xs:hidden truncate">{t("tasks")}</span>
-          </TabsTrigger>
-          <TabsTrigger value="members" className="text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-2 truncate">
-            <Users className="w-3 h-3 sm:w-4 sm:h-4 mr-0 sm:mr-1 shrink-0" />
-            <span className="hidden xs:inline truncate">{t("teamMembers")}</span>
-            <span className="xs:hidden truncate">{t("members")}</span>
-          </TabsTrigger>
-          <TabsTrigger value="stats" className="text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-2 truncate">
-            <BarChart3 className="w-3 h-3 sm:w-4 sm:h-4 mr-0 sm:mr-1 shrink-0" />
-            <span className="hidden xs:inline truncate">{t("statistics")}</span>
-            <span className="xs:hidden truncate">{t("stats")}</span>
-          </TabsTrigger>
-        </TabsList>
+        <Tabs defaultValue="tasks" className="w-full">
+          <TabsList className="grid w-full grid-cols-5 gap-1 p-1 overflow-auto rounded-lg">
+            <TabsTrigger value="tasks" className="text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-2 truncate">
+              <CheckSquare className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
+              {t("tasks")}
+            </TabsTrigger>
+            <TabsTrigger value="chat" className="text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-2 truncate">
+              <MessageSquare className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
+              {t("chat") || "Chat"}
+            </TabsTrigger>
+            <TabsTrigger value="calendar" className="text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-2 truncate">
+              <Calendar className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
+              {t("calendar") || "Calendar"}
+            </TabsTrigger>
+            <TabsTrigger value="members" className="text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-2 truncate">
+              <Users className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
+              {t("members")}
+            </TabsTrigger>
+            <TabsTrigger value="stats" className="text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-2 truncate">
+              <BarChart3 className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
+              {t("statistics")}
+            </TabsTrigger>
+          </TabsList>
 
         <TabsContent value="tasks" className="mt-4 sm:mt-6 space-y-3 sm:space-y-4">
           <Dialog open={isEditTaskDialogOpen} onOpenChange={setIsEditTaskDialogOpen}>
@@ -765,6 +789,18 @@ export default function TeamDetailPage() {
               ))
             )}
           </div>
+        </TabsContent>
+
+        <TabsContent value="chat" className="mt-4 sm:mt-6">
+          <Card className="glass-card p-4 h-96 sm:h-[600px] flex flex-col">
+            <TeamChat teamId={teamId} userId={currentUserId} />
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="calendar" className="mt-4 sm:mt-6">
+          <Card className="glass-card p-4">
+            <TeamCalendar tasks={tasks} />
+          </Card>
         </TabsContent>
 
         <TabsContent value="members" className="mt-4 sm:mt-6 space-y-3 sm:space-y-4">
