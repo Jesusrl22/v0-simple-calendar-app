@@ -51,15 +51,18 @@ export function TeamChat({ teamId, userId }: TeamChatProps) {
       const response = await fetch(`/api/teams/${teamId}/messages`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content: input, userId }),
+        body: JSON.stringify({ content: input }),
       });
 
       if (response.ok) {
         setInput("");
         mutate();
+      } else {
+        const error = await response.json();
+        console.error("[v0] Error response:", error);
       }
     } catch (error) {
-      console.error("Error sending message:", error);
+      console.error("[v0] Error sending message:", error);
     } finally {
       setLoading(false);
     }
