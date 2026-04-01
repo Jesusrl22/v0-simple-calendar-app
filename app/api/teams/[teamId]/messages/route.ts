@@ -12,45 +12,28 @@ export async function GET(
     const limit = parseInt(searchParams.get("limit") || "50")
     const offset = parseInt(searchParams.get("offset") || "0")
 
-    console.log("[v0] Fetching messages for team:", params.teamId, "limit:", limit, "offset:", offset)
-
-    // First, verify user is member of team
+    // Get current user
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const { data: isMember, error: memberCheckError } = await supabase
-      .from("team_members")
-      .select("id")
-      .eq("team_id", params.teamId)
-      .eq("user_id", user.id)
-      .single()
-
-    if (memberCheckError || !isMember) {
-      console.log("[v0] User not member of team")
-      return NextResponse.json(
-        { error: "User is not a member of this team" },
-        { status: 403 }
-      )
-    }
-
+    // Fetch messages - RLS policies will handle access control
     const { data: messages, error } = await supabase
       .from("team_messages")
-      .select("id, message as content, created_at, user_id", { count: "exact" })
+      .select("id, message as content, created_at, user_id")
       .eq("team_id", params.teamId)
       .order("created_at", { ascending: false })
       .range(offset, offset + limit - 1)
 
     if (error) {
-      console.error("[v0] Supabase error fetching messages:", error)
-      throw error
+      console.error("[v0] Error fetching messages:", error)
+      return NextResponse.json(
+        { error: "Failed to fetch messages", details: error.message },
+        { status: 500 }
+      )
     }
 
-    console.log("[v0] Messages fetched successfully:", messages?.length || 0)
     return NextResponse.json({ messages: messages?.reverse() || [] })
   } catch (error) {
     console.error("[v0] Error in GET /messages:", error)
@@ -80,28 +63,10 @@ export async function POST(
     // Get current user
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    // Verify user is member of team
-    const { data: member, error: memberError } = await supabase
-      .from("team_members")
-      .select("id")
-      .eq("team_id", params.teamId)
-      .eq("user_id", user.id)
-      .single()
-
-    if (memberError || !member) {
-      console.log("[v0] User not member for POST:", memberError)
-      return NextResponse.json(
-        { error: "User is not a member of this team" },
-        { status: 403 }
-      )
-    }
-
+    // Insert message - RLS policies will handle access control
     const { data: message, error } = await supabase
       .from("team_messages")
       .insert({
@@ -114,10 +79,12 @@ export async function POST(
 
     if (error) {
       console.error("[v0] Error creating message:", error)
-      throw error
+      return NextResponse.json(
+        { error: "Failed to create message", details: error.message },
+        { status: 500 }
+      )
     }
 
-    console.log("[v0] Message created successfully:", message?.id)
     return NextResponse.json({ message }, { status: 201 })
   } catch (error) {
     console.error("[v0] Error in POST /messages:", error)
