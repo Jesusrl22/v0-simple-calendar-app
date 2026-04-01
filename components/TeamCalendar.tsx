@@ -61,42 +61,42 @@ export function TeamCalendar({ tasks }: TeamCalendarProps) {
   const calendarDays = [...previousMonthDays, ...daysInMonth];
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h3 className="font-semibold text-lg">
+    <div className="space-y-4 sm:space-y-6 w-full">
+      <div className="flex items-center justify-between gap-3">
+        <h3 className="font-semibold text-base sm:text-lg md:text-xl">
           {format(currentDate, "MMMM yyyy")}
         </h3>
         <div className="flex gap-2">
           <button
             onClick={() => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1))}
-            className="p-2 hover:bg-accent rounded-lg transition-colors"
+            className="p-2 hover:bg-accent rounded-lg transition-colors text-muted-foreground hover:text-foreground"
             aria-label="Previous month"
           >
-            <ChevronLeft className="w-4 h-4" />
+            <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
           <button
             onClick={() => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1))}
-            className="p-2 hover:bg-accent rounded-lg transition-colors"
+            className="p-2 hover:bg-accent rounded-lg transition-colors text-muted-foreground hover:text-foreground"
             aria-label="Next month"
           >
-            <ChevronRight className="w-4 h-4" />
+            <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
         </div>
       </div>
 
       {/* Calendar Grid */}
-      <Card className="p-4">
+      <Card className="p-3 sm:p-4 md:p-6 bg-gradient-to-b from-card/80 via-card/50 to-card/30 border-border/50">
         {/* Day Headers */}
-        <div className="grid grid-cols-7 gap-2 mb-2">
+        <div className="grid grid-cols-7 gap-1 sm:gap-2 mb-3 sm:mb-4">
           {days.map((day) => (
-            <div key={day} className="text-center text-sm font-semibold text-muted-foreground">
+            <div key={day} className="text-center text-xs sm:text-sm font-semibold text-muted-foreground py-2">
               {day}
             </div>
           ))}
         </div>
 
         {/* Calendar Days */}
-        <div className="grid grid-cols-7 gap-2">
+        <div className="grid grid-cols-7 gap-1 sm:gap-2">
           {calendarDays.map((day, index) => {
             if (!day) {
               return <div key={`empty-${index}`} className="aspect-square" />;
@@ -110,23 +110,25 @@ export function TeamCalendar({ tasks }: TeamCalendarProps) {
             return (
               <div
                 key={dateKey}
-                className={`aspect-square p-2 rounded-lg border transition-colors ${
-                  isToday ? "bg-primary/10 border-primary" : "border-border"
-                } ${!isCurrentMonth ? "opacity-40" : ""}`}
+                className={`aspect-square p-1.5 sm:p-2 rounded-lg border transition-all ${
+                  isToday 
+                    ? "bg-primary/20 border-primary shadow-md" 
+                    : "border-border/50 bg-card/40 hover:bg-card/60 hover:border-border"
+                } ${!isCurrentMonth ? "opacity-30" : ""}`}
               >
-                <div className="text-xs font-semibold mb-1">{format(day, "d")}</div>
-                <div className="space-y-1">
+                <div className="text-xs sm:text-sm font-semibold mb-0.5">{format(day, "d")}</div>
+                <div className="space-y-0.5 overflow-hidden">
                   {dayTasks.slice(0, 2).map((task) => (
                     <div
                       key={task.id}
-                      className="text-xs bg-blue-500/20 text-blue-700 dark:text-blue-400 px-1.5 py-0.5 rounded truncate"
+                      className="text-xs bg-gradient-to-r from-blue-500/30 to-blue-400/20 text-blue-700 dark:text-blue-300 px-1 py-0.5 rounded truncate hover:bg-blue-500/40 transition-colors cursor-pointer"
                       title={task.title}
                     >
                       {task.title}
                     </div>
                   ))}
                   {dayTasks.length > 2 && (
-                    <div className="text-xs text-muted-foreground px-1">
+                    <div className="text-xs text-muted-foreground px-1 font-medium">
                       +{dayTasks.length - 2} {t.more}
                     </div>
                   )}

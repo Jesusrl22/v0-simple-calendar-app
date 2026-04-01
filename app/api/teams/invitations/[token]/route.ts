@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { createServerClient, createServiceRoleClient } from "@/lib/supabase/server"
+import { notifyNewMember } from "@/lib/team-notifications"
 
 export async function GET(request: Request, { params }: { params: { token: string } }) {
   try {
@@ -106,6 +107,14 @@ export async function POST(request: Request, { params }: { params: { token: stri
     }
 
     console.log("[v0] Successfully added user to team:", teamId)
+
+    // Notify team owners/admins that a new member joined
+    await notifyNewMember({
+      newMemberId: user.id,
+      teamId,
+      teamName: team.name,
+    }).catch(() => {})
+
     return NextResponse.json({ success: true, teamId })
   } catch (error: any) {
     console.error("[v0] Error accepting team invite:", error)
