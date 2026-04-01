@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, getDay, isSameMonth } from "date-fns";
+import { useTranslation } from "@/hooks/useTranslation";
 
 interface Task {
   id: string;
@@ -17,7 +18,27 @@ interface TeamCalendarProps {
 }
 
 export function TeamCalendar({ tasks }: TeamCalendarProps) {
+  const { language } = useTranslation();
   const [currentDate, setCurrentDate] = useState(new Date());
+
+  const dayLabels = {
+    en: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+    es: ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sab"],
+    fr: ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"],
+    de: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
+    it: ["Dom", "Lun", "Mar", "Mer", "Gio", "Ven", "Sab"],
+  };
+
+  const translations = {
+    en: { more: "more" },
+    es: { more: "más" },
+    fr: { more: "de plus" },
+    de: { more: "weitere" },
+    it: { more: "altri" },
+  };
+
+  const t = translations[language as keyof typeof translations] || translations.en;
+  const days = dayLabels[language as keyof typeof dayLabels] || dayLabels.en;
 
   const monthStart = startOfMonth(currentDate);
   const monthEnd = endOfMonth(currentDate);
@@ -49,12 +70,14 @@ export function TeamCalendar({ tasks }: TeamCalendarProps) {
           <button
             onClick={() => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1))}
             className="p-2 hover:bg-accent rounded-lg transition-colors"
+            aria-label="Previous month"
           >
             <ChevronLeft className="w-4 h-4" />
           </button>
           <button
             onClick={() => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1))}
             className="p-2 hover:bg-accent rounded-lg transition-colors"
+            aria-label="Next month"
           >
             <ChevronRight className="w-4 h-4" />
           </button>
@@ -65,7 +88,7 @@ export function TeamCalendar({ tasks }: TeamCalendarProps) {
       <Card className="p-4">
         {/* Day Headers */}
         <div className="grid grid-cols-7 gap-2 mb-2">
-          {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
+          {days.map((day) => (
             <div key={day} className="text-center text-sm font-semibold text-muted-foreground">
               {day}
             </div>
@@ -104,7 +127,7 @@ export function TeamCalendar({ tasks }: TeamCalendarProps) {
                   ))}
                   {dayTasks.length > 2 && (
                     <div className="text-xs text-muted-foreground px-1">
-                      +{dayTasks.length - 2} more
+                      +{dayTasks.length - 2} {t.more}
                     </div>
                   )}
                 </div>
