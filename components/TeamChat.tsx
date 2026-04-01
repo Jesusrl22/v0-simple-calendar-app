@@ -14,10 +14,6 @@ interface Message {
   content: string;
   created_at: string;
   user_id: string;
-  users: {
-    email: string;
-    name: string | null;
-  };
 }
 
 interface TeamChatProps {
@@ -83,13 +79,13 @@ export function TeamChat({ teamId, userId }: TeamChatProps) {
               <Avatar className="w-8 h-8 flex-shrink-0">
                 <AvatarImage src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${message.user_id}`} />
                 <AvatarFallback>
-                  {message.users.name?.charAt(0) || message.users.email.charAt(0)}
+                  {message.user_id.substring(0, 2).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
               <div className="flex-1">
                 <div className="flex items-baseline gap-2">
                   <span className="font-semibold text-sm">
-                    {message.users.name || message.users.email}
+                    User {message.user_id.substring(0, 8)}
                   </span>
                   <span className="text-xs text-muted-foreground">
                     {format(new Date(message.created_at), "HH:mm")}

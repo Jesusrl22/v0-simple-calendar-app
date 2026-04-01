@@ -18,10 +18,7 @@ export async function GET(
 
     const { data: messages, error } = await supabase
       .from("team_messages")
-      .select(
-        "id, content, created_at, user_id, users(email, name)",
-        { count: "exact" }
-      )
+      .select("id, message as content, created_at, user_id")
       .eq("team_id", params.teamId)
       .order("created_at", { ascending: false })
       .range(offset, offset + limit - 1);
@@ -30,7 +27,7 @@ export async function GET(
 
     return NextResponse.json({ messages: messages?.reverse() || [] });
   } catch (error) {
-    console.error("Error fetching messages:", error);
+    console.error("[v0] Error fetching messages:", error);
     return NextResponse.json(
       { error: "Failed to fetch messages" },
       { status: 500 }
@@ -73,16 +70,16 @@ export async function POST(
       .insert({
         team_id: params.teamId,
         user_id: userId,
-        content: content.trim(),
+        message: content.trim(),
       })
-      .select("id, content, created_at, user_id, users(email, name)")
+      .select("id, message as content, created_at, user_id")
       .single();
 
     if (error) throw error;
 
     return NextResponse.json({ message }, { status: 201 });
   } catch (error) {
-    console.error("Error creating message:", error);
+    console.error("[v0] Error creating message:", error);
     return NextResponse.json(
       { error: "Failed to create message" },
       { status: 500 }
