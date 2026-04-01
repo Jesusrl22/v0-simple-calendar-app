@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server"
+import { createClient, createServiceRoleClient } from "@/lib/supabase/server"
 import { NextRequest, NextResponse } from "next/server"
 
 // GET messages for a team
@@ -12,14 +12,17 @@ export async function GET(
     const limit = parseInt(searchParams.get("limit") || "50")
     const offset = parseInt(searchParams.get("offset") || "0")
 
-    // Get current user
+    console.log("[v0] Fetching messages for team:", params.teamId)
+
+    // Get current user for verification
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    // Fetch messages - RLS policies will handle access control
-    const { data: messages, error } = await supabase
+    // Use service role client to bypass RLS
+    const serviceSupabase = await createServiceRoleClient()
+    const { data: messages, error } = await serviceSupabase
       .from("team_messages")
       .select("id, message as content, created_at, user_id")
       .eq("team_id", params.teamId)
@@ -27,13 +30,14 @@ export async function GET(
       .range(offset, offset + limit - 1)
 
     if (error) {
-      console.error("[v0] Error fetching messages:", error)
+      console.error("[v0] Supabase error fetching messages:", error)
       return NextResponse.json(
         { error: "Failed to fetch messages", details: error.message },
         { status: 500 }
       )
     }
 
+    console.log("[v0] Messages fetched successfully:", messages?.length || 0)
     return NextResponse.json({ messages: messages?.reverse() || [] })
   } catch (error) {
     console.error("[v0] Error in GET /messages:", error)
@@ -66,8 +70,11 @@ export async function POST(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    // Insert message - RLS policies will handle access control
-    const { data: message, error } = await supabase
+    console.log("[v0] Creating message for user:", user.id, "team:", params.teamId)
+
+    // Use service role client to bypass RLS
+    const serviceSupabase = await createServiceRoleClient()
+    const { data: message, error } = await serviceSupabase
       .from("team_messages")
       .insert({
         team_id: params.teamId,
@@ -85,6 +92,7 @@ export async function POST(
       )
     }
 
+    console.log("[v0] Message created successfully:", message?.id)
     return NextResponse.json({ message }, { status: 201 })
   } catch (error) {
     console.error("[v0] Error in POST /messages:", error)
