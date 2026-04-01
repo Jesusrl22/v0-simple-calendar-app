@@ -592,6 +592,8 @@ export default function TeamDetailPage() {
               <TabsTrigger 
                 value="stats" 
                 className="flex-shrink-0 inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 sm:py-3 rounded-lg whitespace-nowrap text-xs sm:text-sm font-medium transition-all hover:bg-secondary/50 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md"
+              >
+                <BarChart3 className="w-4 h-4 sm:w-5 sm:h-5" />
                 <span className="hidden sm:inline">{t("statistics")}</span>
               </TabsTrigger>
             </TabsList>
