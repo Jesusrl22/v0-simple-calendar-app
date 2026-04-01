@@ -435,18 +435,23 @@ export default function TeamDetailPage() {
       </Button>
 
       <Dialog open={showInviteLink} onOpenChange={setShowInviteLink}>
-        <DialogContent>
+        <DialogContent className="w-[90vw] max-w-md">
           <DialogHeader>
-            <DialogTitle>{t("invitationLink")}</DialogTitle>
+            <DialogTitle className="text-base sm:text-lg">{t("invitationLink")}</DialogTitle>
           </DialogHeader>
-          <div className="space-y-4">
-            <p className="text-sm text-muted-foreground">{t("shareInvitationLink")}</p>
-            <div className="flex gap-2">
-              <Input type="text" value={teamInviteLink} readOnly className="flex-1" />
-              <Button onClick={() => copyToClipboard(teamInviteLink)} className="shrink-0">
-                Copy
+          <div className="space-y-3 sm:space-y-4">
+            <p className="text-xs sm:text-sm text-muted-foreground">{t("shareInvitationLink")}</p>
+            <div className="flex flex-col xs:flex-row gap-2">
+              <Input type="text" value={teamInviteLink} readOnly className="flex-1 font-mono text-xs" />
+              <Button 
+                onClick={() => copyToClipboard(teamInviteLink)} 
+                className="w-full xs:w-auto shrink-0 text-xs sm:text-sm"
+                size="sm"
+              >
+                {t("copy")}
               </Button>
             </div>
+            <p className="text-xs text-muted-foreground">{t("anyoneWithThisLinkCanJoinTeam")}</p>
           </div>
         </DialogContent>
       </Dialog>
@@ -513,15 +518,20 @@ export default function TeamDetailPage() {
 
       {isOwner && (
         <Card className="glass-card p-3 sm:p-4 md:p-6 mb-4 sm:mb-6">
-          <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2">
-            <UserPlus className="w-4 h-4 sm:w-5 sm:h-5" />
+          <h3 className="text-sm sm:text-base md:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2">
+            <UserPlus className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
             <span className="truncate">{t("inviteMember")}</span>
           </h3>
           <div className="space-y-3 sm:space-y-4">
             <div>
               <p className="text-xs sm:text-sm text-muted-foreground mb-2">{t("shareInvitationLink")}</p>
               <div className="flex flex-col xs:flex-row gap-2">
-                <Input type="text" value={teamInviteLink} readOnly className="flex-1 font-mono text-xs break-all" />
+                <Input 
+                  type="text" 
+                  value={teamInviteLink} 
+                  readOnly 
+                  className="flex-1 font-mono text-xs sm:text-sm break-all" 
+                />
                 <Button
                   onClick={() => {
                     navigator.clipboard.writeText(teamInviteLink)
@@ -534,32 +544,34 @@ export default function TeamDetailPage() {
                 </Button>
               </div>
             </div>
-            <p className="text-xs text-muted-foreground">{t("anyoneWithThisLinkCanJoinTeam")}</p>
+            <p className="text-xs sm:text-sm text-muted-foreground">{t("anyoneWithThisLinkCanJoinTeam")}</p>
           </div>
         </Card>
       )}
 
         <Tabs defaultValue="tasks" className="w-full">
-          <TabsList className="grid w-full grid-cols-5 gap-1 p-1 overflow-auto rounded-lg">
-            <TabsTrigger value="tasks" className="text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-2 truncate">
-              <CheckSquare className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
-              {t("tasks")}
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-1 p-1 overflow-auto rounded-lg">
+            <TabsTrigger value="tasks" className="text-xs sm:text-sm px-1 sm:px-3 py-1 sm:py-2 truncate">
+              <CheckSquare className="w-3 h-3 sm:w-4 sm:h-4 mr-0.5 sm:mr-1" />
+              <span className="hidden sm:inline">{t("tasks")}</span>
+              <span className="inline sm:hidden text-xs">{t("tasks")}</span>
             </TabsTrigger>
-            <TabsTrigger value="chat" className="text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-2 truncate">
-              <MessageSquare className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
-              {t("chat") || "Chat"}
+            <TabsTrigger value="chat" className="text-xs sm:text-sm px-1 sm:px-3 py-1 sm:py-2 truncate">
+              <MessageSquare className="w-3 h-3 sm:w-4 sm:h-4 mr-0.5 sm:mr-1" />
+              <span className="hidden sm:inline">{t("chat")}</span>
+              <span className="inline sm:hidden text-xs">{t("chat")}</span>
             </TabsTrigger>
-            <TabsTrigger value="calendar" className="text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-2 truncate">
-              <Calendar className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
-              {t("calendar") || "Calendar"}
+            <TabsTrigger value="calendar" className="text-xs sm:text-sm px-1 sm:px-3 py-1 sm:py-2 truncate">
+              <Calendar className="w-3 h-3 sm:w-4 sm:h-4 mr-0.5 sm:mr-1" />
+              <span className="hidden md:inline">{t("calendar")}</span>
             </TabsTrigger>
-            <TabsTrigger value="members" className="text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-2 truncate">
-              <Users className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
-              {t("members")}
+            <TabsTrigger value="members" className="text-xs sm:text-sm px-1 sm:px-3 py-1 sm:py-2 truncate">
+              <Users className="w-3 h-3 sm:w-4 sm:h-4 mr-0.5 sm:mr-1" />
+              <span className="hidden md:inline">{t("members")}</span>
             </TabsTrigger>
-            <TabsTrigger value="stats" className="text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-2 truncate">
-              <BarChart3 className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
-              {t("statistics")}
+            <TabsTrigger value="stats" className="text-xs sm:text-sm px-1 sm:px-3 py-1 sm:py-2 truncate">
+              <BarChart3 className="w-3 h-3 sm:w-4 sm:h-4 mr-0.5 sm:mr-1" />
+              <span className="hidden md:inline">{t("statistics")}</span>
             </TabsTrigger>
           </TabsList>
 
@@ -804,49 +816,55 @@ export default function TeamDetailPage() {
         </TabsContent>
 
         <TabsContent value="members" className="mt-4 sm:mt-6 space-y-3 sm:space-y-4">
-          <Card className="glass-card p-4">
-            <div className="space-y-3">
-              <h3 className="font-semibold text-sm sm:text-base">{t("invitationLink")}</h3>
-              <div className="flex gap-2 flex-col sm:flex-row">
+          <Card className="glass-card p-3 sm:p-4 md:p-6">
+            <div className="space-y-3 sm:space-y-4">
+              <h3 className="font-semibold text-sm sm:text-base md:text-lg">{t("invitationLink")}</h3>
+              <div className="flex flex-col xs:flex-row gap-2">
                 <Input 
                   type="text" 
                   value={fullInviteUrl || t("loading")} 
                   readOnly 
-                  className="flex-1 text-xs sm:text-sm" 
+                  className="flex-1 font-mono text-xs sm:text-sm" 
                 />
                 <Button 
                   onClick={() => copyToClipboard(fullInviteUrl)} 
                   size="sm"
-                  className="w-full sm:w-auto"
+                  className="w-full xs:w-auto shrink-0 text-xs sm:text-sm"
                   disabled={!fullInviteUrl}
                 >
                   {t("copy")}
                 </Button>
               </div>
-              <p className="text-xs text-muted-foreground">{t("shareInvitationLink")}</p>
+              <p className="text-xs sm:text-sm text-muted-foreground">{t("shareInvitationLink")}</p>
             </div>
           </Card>
 
-          <div className="grid gap-4">
+          <div className="grid gap-3 sm:gap-4">
             {team.members?.map((member: any) => (
-              <Card key={member.id} className="glass-card p-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
-                      <Users className="w-5 h-5 text-primary" />
+              <Card key={member.id} className="glass-card p-3 sm:p-4 md:p-6">
+                <div className="flex flex-col xs:flex-row xs:items-center xs:justify-between gap-3 xs:gap-4">
+                  <div className="flex items-center gap-2 xs:gap-3 min-w-0">
+                    <div className="w-8 h-8 xs:w-10 xs:h-10 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
+                      <Users className="w-4 h-4 xs:w-5 xs:h-5 text-primary" />
                     </div>
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <p className="font-semibold">{member.users?.name || member.users?.email}</p>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <p className="font-semibold text-sm sm:text-base truncate">{member.users?.name || member.users?.email}</p>
                         {getRoleIcon(member.role)}
                       </div>
-                      <p className="text-sm text-muted-foreground">{member.users?.email}</p>
+                      <p className="text-xs sm:text-sm text-muted-foreground truncate">{member.users?.email}</p>
                       <p className="text-xs text-muted-foreground">{t(member.role)}</p>
                     </div>
                   </div>
                   {canManageMembers && member.role !== "owner" && (
-                    <Button variant="ghost" size="sm" onClick={() => handleRemoveMember(member.id)}>
-                      <Trash2 className="w-4 h-4 text-destructive" />
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      onClick={() => handleRemoveMember(member.id)}
+                      className="w-full xs:w-auto xs:shrink-0 text-xs sm:text-sm"
+                    >
+                      <Trash2 className="w-4 h-4 text-destructive mr-1" />
+                      <span className="xs:hidden">{t("remove")}</span>
                     </Button>
                   )}
                 </div>
