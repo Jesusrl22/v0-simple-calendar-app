@@ -428,8 +428,12 @@ export default function TeamDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background p-4 sm:p-8">
-      <Button variant="ghost" onClick={() => router.push("/app/teams")} className="mb-4">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-background/80 p-4 sm:p-6 md:p-8">
+      <Button 
+        variant="ghost" 
+        onClick={() => router.push("/app/teams")} 
+        className="mb-4 sm:mb-6 -ml-2 hover:bg-primary/10 text-muted-foreground hover:text-foreground"
+      >
         <ArrowLeft className="w-4 h-4 mr-2" />
         {t("back")}
       </Button>
@@ -437,26 +441,26 @@ export default function TeamDetailPage() {
       <Dialog open={showInviteLink} onOpenChange={setShowInviteLink}>
         <DialogContent className="w-[90vw] max-w-md">
           <DialogHeader>
-            <DialogTitle className="text-base sm:text-lg">{t("invitationLink")}</DialogTitle>
+            <DialogTitle className="text-lg sm:text-xl">{t("invitationLink")}</DialogTitle>
           </DialogHeader>
-          <div className="space-y-3 sm:space-y-4">
-            <p className="text-xs sm:text-sm text-muted-foreground">{t("shareInvitationLink")}</p>
+          <div className="space-y-4 sm:space-y-5">
+            <p className="text-sm text-muted-foreground">{t("shareInvitationLink")}</p>
             <div className="flex flex-col xs:flex-row gap-2">
-              <Input type="text" value={teamInviteLink} readOnly className="flex-1 font-mono text-xs" />
+              <Input type="text" value={teamInviteLink} readOnly className="flex-1 font-mono text-xs sm:text-sm h-10" />
               <Button 
                 onClick={() => copyToClipboard(teamInviteLink)} 
-                className="w-full xs:w-auto shrink-0 text-xs sm:text-sm"
+                className="w-full xs:w-auto shrink-0 text-sm h-10"
                 size="sm"
               >
                 {t("copy")}
               </Button>
             </div>
-            <p className="text-xs text-muted-foreground">{t("anyoneWithThisLinkCanJoinTeam")}</p>
+            <p className="text-xs sm:text-sm text-muted-foreground">{t("anyoneWithThisLinkCanJoinTeam")}</p>
           </div>
         </DialogContent>
       </Dialog>
 
-      <div className="mb-6">
+      <div className="mb-8 sm:mb-10">
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4 mb-3 sm:mb-2">
           <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold break-words">
             <span className="text-primary neon-text">{team.name}</span>
@@ -517,65 +521,80 @@ export default function TeamDetailPage() {
       </div>
 
       {isOwner && (
-        <Card className="glass-card p-3 sm:p-4 md:p-6 mb-4 sm:mb-6">
-          <h3 className="text-sm sm:text-base md:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2">
-            <UserPlus className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
-            <span className="truncate">{t("inviteMember")}</span>
+        <Card className="glass-card p-5 sm:p-6 md:p-8 mb-8 sm:mb-10 bg-gradient-to-br from-card/60 via-card/40 to-card/20 border-border/50 hover:border-border transition-all">
+          <h3 className="text-base sm:text-lg md:text-xl font-semibold mb-4 sm:mb-6 flex items-center gap-3">
+            <UserPlus className="w-5 h-5 sm:w-6 sm:h-6 text-primary flex-shrink-0" />
+            <span>{t("inviteMember")}</span>
           </h3>
-          <div className="space-y-3 sm:space-y-4">
+          <div className="space-y-4 sm:space-y-6">
             <div>
-              <p className="text-xs sm:text-sm text-muted-foreground mb-2">{t("shareInvitationLink")}</p>
-              <div className="flex flex-col xs:flex-row gap-2">
+              <p className="text-sm text-muted-foreground mb-3 font-medium">{t("shareInvitationLink")}</p>
+              <div className="flex flex-col xs:flex-row gap-2 sm:gap-3">
                 <Input 
                   type="text" 
                   value={teamInviteLink} 
                   readOnly 
-                  className="flex-1 font-mono text-xs sm:text-sm break-all" 
+                  className="flex-1 font-mono text-xs sm:text-sm h-10 sm:h-11 bg-secondary/30" 
                 />
                 <Button
                   onClick={() => {
                     navigator.clipboard.writeText(teamInviteLink)
                     alert(t("copiedToClipboard") || "Copied!")
                   }}
-                  className="w-full xs:w-auto shrink-0 text-xs sm:text-sm"
+                  className="w-full xs:w-auto shrink-0 text-sm sm:text-base h-10 sm:h-11 px-4 sm:px-6 neon-glow-hover"
                   size="sm"
                 >
                   {t("copy")}
                 </Button>
               </div>
             </div>
-            <p className="text-xs sm:text-sm text-muted-foreground">{t("anyoneWithThisLinkCanJoinTeam")}</p>
+            <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">{t("anyoneWithThisLinkCanJoinTeam")}</p>
           </div>
         </Card>
       )}
 
-        <Tabs defaultValue="tasks" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-1 p-1 overflow-auto rounded-lg">
-            <TabsTrigger value="tasks" className="text-xs sm:text-sm px-1 sm:px-3 py-1 sm:py-2 truncate">
-              <CheckSquare className="w-3 h-3 sm:w-4 sm:h-4 mr-0.5 sm:mr-1" />
-              <span className="hidden sm:inline">{t("tasks")}</span>
-              <span className="inline sm:hidden text-xs">{t("tasks")}</span>
-            </TabsTrigger>
-            <TabsTrigger value="chat" className="text-xs sm:text-sm px-1 sm:px-3 py-1 sm:py-2 truncate">
-              <MessageSquare className="w-3 h-3 sm:w-4 sm:h-4 mr-0.5 sm:mr-1" />
-              <span className="hidden sm:inline">{t("chat")}</span>
-              <span className="inline sm:hidden text-xs">{t("chat")}</span>
-            </TabsTrigger>
-            <TabsTrigger value="calendar" className="text-xs sm:text-sm px-1 sm:px-3 py-1 sm:py-2 truncate">
-              <Calendar className="w-3 h-3 sm:w-4 sm:h-4 mr-0.5 sm:mr-1" />
-              <span className="hidden md:inline">{t("calendar")}</span>
-            </TabsTrigger>
-            <TabsTrigger value="members" className="text-xs sm:text-sm px-1 sm:px-3 py-1 sm:py-2 truncate">
-              <Users className="w-3 h-3 sm:w-4 sm:h-4 mr-0.5 sm:mr-1" />
-              <span className="hidden md:inline">{t("members")}</span>
-            </TabsTrigger>
-            <TabsTrigger value="stats" className="text-xs sm:text-sm px-1 sm:px-3 py-1 sm:py-2 truncate">
-              <BarChart3 className="w-3 h-3 sm:w-4 sm:h-4 mr-0.5 sm:mr-1" />
-              <span className="hidden md:inline">{t("statistics")}</span>
-            </TabsTrigger>
-          </TabsList>
+        <div className="mb-4 sm:mb-6">
+          <Tabs defaultValue="tasks" className="w-full">
+            <div className="flex items-center justify-between mb-4 sm:mb-6">
+              <h2 className="text-base sm:text-lg md:text-xl font-semibold">{t("teamOverview")}</h2>
+            </div>
+            <TabsList className="w-full flex overflow-x-auto bg-gradient-to-r from-card/40 to-card/30 border border-border/50 rounded-xl p-2 sm:p-3 gap-2 sm:gap-3 scrollbar-hide shadow-sm">
+              <TabsTrigger 
+                value="tasks" 
+                className="flex-shrink-0 inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 sm:py-3 rounded-lg whitespace-nowrap text-xs sm:text-sm font-medium transition-all hover:bg-secondary/50 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md"
+              >
+                <CheckSquare className="w-4 h-4 sm:w-5 sm:h-5" />
+                <span className="hidden xs:inline">{t("tasks")}</span>
+              </TabsTrigger>
+              <TabsTrigger 
+                value="chat" 
+                className="flex-shrink-0 inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 sm:py-3 rounded-lg whitespace-nowrap text-xs sm:text-sm font-medium transition-all hover:bg-secondary/50 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md"
+              >
+                <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5" />
+                <span className="hidden xs:inline">{t("chat")}</span>
+              </TabsTrigger>
+              <TabsTrigger 
+                value="calendar" 
+                className="flex-shrink-0 inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 sm:py-3 rounded-lg whitespace-nowrap text-xs sm:text-sm font-medium transition-all hover:bg-secondary/50 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md"
+              >
+                <Calendar className="w-4 h-4 sm:w-5 sm:h-5" />
+                <span className="hidden sm:inline">{t("calendar")}</span>
+              </TabsTrigger>
+              <TabsTrigger 
+                value="members" 
+                className="flex-shrink-0 inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 sm:py-3 rounded-lg whitespace-nowrap text-xs sm:text-sm font-medium transition-all hover:bg-secondary/50 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md"
+              >
+                <Users className="w-4 h-4 sm:w-5 sm:h-5" />
+                <span className="hidden sm:inline">{t("members")}</span>
+              </TabsTrigger>
+              <TabsTrigger 
+                value="stats" 
+                className="flex-shrink-0 inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 sm:py-3 rounded-lg whitespace-nowrap text-xs sm:text-sm font-medium transition-all hover:bg-secondary/50 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md"
+                <span className="hidden sm:inline">{t("statistics")}</span>
+              </TabsTrigger>
+            </TabsList>
 
-        <TabsContent value="tasks" className="mt-4 sm:mt-6 space-y-3 sm:space-y-4">
+        <TabsContent value="tasks" className="mt-6 sm:mt-8 space-y-4 sm:space-y-6 min-h-[60vh]">
           <Dialog open={isEditTaskDialogOpen} onOpenChange={setIsEditTaskDialogOpen}>
             <DialogContent className="w-[90vw] max-w-md">
               <DialogHeader>
@@ -803,19 +822,15 @@ export default function TeamDetailPage() {
           </div>
         </TabsContent>
 
-        <TabsContent value="chat" className="mt-4 sm:mt-6">
-          <Card className="glass-card p-4 h-96 sm:h-[600px] flex flex-col">
-            <TeamChat teamId={teamId} userId={currentUserId} />
-          </Card>
+        <TabsContent value="chat" className="mt-6 sm:mt-8 min-h-[60vh]">
+          <TeamChat teamId={teamId} userId={currentUserId} />
         </TabsContent>
 
-        <TabsContent value="calendar" className="mt-4 sm:mt-6">
-          <Card className="glass-card p-4">
-            <TeamCalendar tasks={tasks} />
-          </Card>
+        <TabsContent value="calendar" className="mt-6 sm:mt-8 min-h-[60vh]">
+          <TeamCalendar tasks={tasks} />
         </TabsContent>
 
-        <TabsContent value="members" className="mt-4 sm:mt-6 space-y-3 sm:space-y-4">
+        <TabsContent value="members" className="mt-6 sm:mt-8 space-y-4 sm:space-y-6 min-h-[60vh]">
           <Card className="glass-card p-3 sm:p-4 md:p-6">
             <div className="space-y-3 sm:space-y-4">
               <h3 className="font-semibold text-sm sm:text-base md:text-lg">{t("invitationLink")}</h3>
@@ -873,7 +888,7 @@ export default function TeamDetailPage() {
           </div>
         </TabsContent>
 
-        <TabsContent value="stats" className="mt-6 space-y-4">
+        <TabsContent value="stats" className="mt-6 sm:mt-8 space-y-4 sm:space-y-6 min-h-[60vh]">
           <div className="grid gap-2 sm:gap-3 md:gap-4 grid-cols-3">
             <Card className="glass-card p-2 sm:p-3 md:p-6 overflow-hidden">
               <div className="text-center">
@@ -933,6 +948,7 @@ export default function TeamDetailPage() {
           </Card>
         </TabsContent>
       </Tabs>
+        </div>
     </div>
   )
 }
