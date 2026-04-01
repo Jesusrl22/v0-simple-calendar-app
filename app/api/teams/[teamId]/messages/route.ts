@@ -1,10 +1,5 @@
-import { createClient } from "@supabase/supabase-js";
-import { NextRequest, NextResponse } from "next/server";
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+import { createClient } from "@/lib/supabase/server"
+import { NextRequest, NextResponse } from "next/server"
 
 // GET messages for a team
 export async function GET(
@@ -12,26 +7,57 @@ export async function GET(
   { params }: { params: { teamId: string } }
 ) {
   try {
-    const searchParams = request.nextUrl.searchParams;
-    const limit = parseInt(searchParams.get("limit") || "50");
-    const offset = parseInt(searchParams.get("offset") || "0");
+    const supabase = await createClient()
+    const searchParams = request.nextUrl.searchParams
+    const limit = parseInt(searchParams.get("limit") || "50")
+    const offset = parseInt(searchParams.get("offset") || "0")
+
+    console.log("[v0] Fetching messages for team:", params.teamId, "limit:", limit, "offset:", offset)
+
+    // First, verify user is member of team
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      )
+    }
+
+    const { data: isMember, error: memberCheckError } = await supabase
+      .from("team_members")
+      .select("id")
+      .eq("team_id", params.teamId)
+      .eq("user_id", user.id)
+      .single()
+
+    if (memberCheckError || !isMember) {
+      console.log("[v0] User not member of team")
+      return NextResponse.json(
+        { error: "User is not a member of this team" },
+        { status: 403 }
+      )
+    }
 
     const { data: messages, error } = await supabase
       .from("team_messages")
-      .select("id, message as content, created_at, user_id")
+      .select("id, message as content, created_at, user_id", { count: "exact" })
       .eq("team_id", params.teamId)
       .order("created_at", { ascending: false })
-      .range(offset, offset + limit - 1);
+      .range(offset, offset + limit - 1)
 
-    if (error) throw error;
+    if (error) {
+      console.error("[v0] Supabase error fetching messages:", error)
+      throw error
+    }
 
-    return NextResponse.json({ messages: messages?.reverse() || [] });
+    console.log("[v0] Messages fetched successfully:", messages?.length || 0)
+    return NextResponse.json({ messages: messages?.reverse() || [] })
   } catch (error) {
-    console.error("[v0] Error fetching messages:", error);
+    console.error("[v0] Error in GET /messages:", error)
     return NextResponse.json(
-      { error: "Failed to fetch messages" },
+      { error: "Failed to fetch messages", details: String(error) },
       { status: 500 }
-    );
+    )
   }
 }
 
@@ -41,13 +67,23 @@ export async function POST(
   { params }: { params: { teamId: string } }
 ) {
   try {
-    const { content, userId } = await request.json();
+    const supabase = await createClient()
+    const { content } = await request.json()
 
     if (!content?.trim()) {
       return NextResponse.json(
         { error: "Message cannot be empty" },
         { status: 400 }
-      );
+      )
+    }
+
+    // Get current user
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      )
     }
 
     // Verify user is member of team
@@ -55,34 +91,39 @@ export async function POST(
       .from("team_members")
       .select("id")
       .eq("team_id", params.teamId)
-      .eq("user_id", userId)
-      .single();
+      .eq("user_id", user.id)
+      .single()
 
     if (memberError || !member) {
+      console.log("[v0] User not member for POST:", memberError)
       return NextResponse.json(
         { error: "User is not a member of this team" },
         { status: 403 }
-      );
+      )
     }
 
     const { data: message, error } = await supabase
       .from("team_messages")
       .insert({
         team_id: params.teamId,
-        user_id: userId,
+        user_id: user.id,
         message: content.trim(),
       })
       .select("id, message as content, created_at, user_id")
-      .single();
+      .single()
 
-    if (error) throw error;
+    if (error) {
+      console.error("[v0] Error creating message:", error)
+      throw error
+    }
 
-    return NextResponse.json({ message }, { status: 201 });
+    console.log("[v0] Message created successfully:", message?.id)
+    return NextResponse.json({ message }, { status: 201 })
   } catch (error) {
-    console.error("[v0] Error creating message:", error);
+    console.error("[v0] Error in POST /messages:", error)
     return NextResponse.json(
-      { error: "Failed to create message" },
+      { error: "Failed to create message", details: String(error) },
       { status: 500 }
-    );
+    )
   }
 }
