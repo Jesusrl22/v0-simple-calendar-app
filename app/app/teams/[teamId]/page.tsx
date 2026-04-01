@@ -29,6 +29,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge"
 import { TeamChat } from "@/components/TeamChat"
 import { TeamCalendar } from "@/components/TeamCalendar"
+import { TaskComments } from "@/components/TaskComments"
 import { createClient } from "@/lib/supabase/client"
 
 export default function TeamDetailPage() {
@@ -72,6 +73,7 @@ export default function TeamDetailPage() {
     due_date: "",
   })
   const [isEditTaskDialogOpen, setIsEditTaskDialogOpen] = useState(false)
+  const [openCommentsTaskId, setOpenCommentsTaskId] = useState<string | null>(null)
 
   const [stats, setStats] = useState({
     totalTasks: 0,
@@ -801,6 +803,15 @@ export default function TeamDetailPage() {
                       <Button
                         variant="ghost"
                         size="icon"
+                        onClick={() => setOpenCommentsTaskId(openCommentsTaskId === task.id ? null : task.id)}
+                        className={`h-8 w-8 sm:h-10 sm:w-10 ${openCommentsTaskId === task.id ? "text-primary" : "text-muted-foreground"}`}
+                        title="Comentarios"
+                      >
+                        <MessageSquare className="w-3 h-3 sm:w-4 sm:h-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
                         onClick={() => openEditTaskDialog(task)}
                         className="h-8 w-8 sm:h-10 sm:w-10"
                       >
@@ -816,6 +827,15 @@ export default function TeamDetailPage() {
                       </Button>
                     </div>
                   </div>
+                  {openCommentsTaskId === task.id && (
+                    <div className="mt-3 pt-3 border-t border-border">
+                      <TaskComments
+                        taskId={task.id}
+                        teamId={teamId}
+                        currentUserId={currentUserId}
+                      />
+                    </div>
+                  )}
                 </Card>
               ))
             )}
