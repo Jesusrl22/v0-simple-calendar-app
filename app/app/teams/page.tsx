@@ -207,39 +207,39 @@ export default function TeamsPage() {
           </Dialog>
         </div>
 
-      {false && !canCreateTeam && (
-        <Card className="glass-card p-4 mb-6 border-primary/50">
-          <div className="flex items-start gap-3">
-            <Crown className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-            <div>
-              <p className="font-semibold mb-1">{t("teamLimitReached")}</p>
-              <p className="text-sm text-muted-foreground mb-2">
-                {userPlan === "free" ? t("freePlanTeamLimit") : t("premiumPlanTeamLimit")}
-              </p>
-              <Button size="sm" onClick={() => router.push("/app/subscription")}>
-                {userPlan === "free" ? t("upgradeToPremium") : t("upgradeToProForUnlimited")}
-              </Button>
+        {false && !canCreateTeam && (
+          <Card className="glass-card p-4 mb-6 border-primary/50">
+            <div className="flex items-start gap-3">
+              <Crown className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="font-semibold mb-1">{t("teamLimitReached")}</p>
+                <p className="text-sm text-muted-foreground mb-2">
+                  {userPlan === "free" ? t("freePlanTeamLimit") : t("premiumPlanTeamLimit")}
+                </p>
+                <Button size="sm" onClick={() => router.push("/app/subscription")}>
+                  {userPlan === "free" ? t("upgradeToPremium") : t("upgradeToProForUnlimited")}
+                </Button>
+              </div>
             </div>
-          </div>
-        </Card>
-      )}
+          </Card>
+        )}
 
-      {loading ? (
-        <div className="flex items-center justify-center h-64">
-          <p className="text-muted-foreground">{t("loading")}</p>
-        </div>
-      ) : teams.length === 0 ? (
-        <Card className="glass-card p-12 text-center border-border/50 bg-card/40">
-          <Users className="w-16 h-16 mx-auto mb-4 text-muted-foreground/40" />
-          <h3 className="text-xl sm:text-2xl font-semibold mb-2">{t("noTeamsFound")}</h3>
-          <p className="text-muted-foreground mb-6">{t("createYourFirstTeam")}</p>
-          <Button onClick={() => setCreateDialogOpen(true)} className="neon-glow-hover">
-            <Plus className="w-4 h-4 mr-2" />
-            {t("createTeam")}
-          </Button>
-        </Card>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        {loading ? (
+          <div className="flex items-center justify-center h-64">
+            <p className="text-muted-foreground">{t("loading")}</p>
+          </div>
+        ) : teams.length === 0 ? (
+          <Card className="glass-card p-12 text-center border-border/50 bg-card/40">
+            <Users className="w-16 h-16 mx-auto mb-4 text-muted-foreground/40" />
+            <h3 className="text-xl sm:text-2xl font-semibold mb-2">{t("noTeamsFound")}</h3>
+            <p className="text-muted-foreground mb-6">{t("createYourFirstTeam")}</p>
+            <Button onClick={() => setCreateDialogOpen(true)} className="neon-glow-hover">
+              <Plus className="w-4 h-4 mr-2" />
+              {t("createTeam")}
+            </Button>
+          </Card>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {teams.map((team, index) => (
             <motion.div
               key={team.id}
@@ -303,7 +303,7 @@ export default function TeamsPage() {
             </motion.div>
           ))}
         </div>
-      )}
+        )}
 
       {/* Edit Team Dialog */}
       <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
@@ -341,6 +341,7 @@ export default function TeamsPage() {
           </div>
         </DialogContent>
       </Dialog>
+      </div>
     </div>
   )
 }
