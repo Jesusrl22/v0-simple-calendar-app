@@ -158,45 +158,47 @@ export default function TeamsPage() {
   const canCreateTeam = teams.length < getTeamLimit()
 
   return (
-    <div className="p-4 md:p-8">
-      <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
-        <div>
-          <h1 className="text-3xl md:text-4xl font-bold mb-2">
+    <div className="p-3 sm:p-4 md:p-8">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
+        <div className="min-w-0 flex-1">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 truncate">
             <span className="text-primary neon-text">{t("teams")}</span>
           </h1>
-          <p className="text-muted-foreground">{t("createYourFirstTeam")}</p>
+          <p className="text-xs sm:text-sm text-muted-foreground truncate">{t("manageYourTeams") || t("createYourFirstTeam")}</p>
         </div>
 
         <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
           <DialogTrigger asChild>
-            <Button disabled={!canCreateTeam} className="neon-glow-hover">
-              <Plus className="w-4 h-4 mr-2" />
+            <Button disabled={!canCreateTeam} className="neon-glow-hover w-full sm:w-auto text-xs sm:text-sm shrink-0">
+              <Plus className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
               {t("createTeam")}
             </Button>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className="w-[90vw] max-w-md">
             <DialogHeader>
-              <DialogTitle>{t("createTeam")}</DialogTitle>
+              <DialogTitle className="text-base sm:text-lg">{t("createTeam")}</DialogTitle>
             </DialogHeader>
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               <div>
-                <Label>{t("teamName")}</Label>
+                <Label className="text-xs sm:text-sm">{t("teamName")}</Label>
                 <Input
                   value={newTeamName}
                   onChange={(e) => setNewTeamName(e.target.value)}
                   placeholder={t("team_placeholder")}
+                  className="text-xs sm:text-sm"
                 />
               </div>
               <div>
-                <Label>{t("teamDescription")}</Label>
+                <Label className="text-xs sm:text-sm">{t("teamDescription")}</Label>
                 <Textarea
                   value={newTeamDescription}
                   onChange={(e) => setNewTeamDescription(e.target.value)}
                   placeholder={t("whatIsThisTeamAbout")}
                   rows={3}
+                  className="text-xs sm:text-sm"
                 />
               </div>
-              <Button onClick={handleCreateTeam} disabled={creating || !newTeamName.trim()} className="w-full">
+              <Button onClick={handleCreateTeam} disabled={creating || !newTeamName.trim()} className="w-full text-xs sm:text-sm">
                 {creating ? t("creating") : t("createTeam")}
               </Button>
             </div>
@@ -232,7 +234,7 @@ export default function TeamsPage() {
           <p className="text-muted-foreground mb-4">{t("createYourFirstTeam")}</p>
         </Card>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
           {teams.map((team, index) => (
             <motion.div
               key={team.id}
@@ -241,31 +243,31 @@ export default function TeamsPage() {
               transition={{ duration: 0.3, delay: index * 0.1 }}
             >
               <Card
-                className="glass-card p-6 neon-glow-hover transition-all group relative overflow-hidden"
+                className="glass-card p-4 sm:p-6 neon-glow-hover transition-all group relative overflow-hidden h-full flex flex-col"
               >
                 <div 
-                  className="cursor-pointer"
+                  className="cursor-pointer flex-1 flex flex-col"
                   onClick={() => router.push(`/app/teams/${team.id}`)}
                 >
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex items-center gap-3 flex-1">
-                      <div className="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center">
-                        <Users className="w-6 h-6 text-primary" />
+                  <div className="flex items-start justify-between gap-2 mb-3 sm:mb-4">
+                    <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-primary/20 flex items-center justify-center flex-shrink-0">
+                        <Users className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-lg truncate">{team.name}</h3>
+                      <div className="min-w-0 flex-1">
+                        <h3 className="font-semibold text-sm sm:text-lg truncate">{team.name}</h3>
                         <p className="text-xs text-muted-foreground">{t(team.role)}</p>
                       </div>
                     </div>
                   </div>
-                  <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+                  <p className="text-xs sm:text-sm text-muted-foreground mb-3 sm:mb-4 line-clamp-2 flex-1">
                     {team.description || t("noDescription")}
                   </p>
-                  <div className="flex items-center justify-between text-sm">
+                  <div className="flex items-center justify-between text-xs sm:text-sm">
                     <div className="flex items-center gap-1 text-muted-foreground">
-                      <UserPlus className="w-4 h-4" />
+                      <UserPlus className="w-3 h-3 sm:w-4 sm:h-4" />
                       <span>
-                        {team.member_count} {t("teamMembers")}
+                        {team.member_count} {t("members")}
                       </span>
                     </div>
                   </div>
@@ -280,10 +282,10 @@ export default function TeamsPage() {
                         e.stopPropagation()
                         openEditTeamDialog(team)
                       }}
-                      className="h-8 w-8 bg-background/80 backdrop-blur-sm hover:bg-background"
+                      className="h-8 w-8 bg-background/80 backdrop-blur-sm hover:bg-background text-xs"
                       title={t("editTeam")}
                     >
-                      <Edit className="w-4 h-4" />
+                      <Edit className="w-3 h-3 sm:w-4 sm:h-4" />
                     </Button>
                   </div>
                 )}
