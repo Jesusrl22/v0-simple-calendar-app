@@ -34,6 +34,15 @@ export function TaskMonthView({ tasks, onTaskClick, onDayClick }: TaskMonthViewP
   // Convert from JS format (0=Sunday) to week starting Monday (0=Monday)
   // Sunday (0) -> 6, Monday (1) -> 0, Tuesday (2) -> 1, etc.
   const firstDayOfMonth = (firstDayOfMonthJS + 6) % 7
+  
+  console.log("[v0] Calendar Debug:", {
+    month: currentMonth,
+    year: currentYear,
+    firstDayOfMonthJS,
+    firstDayOfMonth,
+    firstDateObj: new Date(currentYear, currentMonth, 1).toDateString(),
+    daysInMonth
+  })
 
   const monthName = new Date(currentYear, currentMonth).toLocaleDateString("es-ES", {
     month: "long",
