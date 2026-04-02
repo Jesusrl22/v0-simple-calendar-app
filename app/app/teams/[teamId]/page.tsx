@@ -27,7 +27,6 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
-import { TeamChat } from "@/components/TeamChat"
 import { TeamCalendar } from "@/components/TeamCalendar"
 import { TaskComments } from "@/components/TaskComments"
 import { createClient } from "@/lib/supabase/client"
@@ -569,13 +568,6 @@ export default function TeamDetailPage() {
                 <span className="hidden xs:inline">{t("tasks")}</span>
               </TabsTrigger>
               <TabsTrigger 
-                value="chat" 
-                className="flex-shrink-0 inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 sm:py-3 rounded-lg whitespace-nowrap text-xs sm:text-sm font-medium transition-all hover:bg-secondary/50 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md"
-              >
-                <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5" />
-                <span className="hidden xs:inline">{t("chat")}</span>
-              </TabsTrigger>
-              <TabsTrigger 
                 value="calendar" 
                 className="flex-shrink-0 inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 sm:py-3 rounded-lg whitespace-nowrap text-xs sm:text-sm font-medium transition-all hover:bg-secondary/50 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md"
               >
@@ -842,10 +834,6 @@ export default function TeamDetailPage() {
               ))
             )}
           </div>
-        </TabsContent>
-
-        <TabsContent value="chat" className="mt-6 sm:mt-8 min-h-[60vh]">
-          <TeamChat teamId={teamId} userId={currentUserId} />
         </TabsContent>
 
         <TabsContent value="calendar" className="mt-6 sm:mt-8 min-h-[60vh]">
