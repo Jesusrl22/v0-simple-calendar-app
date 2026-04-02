@@ -29,8 +29,9 @@ export function TaskMonthView({ tasks, onTaskClick, onDayClick }: TaskMonthViewP
     }
   })
 
-  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate()
-  const firstDayOfMonthJS = new Date(currentYear, currentMonth, 1).getDay()
+  // Use UTC to ensure consistent day-of-week calculation across timezones
+  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getUTCDate()
+  const firstDayOfMonthJS = new Date(Date.UTC(currentYear, currentMonth, 1)).getUTCDay()
   // Convert from JS format (0=Sunday) to week starting Monday (0=Monday)
   // Sunday (0) -> 6, Monday (1) -> 0, Tuesday (2) -> 1, etc.
   const firstDayOfMonth = firstDayOfMonthJS === 0 ? 6 : firstDayOfMonthJS - 1
@@ -47,15 +48,6 @@ export function TaskMonthView({ tasks, onTaskClick, onDayClick }: TaskMonthViewP
   for (let i = 1; i <= daysInMonth; i++) {
     days.push(i)
   }
-  
-  console.log("[v0] Month rendering:", { 
-    month: currentMonth, 
-    firstDay: new Date(currentYear, currentMonth, 1).toDateString(),
-    firstDayOfMonthJS, 
-    firstDayOfMonth, 
-    nullCount: firstDayOfMonth,
-    firstFewDays: days.slice(0, 12) 
-  })
 
   const prevMonth = () => {
     if (currentMonth === 0) {
