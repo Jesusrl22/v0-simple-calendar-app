@@ -130,7 +130,7 @@ export function AppSidebar({ onNavigate }: { onNavigate?: () => void }) {
                   }`}
                 >
                   <item.icon className={`w-5 h-5 flex-shrink-0 ${isActive ? "text-primary" : ""}`} />
-                  <span className="font-medium hidden sm:inline text-sm lg:text-base">{item.label}</span>
+                  <span className="font-medium inline sm:inline text-sm lg:text-base">{item.label}</span>
                   {isActive && <div className="ml-auto w-2 h-2 rounded-full bg-primary flex-shrink-0" />}
                 </Button>
               </Link>
@@ -147,7 +147,7 @@ export function AppSidebar({ onNavigate }: { onNavigate?: () => void }) {
           onClick={handleLogout}
         >
           <LogOut className="w-5 h-5 flex-shrink-0" />
-          <span className="font-medium hidden sm:inline text-sm lg:text-base">{t("logout")}</span>
+          <span className="font-medium inline sm:inline text-sm lg:text-base">{t("logout")}</span>
         </Button>
       </div>
     </div>
