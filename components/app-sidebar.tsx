@@ -15,6 +15,7 @@ import {
   LogOut,
   Users,
   Activity,
+  Zap,
 } from "@/components/icons"
 import Image from "next/image"
 import Link from "next/link"
@@ -78,6 +79,7 @@ export function AppSidebar({ onNavigate }: { onNavigate?: () => void }) {
     { icon: Bot, label: t("ai"), href: "/app/ai" },
     { icon: Users, label: t("teams"), href: "/app/teams" },
     { icon: Trophy, label: t("achievements"), href: "/app/achievements" },
+    { icon: Zap, label: t("credits"), href: "/app/credits" },
     { icon: CreditCard, label: t("subscription"), href: "/app/subscription" },
     { icon: Settings, label: t("settings"), href: "/app/settings" },
   ]
