@@ -4,7 +4,8 @@ import React, { useState } from "react"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { ChevronLeft, ChevronRight } from "lucide-react"
-import { Task, getTasksForMonth, isToday } from "@/lib/task-utils"
+import { Task, getTasksForMonth } from "@/lib/task-utils"
+import { useTranslation } from "@/hooks/useTranslation"
 
 interface TaskMonthViewProps {
   tasks: Task[]
@@ -16,6 +17,17 @@ export function TaskMonthView({ tasks, onTaskClick, onDayClick }: TaskMonthViewP
   const today = new Date()
   const [currentMonth, setCurrentMonth] = useState(today.getMonth())
   const [currentYear, setCurrentYear] = useState(today.getFullYear())
+  const { t, language } = useTranslation()
+
+  // Map app language code to BCP-47 locale
+  const localeMap: Record<string, string> = {
+    en: "en-GB",
+    es: "es-ES",
+    fr: "fr-FR",
+    de: "de-DE",
+    it: "it-IT",
+  }
+  const locale = localeMap[language] || "en-GB"
 
   const monthTasks = getTasksForMonth(tasks, currentYear, currentMonth)
 
@@ -29,16 +41,22 @@ export function TaskMonthView({ tasks, onTaskClick, onDayClick }: TaskMonthViewP
     }
   })
 
-  // Use UTC to ensure consistent day-of-week calculation across timezones
-  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getUTCDate()
-  const firstDayOfMonthJS = new Date(Date.UTC(currentYear, currentMonth, 1)).getUTCDay()
-  // Convert from JS format (0=Sunday) to week starting Monday (0=Monday)
-  // Sunday (0) -> 6, Monday (1) -> 0, Tuesday (2) -> 1, etc.
-  const firstDayOfMonth = firstDayOfMonthJS === 0 ? 6 : firstDayOfMonthJS - 1
+  // Use a neutral noon time to avoid timezone boundary issues
+  const firstOfMonth = new Date(currentYear, currentMonth, 1, 12, 0, 0)
+  const lastOfMonth = new Date(currentYear, currentMonth + 1, 0, 12, 0, 0)
+  const daysInMonth = lastOfMonth.getDate()
+  const firstDayOfMonthJS = firstOfMonth.getDay() // 0=Sunday, 1=Monday, ..., 6=Saturday
+  // Convert to week starting Monday: Mon=0, Tue=1, ..., Sun=6
+  const firstDayOfMonth = (firstDayOfMonthJS + 6) % 7
 
-  const monthName = new Date(currentYear, currentMonth).toLocaleDateString("es-ES", {
-    month: "long",
-    year: "numeric",
+  // Month name using the user's locale
+  const monthName = firstOfMonth.toLocaleDateString(locale, { month: "long", year: "numeric" })
+
+  // Weekday headers starting from Monday, using the user's locale
+  // We use a known Monday (2024-01-01 was a Monday) as the anchor
+  const weekDays = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date(2024, 0, 1 + i, 12, 0, 0) // Mon 1 Jan 2024 ... Sun 7 Jan 2024
+    return d.toLocaleDateString(locale, { weekday: "short" })
   })
 
   const days = []
@@ -84,25 +102,15 @@ export function TaskMonthView({ tasks, onTaskClick, onDayClick }: TaskMonthViewP
     <div className="space-y-4">
       {/* Calendar Header */}
       <div className="flex items-center justify-between bg-card p-4 rounded-lg border border-border">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={prevMonth}
-          className="gap-1"
-        >
+        <Button variant="outline" size="sm" onClick={prevMonth} className="gap-1">
           <ChevronLeft className="h-4 w-4" />
-          Anterior
+          {t("previous") || "‹"}
         </Button>
         <h2 className="text-xl font-bold capitalize text-center flex-1 text-foreground">
           {monthName}
         </h2>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={nextMonth}
-          className="gap-1"
-        >
-          Siguiente
+        <Button variant="outline" size="sm" onClick={nextMonth} className="gap-1">
+          {t("next") || "›"}
           <ChevronRight className="h-4 w-4" />
         </Button>
       </div>
@@ -111,8 +119,8 @@ export function TaskMonthView({ tasks, onTaskClick, onDayClick }: TaskMonthViewP
       <div className="border border-border rounded-lg overflow-hidden bg-card">
         {/* Days of week header */}
         <div className="grid grid-cols-7 border-b border-border bg-primary/10">
-          {["Lun", "Mar", "Mié", "Jue", "Vie", "Sab", "Dom"].map((day) => (
-            <div key={day} className="p-3 text-center font-semibold text-sm text-muted-foreground border-r border-border last:border-r-0">
+          {weekDays.map((day) => (
+            <div key={day} className="p-3 text-center font-semibold text-sm text-muted-foreground border-r border-border last:border-r-0 capitalize">
               {day}
             </div>
           ))}
@@ -171,7 +179,7 @@ export function TaskMonthView({ tasks, onTaskClick, onDayClick }: TaskMonthViewP
                           ))}
                           {taskList.length > 3 && (
                             <div className="text-xs px-2 py-1 text-muted-foreground font-medium">
-                              +{taskList.length - 3} más
+                              +{taskList.length - 3} {t("more")}
                             </div>
                           )}
                         </>
@@ -191,22 +199,16 @@ export function TaskMonthView({ tasks, onTaskClick, onDayClick }: TaskMonthViewP
       <Card className="p-4 bg-primary/5 border border-primary/20">
         <div className="grid grid-cols-3 gap-4 text-center">
           <div>
-            <p className="text-2xl font-bold text-primary">
-              {monthTasks.length}
-            </p>
-            <p className="text-sm text-muted-foreground">Tareas este mes</p>
+            <p className="text-2xl font-bold text-primary">{monthTasks.length}</p>
+            <p className="text-sm text-muted-foreground">{t("tasksThisMonth") || t("totalTasks")}</p>
           </div>
           <div>
-            <p className="text-2xl font-bold text-green-500">
-              {monthTasks.filter((t) => t.completed).length}
-            </p>
-            <p className="text-sm text-muted-foreground">Completadas</p>
+            <p className="text-2xl font-bold text-green-500">{monthTasks.filter((t) => t.completed).length}</p>
+            <p className="text-sm text-muted-foreground">{t("completedTasks")}</p>
           </div>
           <div>
-            <p className="text-2xl font-bold text-yellow-500">
-              {monthTasks.filter((t) => !t.completed).length}
-            </p>
-            <p className="text-sm text-muted-foreground">Pendientes</p>
+            <p className="text-2xl font-bold text-yellow-500">{monthTasks.filter((t) => !t.completed).length}</p>
+            <p className="text-sm text-muted-foreground">{t("activeTasks")}</p>
           </div>
         </div>
       </Card>
