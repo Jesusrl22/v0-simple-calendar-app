@@ -41,11 +41,24 @@ export function TaskMonthView({ tasks, onTaskClick, onDayClick }: TaskMonthViewP
     }
   })
 
-  // Use a neutral noon time to avoid timezone boundary issues
-  const firstOfMonth = new Date(currentYear, currentMonth, 1, 12, 0, 0)
-  const lastOfMonth = new Date(currentYear, currentMonth + 1, 0, 12, 0, 0)
+  // Calculate using the local date directly without timezone ambiguity
+  // Create date at start of month to get accurate day of week
+  const firstOfMonth = new Date(currentYear, currentMonth, 1)
+  const lastOfMonth = new Date(currentYear, currentMonth + 1, 0)
   const daysInMonth = lastOfMonth.getDate()
-  const firstDayOfMonthJS = firstOfMonth.getDay() // 0=Sunday, 1=Monday, ..., 6=Saturday
+  
+  // Get day of week: 0=Sunday, 1=Monday, ..., 6=Saturday
+  let firstDayOfMonthJS = firstOfMonth.getDay()
+  
+  // Debug: log the calculation
+  console.log("[v0] Calendar calc:", {
+    month: currentMonth,
+    year: currentYear,
+    dateStr: firstOfMonth.toString(),
+    firstDayOfMonthJS,
+    formatted: firstOfMonth.toLocaleDateString(locale, { weekday: "long", month: "long", day: "numeric" })
+  })
+  
   // Convert to week starting Monday: Mon=0, Tue=1, ..., Sun=6
   const firstDayOfMonth = (firstDayOfMonthJS + 6) % 7
 
@@ -157,7 +170,7 @@ export function TaskMonthView({ tasks, onTaskClick, onDayClick }: TaskMonthViewP
                     <div className="flex-1 space-y-1 overflow-hidden">
                       {taskList.length === 0 ? (
                         <p className="text-xs text-muted-foreground text-center py-2">
-                          Click para agregar
+                          {t("clickToAdd") || "Click to add"}
                         </p>
                       ) : (
                         <>
