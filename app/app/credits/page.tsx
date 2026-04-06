@@ -39,7 +39,7 @@ export default function CreditsPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto mb-12">
           {/* Free Plan */}
-          <Card className="p-8 relative">
+          <Card className="p-8 relative bg-transparent border border-border">
             <div className="mb-6">
               <h3 className="text-2xl font-bold mb-2">{t('free') || 'Free'}</h3>
               <p className="text-muted-foreground">For getting started</p>
@@ -62,7 +62,7 @@ export default function CreditsPage() {
           </Card>
 
           {/* Popular Plan - 2000 Credits */}
-          <Card className="p-8 relative border-primary border-2 shadow-lg">
+          <Card className="p-8 relative bg-transparent border-primary border-2 shadow-lg">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
               <span className="bg-primary text-primary-foreground px-4 py-1 rounded-full text-sm font-semibold">
                 {t('popular') || 'POPULAR'}
@@ -94,7 +94,7 @@ export default function CreditsPage() {
             </ul>
             
             {/* PayPal Button */}
-            <div id="paypal-container-FKYSPKYRC38FN" className="mb-4"></div>
+            <div id="paypal-container-FKYSPKYRC38FN"></div>
             {!paypalLoaded && (
               <Button disabled className="w-full">
                 {t('loading') || 'Loading...'}
@@ -103,7 +103,7 @@ export default function CreditsPage() {
           </Card>
 
           {/* Enterprise Plan */}
-          <Card className="p-8 relative">
+          <Card className="p-8 relative bg-transparent border border-border">
             <div className="mb-6">
               <h3 className="text-2xl font-bold mb-2">{t('enterprise') || 'Enterprise'}</h3>
               <p className="text-muted-foreground">For organizations</p>
