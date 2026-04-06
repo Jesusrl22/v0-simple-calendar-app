@@ -41,29 +41,20 @@ export function TaskMonthView({ tasks, onTaskClick, onDayClick }: TaskMonthViewP
     }
   })
 
-  // Calculate using the local date directly without timezone ambiguity
-  // Create date at start of month to get accurate day of week
-  const firstOfMonth = new Date(currentYear, currentMonth, 1)
-  const lastOfMonth = new Date(currentYear, currentMonth + 1, 0)
-  const daysInMonth = lastOfMonth.getDate()
+  // Calculate using UTC to avoid timezone issues
+  // Get the first day of the month in UTC
+  const firstOfMonthUTC = new Date(Date.UTC(currentYear, currentMonth, 1))
+  const lastOfMonthUTC = new Date(Date.UTC(currentYear, currentMonth + 1, 0))
+  const daysInMonth = lastOfMonthUTC.getUTCDate()
   
-  // Get day of week: 0=Sunday, 1=Monday, ..., 6=Saturday
-  let firstDayOfMonthJS = firstOfMonth.getDay()
-  
-  // Debug: log the calculation
-  console.log("[v0] Calendar calc:", {
-    month: currentMonth,
-    year: currentYear,
-    dateStr: firstOfMonth.toString(),
-    firstDayOfMonthJS,
-    formatted: firstOfMonth.toLocaleDateString(locale, { weekday: "long", month: "long", day: "numeric" })
-  })
+  // Get day of week: 0=Sunday, 1=Monday, ..., 6=Saturday (in UTC)
+  const firstDayOfMonthJS = firstOfMonthUTC.getUTCDay()
   
   // Convert to week starting Monday: Mon=0, Tue=1, ..., Sun=6
   const firstDayOfMonth = (firstDayOfMonthJS + 6) % 7
 
   // Month name using the user's locale
-  const monthName = firstOfMonth.toLocaleDateString(locale, { month: "long", year: "numeric" })
+  const monthName = firstOfMonthUTC.toLocaleDateString(locale, { month: "long", year: "numeric" })
 
   // Weekday headers starting from Monday, using the user's locale
   // We use a known Monday (2024-01-01 was a Monday) as the anchor
