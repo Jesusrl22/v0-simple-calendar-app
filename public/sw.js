@@ -123,6 +123,30 @@ self.addEventListener("push", (event) => {
   try {
     const data = event.data.json()
 
+    // Definir acciones según el tipo de notificación
+    let actions = [
+      { action: "open", title: "Abrir" },
+      { action: "close", title: "Cerrar" },
+    ]
+
+    // Si es notificación de Pomodoro, agregar acciones específicas
+    if (data.type === "pomodoro_done") {
+      actions = [
+        { action: "start_break", title: "☕ Descansar 5 min" },
+        { action: "skip_break", title: "⚡ Seguir trabajando" },
+        { action: "close", title: "Cerrar" },
+      ]
+    }
+
+    // Si es notificación de tareas o eventos
+    if (data.type === "task_due" || data.type === "event_reminder") {
+      actions = [
+        { action: "open", title: "Ver" },
+        { action: "snooze", title: "Recordar en 5 min" },
+        { action: "close", title: "Cerrar" },
+      ]
+    }
+
     const options = {
       body: data.body || "Tienes un nuevo evento",
       icon: "/icon-192.jpg",
@@ -130,10 +154,7 @@ self.addEventListener("push", (event) => {
       vibrate: [200, 100, 200],
       tag: "event-" + (data.eventId || Date.now()),
       requireInteraction: true,
-      actions: [
-        { action: "open", title: "Abrir" },
-        { action: "close", title: "Cerrar" },
-      ],
+      actions,
       data: {
         eventId: data.eventId,
         type: data.type || "reminder",
@@ -153,15 +174,40 @@ self.addEventListener("push", (event) => {
 })
 
 // -------------------------------------------------------
-// NOTIFICATION CLICK
+// NOTIFICATION CLICK & ACTIONS
 // -------------------------------------------------------
 self.addEventListener("notificationclick", (event) => {
   event.notification.close()
 
   const urlToOpen = (event.notification.data && event.notification.data.url) || "/app/calendar"
+  const notificationType = event.notification.data && event.notification.data.type
 
+  // Acciones de Pomodoro
+  if (event.action === "start_break") {
+    event.waitUntil(clients.openWindow("/app/pomodoro?action=start_break"))
+    return
+  }
+
+  if (event.action === "skip_break") {
+    event.waitUntil(clients.openWindow("/app/pomodoro?action=skip_break"))
+    return
+  }
+
+  // Acción de snooze (recordar en 5 min)
+  if (event.action === "snooze") {
+    event.waitUntil(
+      notifyClients({
+        type: "SNOOZE_NOTIFICATION",
+        eventId: event.notification.data?.eventId,
+      })
+    )
+    return
+  }
+
+  // Cerrar notificación sin hacer nada
   if (event.action === "close") return
 
+  // Clic normal en la notificación
   event.waitUntil(
     clients
       .matchAll({ type: "window", includeUncontrolled: true })

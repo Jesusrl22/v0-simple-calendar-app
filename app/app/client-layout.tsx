@@ -10,6 +10,7 @@ import { useState } from "react"
 import { usePathname } from "next/navigation"
 import { useTranslation } from "@/hooks/useTranslation"
 import { ThemeLoader } from "@/components/theme-loader"
+import { ServiceWorkerRegistrar } from "@/components/ServiceWorkerRegistrar"
 
 export default function ClientLayout({
   children,
@@ -42,6 +43,7 @@ export default function ClientLayout({
 
   return (
     <>
+      <ServiceWorkerRegistrar />
       <ThemeLoader />
       {/* Mobile Layout */}
       <div className="lg:hidden flex h-screen overflow-hidden bg-background flex-col">
