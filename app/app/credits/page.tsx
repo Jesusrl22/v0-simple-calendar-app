@@ -19,12 +19,12 @@ export default function CreditsPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto mb-12">
           {/* Starter Plan - 500 Credits */}
           <Card className="p-8 relative bg-transparent border border-border">
             <div className="mb-6">
               <h3 className="text-2xl font-bold mb-2">Starter</h3>
-              <p className="text-muted-foreground">Para empezar</p>
+              <p className="text-muted-foreground">€4.99</p>
             </div>
             <div className="mb-6">
               <div className="text-5xl font-bold mb-2">500</div>
@@ -34,7 +34,7 @@ export default function CreditsPage() {
               {['Características básicas de IA', 'Uso diario limitado', 'Soporte comunitario'].map((item) => (
                 <li key={item} className="flex items-center gap-2">
                   <Check className="w-5 h-5 text-primary" />
-                  <span>{item}</span>
+                  <span className="text-sm">{item}</span>
                 </li>
               ))}
             </ul>
@@ -45,19 +45,11 @@ export default function CreditsPage() {
             />
           </Card>
 
-          {/* Popular Plan - 2000 Credits */}
-          <Card className="p-8 relative bg-transparent border-primary border-2 shadow-lg">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
-              <span className="bg-primary text-primary-foreground px-4 py-1 rounded-full text-sm font-semibold">
-                {t('popular') || 'POPULAR'}
-              </span>
-            </div>
-            <div className="mb-6 pt-4">
-              <h3 className="text-2xl font-bold mb-2 flex items-center gap-2">
-                <Zap className="w-6 h-6 text-primary" />
-                {t('pro') || 'Pro'}
-              </h3>
-              <p className="text-muted-foreground">Recomendado para usuarios avanzados</p>
+          {/* Pro Plan - 2000 Credits */}
+          <Card className="p-8 relative bg-transparent border border-border">
+            <div className="mb-6">
+              <h3 className="text-2xl font-bold mb-2">{t('pro') || 'Pro'}</h3>
+              <p className="text-muted-foreground">€17.99</p>
             </div>
             <div className="mb-6">
               <div className="text-5xl font-bold mb-2">2000</div>
@@ -68,19 +60,58 @@ export default function CreditsPage() {
                 'Características avanzadas de IA',
                 'Uso diario ilimitado',
                 'Soporte prioritario',
-                'Análisis avanzado',
               ].map((item) => (
                 <li key={item} className="flex items-center gap-2">
                   <Check className="w-5 h-5 text-primary" />
-                  <span>{item}</span>
+                  <span className="text-sm">{item}</span>
                 </li>
               ))}
             </ul>
             
             <PayPalButton 
-              paymentId="FKYSPKYRC38FN"
+              paymentId="TCQA8RU8R9KVQ"
               buttonText={t('buyNow') || 'Comprar ahora'}
               credits={2000}
+            />
+          </Card>
+
+          {/* Popular Plan - 12000 Credits */}
+          <Card className="p-8 relative bg-transparent border-primary border-2 shadow-lg md:col-span-2 lg:col-span-1">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
+              <span className="bg-primary text-primary-foreground px-4 py-1 rounded-full text-sm font-semibold">
+                {t('popular') || 'POPULAR'}
+              </span>
+            </div>
+            <div className="mb-6 pt-4">
+              <h3 className="text-2xl font-bold mb-2 flex items-center gap-2">
+                <Zap className="w-6 h-6 text-primary" />
+                Business
+              </h3>
+              <p className="text-muted-foreground">€39.99</p>
+            </div>
+            <div className="mb-6">
+              <div className="text-5xl font-bold mb-2">12000</div>
+              <p className="text-muted-foreground">{t('credits') || 'Credits'}</p>
+            </div>
+            <ul className="space-y-3 mb-8">
+              {[
+                'Acceso ilimitado a IA',
+                'Procesamiento prioritario',
+                'Soporte 24/7',
+                'Análisis avanzado',
+                'Máxima velocidad',
+              ].map((item) => (
+                <li key={item} className="flex items-center gap-2">
+                  <Check className="w-5 h-5 text-primary" />
+                  <span className="text-sm">{item}</span>
+                </li>
+              ))}
+            </ul>
+            
+            <PayPalButton 
+              paymentId="6Y2M54NWMFMPW"
+              buttonText={t('buyNow') || 'Comprar ahora'}
+              credits={12000}
             />
           </Card>
 
@@ -88,7 +119,7 @@ export default function CreditsPage() {
           <Card className="p-8 relative bg-transparent border border-border">
             <div className="mb-6">
               <h3 className="text-2xl font-bold mb-2">{t('enterprise') || 'Enterprise'}</h3>
-              <p className="text-muted-foreground">Para organizaciones</p>
+              <p className="text-muted-foreground">Personalizado</p>
             </div>
             <div className="mb-6">
               <div className="text-5xl font-bold mb-2">{t('custom') || 'Custom'}</div>
@@ -103,7 +134,7 @@ export default function CreditsPage() {
               ].map((item) => (
                 <li key={item} className="flex items-center gap-2">
                   <Check className="w-5 h-5 text-primary" />
-                  <span>{item}</span>
+                  <span className="text-sm">{item}</span>
                 </li>
               ))}
             </ul>
