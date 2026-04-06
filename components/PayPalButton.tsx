@@ -1,71 +1,41 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { Button } from '@/components/ui/button'
+import React from 'react'
 
 interface PayPalButtonProps {
-  hostedButtonId: string
-  containerId: string
-  label?: string
-  disabled?: boolean
+  paymentId: string
+  buttonText?: string
+  credits: number
 }
 
-export function PayPalButton({
-  hostedButtonId,
-  containerId,
-  label = 'Buy Now',
-  disabled = false,
-}: PayPalButtonProps) {
-  const [isLoaded, setIsLoaded] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-
-  useEffect(() => {
-    // Load PayPal SDK
-    if (isLoaded || (window as any).paypal) return
-
-    const script = document.createElement('script')
-    script.src =
-      'https://www.paypal.com/sdk/js?client-id=BAAErLK9a7MDpL4R4B5toQTZkuLtYDBqH6UDdxyDRd0PK9MMUvBqgyCP-OwyP1RZ3RBprQ2m7zWab8rr0Y&components=hosted-buttons&disable-funding=venmo&currency=EUR'
-    script.async = true
-
-    script.onload = () => {
-      try {
-        ;(window as any).paypal.HostedButtons({
-          hostedButtonId,
-        }).render(`#${containerId}`)
-        setIsLoaded(true)
-      } catch (err) {
-        setError('Failed to load PayPal button')
-        console.error('PayPal error:', err)
-      }
-    }
-
-    script.onerror = () => {
-      setError('Failed to load PayPal SDK')
-    }
-
-    document.head.appendChild(script)
-
-    return () => {
-      // Cleanup if needed
-    }
-  }, [hostedButtonId, containerId, isLoaded])
-
-  if (error) {
-    return (
-      <Button disabled variant="destructive" className="w-full">
-        {error}
-      </Button>
-    )
-  }
-
-  if (!isLoaded) {
-    return (
-      <Button disabled className="w-full">
-        Loading...
-      </Button>
-    )
-  }
-
-  return <div id={containerId} />
+export function PayPalButton({ paymentId, buttonText = 'Comprar ahora', credits }: PayPalButtonProps) {
+  return (
+    <div className="flex justify-center w-full">
+      <form 
+        action={`https://www.paypal.com/ncp/payment/${paymentId}`} 
+        method="post" 
+        target="_blank"
+        className="inline-grid justify-items-center gap-2 w-full"
+      >
+        <input 
+          type="submit" 
+          value={buttonText}
+          className="px-8 py-2.5 rounded font-bold bg-[#FFD140] text-black hover:bg-[#FFC814] transition-colors cursor-pointer min-w-[186px] text-base w-full"
+        />
+        <img 
+          src="https://www.paypalobjects.com/images/Debit_Credit_APM.svg" 
+          alt="cards"
+          className="h-6"
+        />
+        <section className="text-xs text-center">
+          Tecnología de{' '}
+          <img 
+            src="https://www.paypalobjects.com/paypal-ui/logos/svg/paypal-wordmark-color.svg" 
+            alt="paypal" 
+            className="h-3.5 inline align-middle ml-1"
+          />
+        </section>
+      </form>
+    </div>
+  )
 }
