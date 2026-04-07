@@ -182,13 +182,13 @@ export default function StatsPage() {
               <TabsContent value="tasks">
                 <ResponsiveContainer width="100%" height={250}>
                   <BarChart data={chartData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
-                    <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" />
-                    <YAxis stroke="hsl(var(--muted-foreground))" />
+                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--primary) / 0.4)" opacity={1} />
+                    <XAxis dataKey="name" stroke="hsl(var(--foreground) / 0.7)" />
+                    <YAxis stroke="hsl(var(--foreground) / 0.7)" />
                     <Tooltip
                       contentStyle={{
                         backgroundColor: "hsl(var(--card))",
-                        border: "1px solid hsl(var(--primary) / 0.3)",
+                        border: "1px solid hsl(var(--primary) / 0.5)",
                         borderRadius: "8px",
                         color: "hsl(var(--foreground))",
                       }}
@@ -200,13 +200,13 @@ export default function StatsPage() {
               <TabsContent value="pomodoro">
                 <ResponsiveContainer width="100%" height={250}>
                   <LineChart data={chartData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
-                    <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" />
-                    <YAxis stroke="hsl(var(--muted-foreground))" />
+                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--primary) / 0.4)" opacity={1} />
+                    <XAxis dataKey="name" stroke="hsl(var(--foreground) / 0.7)" />
+                    <YAxis stroke="hsl(var(--foreground) / 0.7)" />
                     <Tooltip
                       contentStyle={{
                         backgroundColor: "hsl(var(--card))",
-                        border: "1px solid hsl(var(--primary) / 0.3)",
+                        border: "1px solid hsl(var(--primary) / 0.5)",
                         borderRadius: "8px",
                         color: "hsl(var(--foreground))",
                       }}
@@ -243,17 +243,17 @@ export default function StatsPage() {
               </div>
 
               {/* Statistics Table */}
-              <div className="border border-border/50 rounded-lg overflow-hidden bg-background/30">
-                <div className="divide-y divide-border/50">
-                  <div className="grid grid-cols-2 bg-primary/10 border-b border-border/50">
-                    <div className="px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm font-semibold text-muted-foreground">
+              <div className="border-2 border-primary/40 rounded-lg overflow-hidden bg-background/50">
+                <div className="divide-y divide-primary/30">
+                  <div className="grid grid-cols-2 bg-primary/15 border-b-2 border-primary/30">
+                    <div className="px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm font-semibold text-foreground">
                       Métrica
                     </div>
-                    <div className="px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm font-semibold text-muted-foreground text-right">
+                    <div className="px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm font-semibold text-foreground text-right">
                       Valor
                     </div>
                   </div>
-                  <div className="grid grid-cols-2 hover:bg-primary/5 transition-colors">
+                  <div className="grid grid-cols-2 hover:bg-primary/10 transition-colors border-b border-primary/20">
                     <div className="px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm">{t("average_focus_time")}</div>
                     <div className="px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm font-semibold text-primary text-right">
                       {timeRange === "day"
@@ -263,15 +263,15 @@ export default function StatsPage() {
                           : `${Math.round((stats.totalFocusTime / 30) * 10) / 10}h/day`}
                     </div>
                   </div>
-                  <div className="grid grid-cols-2 hover:bg-primary/5 transition-colors border-t border-border/50">
+                  <div className="grid grid-cols-2 hover:bg-primary/10 transition-colors border-b border-primary/20">
                     <div className="px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm">{t("total_pomodoros")}</div>
-                    <div className="px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm font-semibold text-secondary text-right">
+                    <div className="px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm font-semibold text-primary text-right">
                       {stats.totalPomodoro}
                     </div>
                   </div>
-                  <div className="grid grid-cols-2 hover:bg-primary/5 transition-colors border-t border-border/50">
+                  <div className="grid grid-cols-2 hover:bg-primary/10 transition-colors">
                     <div className="px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm">{t("notes_created")}</div>
-                    <div className="px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm font-semibold text-foreground text-right">
+                    <div className="px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm font-semibold text-primary text-right">
                       {stats.totalNotes}
                     </div>
                   </div>
