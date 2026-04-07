@@ -19,7 +19,7 @@ export default function CreditsPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 max-w-7xl mx-auto mb-12">
           {/* Starter Plan - 500 Credits */}
           <Card className="p-8 relative bg-transparent border border-border">
             <div className="mb-6">
@@ -69,9 +69,40 @@ export default function CreditsPage() {
             </ul>
             
             <PayPalButton 
-              paymentId="TCQA8RU8R9KVQ"
+              paymentId="FKYSPKYRC38FN"
               buttonText={t('buyNow') || 'Comprar ahora'}
               credits={2000}
+            />
+          </Card>
+
+          {/* Advanced Plan - 5000 Credits */}
+          <Card className="p-8 relative bg-transparent border border-border">
+            <div className="mb-6">
+              <h3 className="text-2xl font-bold mb-2">Advanced</h3>
+              <p className="text-muted-foreground">€17.99</p>
+            </div>
+            <div className="mb-6">
+              <div className="text-5xl font-bold mb-2">5000</div>
+              <p className="text-muted-foreground">{t('credits') || 'Credits'}</p>
+            </div>
+            <ul className="space-y-3 mb-8">
+              {[
+                'Generaciones ilimitadas de IA',
+                'Acceso prioritario',
+                'Soporte 24/7',
+                'Sin restricciones de uso',
+              ].map((item) => (
+                <li key={item} className="flex items-center gap-2">
+                  <Check className="w-5 h-5 text-primary" />
+                  <span className="text-sm">{item}</span>
+                </li>
+              ))}
+            </ul>
+            
+            <PayPalButton 
+              paymentId="TCQA8RU8R9KVQ"
+              buttonText={t('buyNow') || 'Comprar ahora'}
+              credits={5000}
             />
           </Card>
 
@@ -115,22 +146,23 @@ export default function CreditsPage() {
             />
           </Card>
 
-          {/* Enterprise Plan */}
+          {/* Enterprise Plan - No limits */}
           <Card className="p-8 relative bg-transparent border border-border">
             <div className="mb-6">
               <h3 className="text-2xl font-bold mb-2">{t('enterprise') || 'Enterprise'}</h3>
-              <p className="text-muted-foreground">Personalizado</p>
+              <p className="text-muted-foreground">Sin límites</p>
             </div>
             <div className="mb-6">
-              <div className="text-5xl font-bold mb-2">{t('custom') || 'Custom'}</div>
-              <p className="text-muted-foreground">{t('contactSales') || 'Contactar ventas'}</p>
+              <div className="text-5xl font-bold mb-2">∞</div>
+              <p className="text-muted-foreground">{t('credits') || 'Credits'}</p>
             </div>
             <ul className="space-y-3 mb-8">
               {[
                 'Créditos ilimitados',
-                'Soporte dedicado',
+                'Soporte dedicado 24/7',
                 'Integraciones personalizadas',
                 'Garantía SLA',
+                'Account manager personal',
               ].map((item) => (
                 <li key={item} className="flex items-center gap-2">
                   <Check className="w-5 h-5 text-primary" />
@@ -138,9 +170,9 @@ export default function CreditsPage() {
                 </li>
               ))}
             </ul>
-            <Button variant="outline" className="w-full">
-              {t('contactUs') || 'Contáctanos'}
-            </Button>
+            <div className="text-center text-sm text-muted-foreground">
+              <p>Contacta a nuestro equipo de ventas para más información</p>
+            </div>
           </Card>
         </div>
 
@@ -152,18 +184,18 @@ export default function CreditsPage() {
               {[
                 {
                   title: 'Generaciones de IA',
-                  description: 'Genera contenido de IA, imágenes y más',
+                  description: 'Genera contenido de IA, imágenes y más con tus créditos',
                 },
                 {
                   title: 'Procesamiento Prioritario',
                   description: 'Procesamiento más rápido para tus solicitudes',
                 },
                 {
-                  title: 'Válido 30 días',
-                  description: 'Los créditos son válidos por 30 días desde la compra',
+                  title: 'Sin Expiración',
+                  description: 'Los créditos nunca caducan - úsalos cuando quieras',
                 },
                 {
-                  title: 'Sin límites',
+                  title: 'Sin Límites de Uso',
                   description: 'Usa tus créditos en cualquier momento y lugar',
                 },
               ].map((feature, index) => (
