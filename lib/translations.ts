@@ -177,6 +177,14 @@ export const translations = {
     event_saved_calendar: "Event saved to calendar!",
     error_saving_calendar: "Error saving to calendar",
     upgrade_to_send_files: "Upgrade your plan to send files!",
+    out_of_credits: "Out of credits",
+    out_of_credits_description: "You've run out of AI credits. Choose one of the options below to continue:",
+    upgrade_to_pro: "Upgrade to Pro",
+    pro_plan_benefits: "Get 500 monthly credits + access to all features",
+    buy_credits: "Buy Credits",
+    buy_credits_anytime: "Purchase credits at any time - they never expire",
+    buy_credits_now: "Buy Credits Now",
+    go_back: "Go Back",
 
     // Achievement and other pages
     achievementUnlocked: "Achievement Unlocked",
@@ -527,6 +535,14 @@ export const translations = {
     event_saved_calendar: "¡Evento guardado en el calendario!",
     error_saving_calendar: "Error al guardar en el calendario",
     upgrade_to_send_files: "¡Actualiza tu plan para enviar archivos!",
+    out_of_credits: "Se acabaron los créditos",
+    out_of_credits_description: "Se acabaron tus créditos de IA. Elige una de las opciones a continuación para continuar:",
+    upgrade_to_pro: "Mejora a Pro",
+    pro_plan_benefits: "Obtén 500 créditos mensuales + acceso a todas las funciones",
+    buy_credits: "Comprar Créditos",
+    buy_credits_anytime: "Compra créditos en cualquier momento - nunca caducan",
+    buy_credits_now: "Comprar Créditos Ahora",
+    go_back: "Volver",
 
     // Achievement and other pages
     achievementUnlocked: "Logro Desbloqueado",
@@ -1106,6 +1122,14 @@ export const translations = {
     event_saved_calendar: "Événement enregistré dans le calendrier!",
     error_saving_calendar: "Erreur lors de l'enregistrement dans le calendrier",
     upgrade_to_send_files: "Mettez à niveau votre plan pour envoyer des fichiers!",
+    out_of_credits: "Crédits épuisés",
+    out_of_credits_description: "Vous avez épuisé vos crédits IA. Choisissez l'une des options ci-dessous pour continuer:",
+    upgrade_to_pro: "Passer à Pro",
+    pro_plan_benefits: "Obtenez 500 crédits mensuels + accès à toutes les fonctionnalités",
+    buy_credits: "Acheter des crédits",
+    buy_credits_anytime: "Achetez des crédits à tout moment - ils n'expirent jamais",
+    buy_credits_now: "Acheter des crédits maintenant",
+    go_back: "Retour",
 
     // Achievement and other pages
     achievementUnlocked: "Succès Débloqué",
@@ -1147,7 +1171,7 @@ export const translations = {
     break: "Pause",
     longBreak: "Pause Longue",
     sessionsCompleted: "Sessions Complétées",
-    customPomodoroDuration: "Durée Personnalisée du Pomodoro",
+    customPomodoroDuration: "Durée Personnalis��e du Pomodoro",
     setCustomDuration: "Définissez votre durée de travail personnalisée",
     workDuration: "Durée de Travail (minutes)",
     minutes: "minutes",

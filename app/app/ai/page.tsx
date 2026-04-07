@@ -11,6 +11,7 @@ import { createClient } from "@/lib/supabase/client"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { toast } from "react-toastify"
 import { getAICredits } from "@/lib/subscription"
+import { OutOfCreditsModal } from "@/components/out-of-credits-modal"
 
 const supabase = createClient()
 
@@ -62,6 +63,7 @@ const AIPage = () => {
     purchasedCredits: 0,
   })
   const [isLoadingConversations, setIsLoadingConversations] = useState(true)
+  const [showOutOfCreditsModal, setShowOutOfCreditsModal] = useState(false)
 
   // Calculate max credits based on tier
   const maxMonthlyCredits = getAICredits(profileData.tier as "free" | "premium" | "pro")
@@ -361,7 +363,15 @@ const AIPage = () => {
           headers: { Authorization: `Bearer ${session.data.session?.access_token}` },
           body: formData,
         })
-        if (!response.ok) throw new Error("Failed to process file")
+        if (!response.ok) {
+          if (response.status === 402) {
+            setShowOutOfCreditsModal(true)
+            setMessages(updatedMessages.slice(0, -1))
+            setLoading(false)
+            return
+          }
+          throw new Error("Failed to process file")
+        }
         const data = await response.json()
         const assistantMessage: Message = { role: "assistant", content: data.response }
         const finalMessages = [...updatedMessages, assistantMessage]
@@ -412,7 +422,15 @@ const AIPage = () => {
             systemPrompt: getSystemPrompt(),
           }),
         })
-        if (!response.ok) throw new Error("Failed to send message")
+        if (!response.ok) {
+          if (response.status === 402) {
+            setShowOutOfCreditsModal(true)
+            setMessages(updatedMessages.slice(0, -1))
+            setLoading(false)
+            return
+          }
+          throw new Error("Failed to send message")
+        }
         const data = await response.json()
         const assistantMessage: Message = { role: "assistant", content: data.response }
         const finalMessages = [...updatedMessages, assistantMessage]
@@ -1325,6 +1343,10 @@ const AIPage = () => {
             </div>
           </Card>
         </div>
+      )}
+
+      {showOutOfCreditsModal && (
+        <OutOfCreditsModal userPlan={profileData.tier} />
       )}
     </div>
   )

@@ -19,19 +19,19 @@ export default function CreditsPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 max-w-7xl mx-auto mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto mb-12">
           {/* Starter Plan - 500 Credits */}
           <Card className="p-8 relative bg-transparent border border-border">
             <div className="mb-6">
               <h3 className="text-2xl font-bold mb-2">Starter</h3>
-              <p className="text-muted-foreground">€4.99</p>
+              <p className="text-muted-foreground">€2.99</p>
             </div>
             <div className="mb-6">
               <div className="text-5xl font-bold mb-2">500</div>
               <p className="text-muted-foreground">{t('credits') || 'Credits'}</p>
             </div>
             <ul className="space-y-3 mb-8">
-              {['Características básicas de IA', 'Uso diario limitado', 'Soporte comunitario'].map((item) => (
+              {['Credits nunca caducan', 'Úsalos cuando quieras', 'Se acumulan con créditos mensuales'].map((item) => (
                 <li key={item} className="flex items-center gap-2">
                   <Check className="w-5 h-5 text-primary" />
                   <span className="text-sm">{item}</span>
@@ -45,22 +45,26 @@ export default function CreditsPage() {
             />
           </Card>
 
-          {/* Pro Plan - 2000 Credits */}
-          <Card className="p-8 relative bg-transparent border border-border">
-            <div className="mb-6">
-              <h3 className="text-2xl font-bold mb-2">{t('pro') || 'Pro'}</h3>
-              <p className="text-muted-foreground">€17.99</p>
+          {/* Popular Plan - 2000 Credits */}
+          <Card className="p-8 relative bg-transparent border-primary border-2 shadow-lg">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
+              <span className="bg-primary text-primary-foreground px-4 py-1 rounded-full text-sm font-semibold">
+                {t('popular') || 'POPULAR'}
+              </span>
+            </div>
+            <div className="mb-6 pt-4">
+              <h3 className="text-2xl font-bold mb-2 flex items-center gap-2">
+                <Zap className="w-6 h-6 text-primary" />
+                Popular
+              </h3>
+              <p className="text-muted-foreground">€9.99</p>
             </div>
             <div className="mb-6">
               <div className="text-5xl font-bold mb-2">2000</div>
               <p className="text-muted-foreground">{t('credits') || 'Credits'}</p>
             </div>
             <ul className="space-y-3 mb-8">
-              {[
-                'Características avanzadas de IA',
-                'Uso diario ilimitado',
-                'Soporte prioritario',
-              ].map((item) => (
+              {['Credits nunca caducan', 'Úsalos cuando quieras', 'Se acumulan con créditos mensuales'].map((item) => (
                 <li key={item} className="flex items-center gap-2">
                   <Check className="w-5 h-5 text-primary" />
                   <span className="text-sm">{item}</span>
@@ -75,10 +79,10 @@ export default function CreditsPage() {
             />
           </Card>
 
-          {/* Advanced Plan - 5000 Credits */}
+          {/* Professional Plan - 5000 Credits */}
           <Card className="p-8 relative bg-transparent border border-border">
             <div className="mb-6">
-              <h3 className="text-2xl font-bold mb-2">Advanced</h3>
+              <h3 className="text-2xl font-bold mb-2">Professional</h3>
               <p className="text-muted-foreground">€17.99</p>
             </div>
             <div className="mb-6">
@@ -86,12 +90,7 @@ export default function CreditsPage() {
               <p className="text-muted-foreground">{t('credits') || 'Credits'}</p>
             </div>
             <ul className="space-y-3 mb-8">
-              {[
-                'Generaciones ilimitadas de IA',
-                'Acceso prioritario',
-                'Soporte 24/7',
-                'Sin restricciones de uso',
-              ].map((item) => (
+              {['Credits nunca caducan', 'Úsalos cuando quieras', 'Se acumulan con créditos mensuales'].map((item) => (
                 <li key={item} className="flex items-center gap-2">
                   <Check className="w-5 h-5 text-primary" />
                   <span className="text-sm">{item}</span>
@@ -106,18 +105,10 @@ export default function CreditsPage() {
             />
           </Card>
 
-          {/* Popular Plan - 12000 Credits */}
-          <Card className="p-8 relative bg-transparent border-primary border-2 shadow-lg md:col-span-2 lg:col-span-1">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
-              <span className="bg-primary text-primary-foreground px-4 py-1 rounded-full text-sm font-semibold">
-                {t('popular') || 'POPULAR'}
-              </span>
-            </div>
-            <div className="mb-6 pt-4">
-              <h3 className="text-2xl font-bold mb-2 flex items-center gap-2">
-                <Zap className="w-6 h-6 text-primary" />
-                Business
-              </h3>
+          {/* Enterprise Plan - 12000 Credits */}
+          <Card className="p-8 relative bg-transparent border border-border">
+            <div className="mb-6">
+              <h3 className="text-2xl font-bold mb-2">Enterprise</h3>
               <p className="text-muted-foreground">€39.99</p>
             </div>
             <div className="mb-6">
@@ -125,13 +116,7 @@ export default function CreditsPage() {
               <p className="text-muted-foreground">{t('credits') || 'Credits'}</p>
             </div>
             <ul className="space-y-3 mb-8">
-              {[
-                'Acceso ilimitado a IA',
-                'Procesamiento prioritario',
-                'Soporte 24/7',
-                'Análisis avanzado',
-                'Máxima velocidad',
-              ].map((item) => (
+              {['Credits nunca caducan', 'Úsalos cuando quieras', 'Se acumulan con créditos mensuales'].map((item) => (
                 <li key={item} className="flex items-center gap-2">
                   <Check className="w-5 h-5 text-primary" />
                   <span className="text-sm">{item}</span>
@@ -144,35 +129,6 @@ export default function CreditsPage() {
               buttonText={t('buyNow') || 'Comprar ahora'}
               credits={12000}
             />
-          </Card>
-
-          {/* Enterprise Plan - No limits */}
-          <Card className="p-8 relative bg-transparent border border-border">
-            <div className="mb-6">
-              <h3 className="text-2xl font-bold mb-2">{t('enterprise') || 'Enterprise'}</h3>
-              <p className="text-muted-foreground">Sin límites</p>
-            </div>
-            <div className="mb-6">
-              <div className="text-5xl font-bold mb-2">∞</div>
-              <p className="text-muted-foreground">{t('credits') || 'Credits'}</p>
-            </div>
-            <ul className="space-y-3 mb-8">
-              {[
-                'Créditos ilimitados',
-                'Soporte dedicado 24/7',
-                'Integraciones personalizadas',
-                'Garantía SLA',
-                'Account manager personal',
-              ].map((item) => (
-                <li key={item} className="flex items-center gap-2">
-                  <Check className="w-5 h-5 text-primary" />
-                  <span className="text-sm">{item}</span>
-                </li>
-              ))}
-            </ul>
-            <div className="text-center text-sm text-muted-foreground">
-              <p>Contacta a nuestro equipo de ventas para más información</p>
-            </div>
           </Card>
         </div>
 
