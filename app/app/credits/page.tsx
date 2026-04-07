@@ -79,7 +79,7 @@ export default function CreditsPage() {
           <Card className="p-8 relative bg-transparent border border-border">
             <div className="mb-6">
               <h3 className="text-2xl font-bold mb-2">Advanced</h3>
-              <p className="text-muted-foreground">€17.99</p>
+              <p className="text-muted-foreground">€24.99</p>
             </div>
             <div className="mb-6">
               <div className="text-5xl font-bold mb-2">5000</div>
