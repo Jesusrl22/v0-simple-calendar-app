@@ -61,7 +61,11 @@ export async function POST(req: NextRequest) {
     const totalCredits = monthlyCredits + purchasedCredits
 
     if (totalCredits < 2) {
-      return NextResponse.json({ error: "Insufficient credits" }, { status: 402 })
+      return NextResponse.json({ 
+        error: "Insufficient credits",
+        userPlan: profile.subscription_tier,
+        outOfCredits: true,
+      }, { status: 402 })
     }
 
     let newMonthlyCredits = monthlyCredits
