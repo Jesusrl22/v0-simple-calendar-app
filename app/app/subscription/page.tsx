@@ -4,15 +4,9 @@ import { useEffect, useState } from "react"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
-import { Check, Zap, ShoppingCart } from "@/components/icons"
-import dynamic from "next/dynamic"
+import { Check, Zap } from "@/components/icons"
 import { PayPalSubscriptionButton } from "@/components/paypal-subscription-button"
 import { useTranslation } from "@/hooks/useTranslation"
-
-const CreditPacksModal = dynamic(() => import("@/components/credit-packs-modal").then((mod) => mod.CreditPacksModal), {
-  ssr: false,
-  loading: () => <div>Loading...</div>,
-})
 
 const plans = [
   {
@@ -86,7 +80,6 @@ export default function SubscriptionPage() {
   const [purchasedCredits, setPurchasedCredits] = useState(0)
   const [expiresAt, setExpiresAt] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
-  const [showCreditPacks, setShowCreditPacks] = useState(false)
   const [billingPeriod, setBillingPeriod] = useState<"monthly" | "annual">("monthly")
   const [cancelling, setCancelling] = useState(false)
 
@@ -217,19 +210,6 @@ export default function SubscriptionPage() {
             </Card>
           )}
 
-          <div className="mb-6 md:mb-8">
-            <Button
-              onClick={() => setShowCreditPacks(true)}
-              className="w-full md:w-auto neon-glow-hover"
-              size="lg"
-              disabled
-            >
-              <ShoppingCart className="w-5 h-5 mr-2" />
-              {t("buy_extra_credits")}
-            </Button>
-            <p className="text-sm text-muted-foreground mt-2">{t("purchase_additional_credits")}</p>
-          </div>
-
           <div className="flex justify-center mb-6 md:mb-8">
             <div className="inline-flex items-center gap-2 p-1 bg-muted rounded-lg">
               <Button
@@ -328,8 +308,6 @@ export default function SubscriptionPage() {
               )
             })}
           </div>
-
-          <CreditPacksModal open={showCreditPacks} onOpenChange={setShowCreditPacks} userPlan={currentPlan} />
         </motion.div>
       )}
     </div>
