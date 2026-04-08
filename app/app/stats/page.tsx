@@ -180,46 +180,53 @@ export default function StatsPage() {
                 <TabsTrigger value="pomodoro" className="flex-1">{t("pomodoro")}</TabsTrigger>
               </TabsList>
               <TabsContent value="tasks">
-                <ResponsiveContainer width="100%" height={250}>
-                  <BarChart data={chartData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--primary) / 0.4)" opacity={1} />
-                    <XAxis dataKey="name" stroke="hsl(var(--foreground) / 0.7)" />
-                    <YAxis stroke="hsl(var(--foreground) / 0.7)" />
-                    <Tooltip
-                      contentStyle={{
-                        backgroundColor: "hsl(var(--card))",
-                        border: "1px solid hsl(var(--primary) / 0.5)",
-                        borderRadius: "8px",
-                        color: "hsl(var(--foreground))",
-                      }}
-                    />
-                    <Bar dataKey="tasks" fill="hsl(var(--primary))" radius={[8, 8, 0, 0]} />
-                  </BarChart>
-                </ResponsiveContainer>
+                <div className="p-4 border-2 border-primary/30 rounded-lg bg-background/40">
+                  <ResponsiveContainer width="100%" height={250}>
+                    <BarChart data={chartData} margin={{ top: 20, right: 30, left: 0, bottom: 20 }}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--primary) / 0.5)" opacity={1} />
+                      <XAxis dataKey="name" stroke="hsl(var(--foreground) / 0.8)" tick={{ fontSize: 12 }} />
+                      <YAxis stroke="hsl(var(--foreground) / 0.8)" tick={{ fontSize: 12 }} />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: "hsl(var(--card))",
+                          border: "2px solid hsl(var(--primary) / 0.7)",
+                          borderRadius: "8px",
+                          color: "hsl(var(--foreground))",
+                        }}
+                        cursor={{ fill: "hsl(var(--primary) / 0.1)" }}
+                      />
+                      <Bar dataKey="tasks" fill="hsl(var(--primary))" radius={[8, 8, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
               </TabsContent>
               <TabsContent value="pomodoro">
-                <ResponsiveContainer width="100%" height={250}>
-                  <LineChart data={chartData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--primary) / 0.4)" opacity={1} />
-                    <XAxis dataKey="name" stroke="hsl(var(--foreground) / 0.7)" />
-                    <YAxis stroke="hsl(var(--foreground) / 0.7)" />
-                    <Tooltip
-                      contentStyle={{
-                        backgroundColor: "hsl(var(--card))",
-                        border: "1px solid hsl(var(--primary) / 0.5)",
-                        borderRadius: "8px",
-                        color: "hsl(var(--foreground))",
-                      }}
-                    />
-                    <Line
-                      type="monotone"
-                      dataKey="pomodoro"
-                      stroke="hsl(var(--primary))"
-                      strokeWidth={3}
-                      dot={{ fill: "hsl(var(--primary))", strokeWidth: 2 }}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
+                <div className="p-4 border-2 border-primary/30 rounded-lg bg-background/40">
+                  <ResponsiveContainer width="100%" height={250}>
+                    <LineChart data={chartData} margin={{ top: 20, right: 30, left: 0, bottom: 20 }}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--primary) / 0.5)" opacity={1} />
+                      <XAxis dataKey="name" stroke="hsl(var(--foreground) / 0.8)" tick={{ fontSize: 12 }} />
+                      <YAxis stroke="hsl(var(--foreground) / 0.8)" tick={{ fontSize: 12 }} />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: "hsl(var(--card))",
+                          border: "2px solid hsl(var(--primary) / 0.7)",
+                          borderRadius: "8px",
+                          color: "hsl(var(--foreground))",
+                        }}
+                        cursor={{ stroke: "hsl(var(--primary) / 0.3)", strokeWidth: 2 }}
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="pomodoro"
+                        stroke="hsl(var(--primary))"
+                        strokeWidth={3}
+                        dot={{ fill: "hsl(var(--primary))", r: 5, strokeWidth: 2 }}
+                        activeDot={{ r: 7 }}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
               </TabsContent>
             </Tabs>
           </Card>
@@ -243,19 +250,19 @@ export default function StatsPage() {
               </div>
 
               {/* Statistics Table */}
-              <div className="border-2 border-primary/40 rounded-lg overflow-hidden bg-background/50">
-                <div className="divide-y divide-primary/30">
-                  <div className="grid grid-cols-2 bg-primary/15 border-b-2 border-primary/30">
-                    <div className="px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm font-semibold text-foreground">
+              <div className="border-2 border-primary/50 rounded-lg overflow-hidden bg-background">
+                <div className="divide-y divide-primary/40">
+                  <div className="grid grid-cols-2 bg-primary/25 border-b-2 border-primary/50">
+                    <div className="px-4 py-3 text-sm font-bold text-foreground">
                       Métrica
                     </div>
-                    <div className="px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm font-semibold text-foreground text-right">
+                    <div className="px-4 py-3 text-sm font-bold text-foreground text-right">
                       Valor
                     </div>
                   </div>
-                  <div className="grid grid-cols-2 hover:bg-primary/10 transition-colors border-b border-primary/20">
-                    <div className="px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm">{t("average_focus_time")}</div>
-                    <div className="px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm font-semibold text-primary text-right">
+                  <div className="grid grid-cols-2 hover:bg-primary/15 transition-colors border-b-2 border-primary/40">
+                    <div className="px-4 py-3 text-sm text-foreground/90">{t("average_focus_time")}</div>
+                    <div className="px-4 py-3 text-sm font-semibold text-primary text-right">
                       {timeRange === "day"
                         ? `${stats.totalFocusTime}h`
                         : timeRange === "week"
@@ -263,15 +270,15 @@ export default function StatsPage() {
                           : `${Math.round((stats.totalFocusTime / 30) * 10) / 10}h/day`}
                     </div>
                   </div>
-                  <div className="grid grid-cols-2 hover:bg-primary/10 transition-colors border-b border-primary/20">
-                    <div className="px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm">{t("total_pomodoros")}</div>
-                    <div className="px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm font-semibold text-primary text-right">
+                  <div className="grid grid-cols-2 hover:bg-primary/15 transition-colors border-b-2 border-primary/40">
+                    <div className="px-4 py-3 text-sm text-foreground/90">{t("total_pomodoros")}</div>
+                    <div className="px-4 py-3 text-sm font-semibold text-primary text-right">
                       {stats.totalPomodoro}
                     </div>
                   </div>
-                  <div className="grid grid-cols-2 hover:bg-primary/10 transition-colors">
-                    <div className="px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm">{t("notes_created")}</div>
-                    <div className="px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm font-semibold text-primary text-right">
+                  <div className="grid grid-cols-2 hover:bg-primary/15 transition-colors">
+                    <div className="px-4 py-3 text-sm text-foreground/90">{t("notes_created")}</div>
+                    <div className="px-4 py-3 text-sm font-semibold text-primary text-right">
                       {stats.totalNotes}
                     </div>
                   </div>

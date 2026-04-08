@@ -68,7 +68,7 @@ export function PayPalSubscriptionButton({ planId, planName, onSuccess }: PayPal
         .Buttons({
           style: {
             shape: "rect",
-            color: "gold",
+            color: "blue",
             layout: "vertical",
             label: "paypal",
           },
