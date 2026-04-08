@@ -68,7 +68,7 @@ export function PayPalSubscriptionButton({ planId, planName, onSuccess }: PayPal
         .Buttons({
           style: {
             shape: "rect",
-            color: "blue",
+            color: "gold",
             layout: "vertical",
             label: "paypal",
           },
@@ -107,7 +107,7 @@ export function PayPalSubscriptionButton({ planId, planName, onSuccess }: PayPal
   }
 
   return (
-    <div ref={containerRef} className="mt-4 min-h-[45px]">
+    <div ref={containerRef} className="mt-4 min-h-[45px] [&_iframe]:!bg-transparent [&_iframe]:!border-0">
       {!isLoaded && <div className="text-center text-sm text-muted-foreground">Loading PayPal...</div>}
     </div>
   )
