@@ -76,6 +76,7 @@ const plans = [
 export default function SubscriptionPage() {
   const { t } = useTranslation()
   const [currentPlan, setCurrentPlan] = useState("free")
+  const [currentBillingPeriod, setCurrentBillingPeriod] = useState<"monthly" | "annual" | null>(null)
   const [monthlyCredits, setMonthlyCredits] = useState(0)
   const [purchasedCredits, setPurchasedCredits] = useState(0)
   const [expiresAt, setExpiresAt] = useState<string | null>(null)
@@ -104,6 +105,11 @@ export default function SubscriptionPage() {
       if (response.ok) {
         const data = await response.json()
         setCurrentPlan(data.subscription_tier || "free")
+        
+        // Detect billing period from subscription_period if available
+        const billingPeriod = data.subscription_period || (data.subscription_tier && data.subscription_tier !== "free" ? "monthly" : null)
+        setCurrentBillingPeriod(billingPeriod)
+        
         setMonthlyCredits(data.ai_credits_monthly || 0)
         setPurchasedCredits(data.ai_credits_purchased || 0)
         setExpiresAt(data.subscription_expires_at || null)
@@ -286,9 +292,13 @@ export default function SubscriptionPage() {
                       ))}
                     </div>
 
-                    {isCurrentPlan ? (
+                    {isCurrentPlan && currentBillingPeriod === billingPeriod ? (
                       <Button disabled className="w-full">
                         {t("current_plan")}
+                      </Button>
+                    ) : isCurrentPlan && currentBillingPeriod !== billingPeriod ? (
+                      <Button className="w-full" variant="outline">
+                        {t("change_plan")}
                       </Button>
                     ) : plan.monthlyPrice === 0 ? (
                       <Button disabled className="w-full opacity-50">
