@@ -52,13 +52,20 @@ export function PayPalSubscriptionButton({ planId, planName, onSuccess }: PayPal
 
       return () => clearInterval(checkInterval)
     }
-  }, [])
+  }, [planId])
 
   useEffect(() => {
     if (isLoaded && !buttonRendered.current) {
       renderButton()
+    } else if (isLoaded && buttonRendered.current) {
+      // Reset button when planId changes
+      buttonRendered.current = false
+      if (containerRef.current) {
+        containerRef.current.innerHTML = ""
+      }
+      renderButton()
     }
-  }, [isLoaded])
+  }, [isLoaded, planId])
 
   const renderButton = () => {
     if (window.paypal && containerRef.current && !buttonRendered.current) {
