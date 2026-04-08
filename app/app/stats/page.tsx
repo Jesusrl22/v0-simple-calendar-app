@@ -284,34 +284,6 @@ export default function StatsPage() {
                   </div>
                 </div>
               </div>
-                    <div className="px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm font-semibold text-foreground text-right">
-                      Valor
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 hover:bg-primary/10 transition-colors border-b border-primary/20">
-                    <div className="px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm">{t("average_focus_time")}</div>
-                    <div className="px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm font-semibold text-primary text-right">
-                      {timeRange === "day"
-                        ? `${stats.totalFocusTime}h`
-                        : timeRange === "week"
-                          ? `${Math.round((stats.totalFocusTime / 7) * 10) / 10}h/day`
-                          : `${Math.round((stats.totalFocusTime / 30) * 10) / 10}h/day`}
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 hover:bg-primary/10 transition-colors border-b border-primary/20">
-                    <div className="px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm">{t("total_pomodoros")}</div>
-                    <div className="px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm font-semibold text-primary text-right">
-                      {stats.totalPomodoro}
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 hover:bg-primary/10 transition-colors">
-                    <div className="px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm">{t("notes_created")}</div>
-                    <div className="px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm font-semibold text-primary text-right">
-                      {stats.totalNotes}
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
           </Card>
         </div>
