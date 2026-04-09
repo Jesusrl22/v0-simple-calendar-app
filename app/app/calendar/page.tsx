@@ -158,26 +158,36 @@ export default function CalendarPage() {
 
   // Generate calendar days using UTC to avoid timezone issues
   useEffect(() => {
-    const firstOfMonthUTC = new Date(Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), 1))
-    const lastOfMonthUTC = new Date(Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth() + 1, 0))
-    const daysInMonth = lastOfMonthUTC.getUTCDate()
+    const year = currentDate.getUTCFullYear()
+    const month = currentDate.getUTCMonth()
     
-    // Get day of week: 0=Sunday, 1=Monday, ..., 6=Saturday (in UTC)
-    const firstDayOfMonthJS = firstOfMonthUTC.getUTCDay()
+    // Create first day of month in UTC
+    const firstOfMonth = new Date(Date.UTC(year, month, 1))
+    // Create first day of next month in UTC to get last day of current month
+    const firstOfNextMonth = new Date(Date.UTC(year, month + 1, 1))
+    const lastDayOfMonth = new Date(firstOfNextMonth.getTime() - 1).getUTCDate()
     
-    // Convert to week starting Monday: Mon=0, Tue=1, ..., Sun=6
-    const firstDayOfMonth = (firstDayOfMonthJS + 6) % 7
+    // Get day of week (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
+    const firstDayWeekJS = firstOfMonth.getUTCDay()
+    
+    // Convert to Monday-first week (0 = Monday, 1 = Tuesday, ..., 6 = Sunday)
+    const firstDayOfWeek = firstDayWeekJS === 0 ? 6 : firstDayWeekJS - 1
     
     const daysArray: (Date | null)[] = []
 
-    for (let i = 0; i < firstDayOfMonth; i++) daysArray.push(null)
-    for (let i = 1; i <= daysInMonth; i++) {
-      daysArray.push(new Date(Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), i)))
+    // Add empty cells before first day of month
+    for (let i = 0; i < firstDayOfWeek; i++) {
+      daysArray.push(null)
+    }
+    
+    // Add all days of the month
+    for (let day = 1; day <= lastDayOfMonth; day++) {
+      daysArray.push(new Date(Date.UTC(year, month, day)))
     }
 
     setDays(daysArray)
-    if (!selectedDate || selectedDate.getMonth() !== currentDate.getMonth()) {
-      setSelectedDate(new Date(Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), 1)))
+    if (!selectedDate || selectedDate.getUTCMonth() !== month) {
+      setSelectedDate(new Date(Date.UTC(year, month, 1)))
     }
   }, [currentDate])
 
