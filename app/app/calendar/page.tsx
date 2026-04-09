@@ -156,20 +156,28 @@ export default function CalendarPage() {
       .sort((a, b) => (a.due_date || "").localeCompare(b.due_date || ""))
   }
 
-  // Generate calendar days
+  // Generate calendar days using UTC to avoid timezone issues
   useEffect(() => {
-    const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1)
-    const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0)
+    const firstOfMonthUTC = new Date(Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), 1))
+    const lastOfMonthUTC = new Date(Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth() + 1, 0))
+    const daysInMonth = lastOfMonthUTC.getUTCDate()
+    
+    // Get day of week: 0=Sunday, 1=Monday, ..., 6=Saturday (in UTC)
+    const firstDayOfMonthJS = firstOfMonthUTC.getUTCDay()
+    
+    // Convert to week starting Monday: Mon=0, Tue=1, ..., Sun=6
+    const firstDayOfMonth = (firstDayOfMonthJS + 6) % 7
+    
     const daysArray: (Date | null)[] = []
 
-    for (let i = 0; i < firstDay.getDay(); i++) daysArray.push(null)
-    for (let i = 1; i <= lastDay.getDate(); i++) {
-      daysArray.push(new Date(currentDate.getFullYear(), currentDate.getMonth(), i))
+    for (let i = 0; i < firstDayOfMonth; i++) daysArray.push(null)
+    for (let i = 1; i <= daysInMonth; i++) {
+      daysArray.push(new Date(Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), i)))
     }
 
     setDays(daysArray)
     if (!selectedDate || selectedDate.getMonth() !== currentDate.getMonth()) {
-      setSelectedDate(new Date(currentDate.getFullYear(), currentDate.getMonth(), 1))
+      setSelectedDate(new Date(Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), 1)))
     }
   }, [currentDate])
 
