@@ -13,6 +13,7 @@ import { ChevronLeft, ChevronRight, Plus, Edit2, Trash2, Bell, BellOff } from "l
 import { useTranslation } from "@/hooks/useTranslation"
 import { useRouter } from "next/navigation"
 import { useCalendarEventNotifications } from "@/hooks/useCalendarEventNotifications"
+import { TaskMonthView } from "@/components/TaskMonthView"
 
 interface Task {
   id: string
@@ -560,23 +561,17 @@ export default function CalendarPage() {
           )}
 
           {viewMode === "month" && (
-            <Card className="glass-card p-6 border-primary/30">
-              <div className="flex items-center justify-between mb-6 pb-4 border-b border-primary/20">
-                <h2 className="text-2xl font-bold text-primary">Vista Mensual</h2>
-                <Button
-                  onClick={() => {
-                    setNewEvent(prev => ({ ...prev, time: getCurrentTime() }))
-                    setIsDialogOpen(true)
-                  }}
-                  className="bg-primary hover:bg-primary/80 text-primary-foreground"
-                  size="sm"
-                >
-                  <Plus className="w-4 h-4 mr-2" />
-                  Añadir Evento
-                </Button>
-              </div>
-              <p className="text-muted-foreground text-center py-8">Vista mensual en desarrollo</p>
-            </Card>
+            <TaskMonthView
+              tasks={events}
+              onDayClick={(date) => {
+                setSelectedDate(date)
+                setViewMode("day")
+              }}
+              onTaskClick={(task) => {
+                setEditingEvent(task)
+                setIsEditDialogOpen(true)
+              }}
+            />
           )}
         </div>
       </div>
