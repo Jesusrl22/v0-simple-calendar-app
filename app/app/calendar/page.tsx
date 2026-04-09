@@ -392,7 +392,7 @@ export default function CalendarPage() {
                   variant="ghost"
                   size="icon"
                   className="h-8 w-8 hover:bg-primary/20"
-                  onClick={() => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1))}
+                  onClick={() => setCurrentDate(new Date(Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth() - 1, 1)))}
                 >
                   <ChevronLeft className="w-4 h-4" />
                 </Button>
@@ -400,7 +400,7 @@ export default function CalendarPage() {
                   variant="ghost"
                   size="icon"
                   className="h-8 w-8 hover:bg-primary/20"
-                  onClick={() => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1))}
+                  onClick={() => setCurrentDate(new Date(Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth() + 1, 1)))}
                 >
                   <ChevronRight className="w-4 h-4" />
                 </Button>
