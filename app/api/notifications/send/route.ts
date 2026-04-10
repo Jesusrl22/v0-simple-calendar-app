@@ -90,13 +90,6 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Get user's push subscriptions
-    console.log("[v0] Fetching subscriptions for user:", userId)
-    const { data: subscriptions, error } = await supabase
-      .from("push_subscriptions")
-      .select("*")
-      .eq("user_id", userId)
-
     if (error) {
       console.error("[v0] Database error:", error)
       return NextResponse.json(
