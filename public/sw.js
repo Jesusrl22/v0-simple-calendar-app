@@ -80,6 +80,11 @@ self.addEventListener("message", (event) => {
 
   } else if (type === "NOTIFICATION_CLICK") {
     // Handled below in notificationclick
+  } else if (type === "RESCHEDULE_NOTIFICATIONS") {
+    // When client wakes up, clear old timers and let client resend SCHEDULE_NOTIFICATIONS
+    scheduledTimers.forEach((timerId) => clearTimeout(timerId))
+    scheduledTimers.clear()
+    notifyClients({ type: "RESCHEDULE_NEEDED" })
   }
 })
 

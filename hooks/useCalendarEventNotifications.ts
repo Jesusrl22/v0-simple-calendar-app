@@ -166,13 +166,28 @@ export function useCalendarEventNotifications() {
     const intervalId = setInterval(refreshSchedule, 5 * 60 * 1000)
 
     const handleVisibilityChange = () => {
-      if (document.visibilityState === 'visible') refreshSchedule()
+      if (document.visibilityState === 'visible') {
+        // Clear old timers to prevent duplicate notifications
+        fallbackTimers.current.forEach((id) => clearTimeout(id))
+        fallbackTimers.current.clear()
+        // Refresh after a small delay to ensure SW has updated
+        setTimeout(refreshSchedule, 100)
+      }
     }
     document.addEventListener('visibilitychange', handleVisibilityChange)
+
+    // Also handle focus event for better coverage
+    const handleFocus = () => {
+      fallbackTimers.current.forEach((id) => clearTimeout(id))
+      fallbackTimers.current.clear()
+      setTimeout(refreshSchedule, 100)
+    }
+    window.addEventListener('focus', handleFocus)
 
     return () => {
       clearInterval(intervalId)
       document.removeEventListener('visibilitychange', handleVisibilityChange)
+      window.removeEventListener('focus', handleFocus)
       fallbackTimers.current.forEach((id) => clearTimeout(id))
       fallbackTimers.current.clear()
     }
