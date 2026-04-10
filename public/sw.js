@@ -94,7 +94,7 @@ self.addEventListener("message", (event) => {
 function showLocalNotification({ title, body, eventId, url }) {
   if (!self.registration) return
 
-  const tag = `event-${eventId}-${Date.now()}`
+  const tag = `event-${eventId}`
 
   self.registration.showNotification(title, {
     body,
@@ -157,7 +157,7 @@ self.addEventListener("push", (event) => {
       icon: "/icon-192.jpg",
       badge: "/icon-192.jpg",
       vibrate: [200, 100, 200],
-      tag: "event-" + (data.eventId || Date.now()),
+      tag: data.eventId ? `event-${data.eventId}` : `ft-${Date.now()}`,
       requireInteraction: true,
       actions,
       data: {

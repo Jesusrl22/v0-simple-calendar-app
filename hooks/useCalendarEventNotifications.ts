@@ -175,29 +175,27 @@ export function useCalendarEventNotifications() {
     refreshSchedule()
     const intervalId = setInterval(refreshSchedule, 5 * 60 * 1000)
 
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === 'visible') {
-        // Clear old timers to prevent duplicate notifications
-        fallbackTimers.current.forEach((id) => clearTimeout(id))
-        fallbackTimers.current.clear()
-        // Refresh after a small delay to ensure SW has updated
-        setTimeout(refreshSchedule, 100)
-      }
-    }
-    document.addEventListener('visibilitychange', handleVisibilityChange)
+    let debounceTimer: ReturnType<typeof setTimeout> | null = null
 
-    // Also handle focus event for better coverage
-    const handleFocus = () => {
+    const debouncedRefresh = () => {
+      if (debounceTimer) clearTimeout(debounceTimer)
       fallbackTimers.current.forEach((id) => clearTimeout(id))
       fallbackTimers.current.clear()
-      setTimeout(refreshSchedule, 100)
+      debounceTimer = setTimeout(refreshSchedule, 300) // espera 300ms antes de ejecutar
     }
-    window.addEventListener('focus', handleFocus)
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') debouncedRefresh()
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    window.addEventListener('focus', debouncedRefresh)
 
     return () => {
       clearInterval(intervalId)
+      if (debounceTimer) clearTimeout(debounceTimer)
       document.removeEventListener('visibilitychange', handleVisibilityChange)
-      window.removeEventListener('focus', handleFocus)
+      window.removeEventListener('focus', debouncedRefresh)
       fallbackTimers.current.forEach((id) => clearTimeout(id))
       fallbackTimers.current.clear()
     }
