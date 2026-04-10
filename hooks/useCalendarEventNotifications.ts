@@ -57,21 +57,30 @@ export function useCalendarEventNotifications() {
   // Fallback: schedule in-page timeouts (works while tab is visible)
   // ------------------------------------------------------------------
   const scheduleViaTimeout = useCallback((events: any[]) => {
-    // Clear previous timers
+    // Clear previous timers to prevent duplicates
     fallbackTimers.current.forEach((id) => clearTimeout(id))
     fallbackTimers.current.clear()
 
     const now = Date.now()
+    const notifiedIds = new Set<string>() // Track already notified events
 
     events.forEach((ev) => {
       if (!ev.due_date || ev.completed) return
 
       const eventTime = new Date(ev.due_date).getTime()
+      const key10min = `${ev.id}-reminder`
+      const keyNow = `${ev.id}-now`
+
+      // Only schedule if not already scheduled
+      if (notifiedIds.has(key10min) || notifiedIds.has(keyNow)) return
 
       const schedule = (ms: number, isNow: boolean) => {
         if (ms < -60_000) return // already more than 1 min past
         const delay = Math.max(0, ms)
-        const key = `${ev.id}-${isNow ? 'now' : 'reminder'}`
+        const key = isNow ? keyNow : key10min
+
+        // Only schedule if this specific notification hasn't been scheduled yet
+        if (fallbackTimers.current.has(key)) return
 
         const timerId = setTimeout(() => {
           if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
@@ -83,7 +92,7 @@ export function useCalendarEventNotifications() {
                     ? `Tu evento "${ev.title}" comienza ahora`
                     : `"${ev.title}" comienza en 10 minutos`,
                   icon: '/icon-192.jpg',
-                  tag: key,
+                  tag: key, // Prevent duplicate desktop notifications
                 }
               )
             } catch {
@@ -94,6 +103,7 @@ export function useCalendarEventNotifications() {
         }, delay)
 
         fallbackTimers.current.set(key, timerId)
+        notifiedIds.add(key)
       }
 
       schedule(eventTime - 10 * 60 * 1000 - now, false) // 10 min before
@@ -191,7 +201,8 @@ export function useCalendarEventNotifications() {
       fallbackTimers.current.forEach((id) => clearTimeout(id))
       fallbackTimers.current.clear()
     }
-  }, [refreshSchedule])
+    // Empty dependencies - only run on mount
+  }, [])
 
   return { rescheduleWithEvents, requestPermission, refreshSchedule }
 }
